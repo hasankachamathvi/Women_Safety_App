@@ -27,13 +27,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.LocationActivity" />
-        <activity android:name=".activities.ContactsActivity" />
-        <activity android:name=".activities.SafetyTipsActivity" />
-        <activity android:name=".activities.ComplaintActivity" />
+        <activity android:name=".activities.LoginActivity" android:exported="true" />
+        <activity android:name=".activities.RegisterActivity" android:exported="true" />
+        <activity android:name=".activities.HomeActivity" android:exported="true" />
+        <activity android:name=".activities.LocationActivity" android:exported="true" />
+        <activity android:name=".activities.ContactsActivity" android:exported="true" />
+        <activity android:name=".activities.SafetyTipsActivity" android:exported="true" />
+        <activity android:name=".activities.ComplaintActivity" android:exported="true" />
+        <activity android:name=".activities.Complaint2Activity" android:exported="true" />
     </application>
 
 </manifest>
