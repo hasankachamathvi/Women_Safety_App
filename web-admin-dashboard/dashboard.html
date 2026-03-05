@@ -1,1 +1,106 @@
-<!-- Dashboard Overview Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>යුවතී - Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>යුවතී</h2>
+            <p>Guarding every girl's journey</p>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item active">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="users.html" class="nav-item">
+                <span>👥</span> Users
+            </a>
+            <a href="complaints.html" class="nav-item">
+                <span>📝</span> Complaints
+            </a>
+            <a href="reports.html" class="nav-item">
+                <span>📈</span> Reports
+            </a>
+            <a href="safety-tips.html" class="nav-item">
+                <span>💡</span> Safety Tips
+            </a>
+            <a href="login.html" class="nav-item logout">
+                <span>🚪</span> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <h1>Dashboard Overview</h1>
+            <div class="user-info">
+                <span>Welcome, Admin</span>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <div class="card-info">
+                    <h3>Total Users</h3>
+                    <p class="card-number">1,234</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <div class="card-info">
+                    <h3>Active Complaints</h3>
+                    <p class="card-number">48</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">✅</div>
+                <div class="card-info">
+                    <h3>Resolved Cases</h3>
+                    <p class="card-number">856</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🚨</div>
+                <div class="card-info">
+                    <h3>Emergency Alerts</h3>
+                    <p class="card-number">12</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info Cards -->
+        <div class="info-section">
+            <div class="info-card">
+                <h3>Recent Activity</h3>
+                <ul class="activity-list">
+                    <li>New user registration - 5 mins ago</li>
+                    <li>Complaint filed - 15 mins ago</li>
+                    <li>Case resolved - 1 hour ago</li>
+                    <li>Safety tip added - 2 hours ago</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn">Add User</button>
+                    <button class="action-btn">View Complaints</button>
+                    <button class="action-btn">Generate Report</button>
+                    <button class="action-btn">Send Alert</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
