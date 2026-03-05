@@ -13,4 +13,13 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Spinner">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">#CCFFFFFF</item>
+    </style>
+
+    <style name="WhiteSpinnerItem">
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>
