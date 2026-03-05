@@ -1,0 +1,2 @@
+rootProject.name = "Women_Safety_App"
+include ':app'
