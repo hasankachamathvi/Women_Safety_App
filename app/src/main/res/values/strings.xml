@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Yuwathi</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="don_t_have_an_account_register_here">Don\'t have an account? Register here</string>
+    <string name="home">Home</string>
+    <string name="location">Location</string>
+    <string name="contacts">Contacts</string>
+    <string name="safety_tips">Safety Tips</string>
+    <string name="complaint">Complaint</string>
+</resources>
