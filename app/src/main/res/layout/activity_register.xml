@@ -1,239 +1,253 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FF208E">
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical">-->
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+<!--    &lt;!&ndash; ===== TOP PINK HEADER ===== &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="0.55"-->
+<!--        android:background="@color/yuwathi_pink"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingTop="40dp"-->
+<!--        android:paddingBottom="24dp">-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="32dp">
+<!--        <ImageView-->
+<!--            android:layout_width="72dp"-->
+<!--            android:layout_height="72dp"-->
+<!--            android:contentDescription="@string/app_name"-->
+<!--            android:src="@drawable/ic_launcher"-->
+<!--            android:scaleType="centerCrop" />-->
 
-            <!-- Top Right Logo -->
-            <ImageView
-                android:id="@+id/iv_top_logo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:src="@mipmap/ic_launcher"
-                android:alpha="0.5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:fontFamily="sans-serif-black"-->
+<!--            android:text="@string/create_account"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="26sp"-->
+<!--            android:textStyle="bold" />-->
 
-            <TextView
-                android:id="@+id/tv_app_name_sinhala"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="යුවති"
-                android:textColor="@color/white"
-                android:textSize="64sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:text="@string/tagline"-->
+<!--            android:textColor="#E0E0E0"-->
+<!--            android:textSize="13sp" />-->
+<!--    </LinearLayout>-->
 
-            <TextView
-                android:id="@+id/tv_welcome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="WELCOME"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_app_name_sinhala" />
+<!--    &lt;!&ndash; ===== BOTTOM WHITE FORM SECTION ===== &ndash;&gt;-->
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="@drawable/bg_white_rounded_top"-->
+<!--        android:fillViewport="true">-->
 
-            <TextView
-                android:id="@+id/tv_tagline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Guarding every girl's journey"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_welcome" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:paddingHorizontal="32dp"-->
+<!--            android:paddingTop="32dp"-->
+<!--            android:paddingBottom="32dp">-->
 
-            <LinearLayout
-                android:id="@+id/ll_form"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="32dp"
-                android:layout_marginTop="32dp"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/tv_tagline">
+<!--            &lt;!&ndash; Full Name &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/full_name"-->
+<!--                android:textColor="@color/yuwathi_text_medium"-->
+<!--                android:textSize="13sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email or Phone Number"
-                    android:textColor="@color/white" />
+<!--            <EditText-->
+<!--                android:id="@+id/et_full_name"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:autofillHints="name"-->
+<!--                android:background="@drawable/bg_input_underline_pink"-->
+<!--                android:hint="@string/hint_full_name"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:textColor="@color/yuwathi_text_dark"-->
+<!--                android:textColorHint="@color/yuwathi_text_hint"-->
+<!--                android:textSize="14sp" />-->
 
-                <EditText
-                    android:id="@+id/et_contact"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/white"
-                    android:inputType="text" />
+<!--            &lt;!&ndash; Email / Phone &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="@string/email_or_phone"-->
+<!--                android:textColor="@color/yuwathi_text_medium"-->
+<!--                android:textSize="13sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Full Name"
-                    android:textColor="@color/white" />
+<!--            <EditText-->
+<!--                android:id="@+id/et_contact"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:autofillHints="emailAddress"-->
+<!--                android:background="@drawable/bg_input_underline_pink"-->
+<!--                android:hint="@string/hint_email_or_phone"-->
+<!--                android:inputType="text"-->
+<!--                android:textColor="@color/yuwathi_text_dark"-->
+<!--                android:textColorHint="@color/yuwathi_text_hint"-->
+<!--                android:textSize="14sp" />-->
 
-                <EditText
-                    android:id="@+id/et_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/white"
-                    android:inputType="textPersonName" />
+<!--            &lt;!&ndash; Username &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="@string/username_label"-->
+<!--                android:textColor="@color/yuwathi_text_medium"-->
+<!--                android:textSize="13sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Username"
-                    android:textColor="@color/white" />
+<!--            <EditText-->
+<!--                android:id="@+id/et_username"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:autofillHints="username"-->
+<!--                android:background="@drawable/bg_input_underline_pink"-->
+<!--                android:hint="@string/hint_username"-->
+<!--                android:inputType="text"-->
+<!--                android:textColor="@color/yuwathi_text_dark"-->
+<!--                android:textColorHint="@color/yuwathi_text_hint"-->
+<!--                android:textSize="14sp" />-->
 
-                <EditText
-                    android:id="@+id/et_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/white"
-                    android:inputType="text" />
+<!--            &lt;!&ndash; Password &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="@string/password_label"-->
+<!--                android:textColor="@color/yuwathi_text_medium"-->
+<!--                android:textSize="13sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Password"
-                    android:textColor="@color/white" />
+<!--            <FrameLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+<!--                <EditText-->
+<!--                    android:id="@+id/et_password"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:autofillHints="newPassword"-->
+<!--                    android:background="@drawable/bg_input_underline_pink"-->
+<!--                    android:hint="@string/hint_password"-->
+<!--                    android:inputType="textPassword"-->
+<!--                    android:paddingStart="0dp"-->
+<!--                    android:paddingEnd="40dp"-->
+<!--                    android:textColor="@color/yuwathi_text_dark"-->
+<!--                    android:textColorHint="@color/yuwathi_text_hint"-->
+<!--                    android:textSize="14sp" />-->
 
-                    <EditText
-                        android:id="@+id/et_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:inputType="textPassword"
-                        android:textColor="@color/white" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_show_password"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:layout_gravity="end|center_vertical"-->
+<!--                    android:layout_marginEnd="4dp"-->
+<!--                    android:contentDescription="@string/toggle_password"-->
+<!--                    android:src="@android:drawable/ic_menu_view"-->
+<!--                    app:tint="@color/yuwathi_pink_light" />-->
+<!--            </FrameLayout>-->
 
-                    <ImageView
-                        android:id="@+id/iv_show_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@android:drawable/ic_menu_view"
-                        app:tint="@color/white" />
-                </RelativeLayout>
+<!--            &lt;!&ndash; Confirm Password &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="@string/confirm_password"-->
+<!--                android:textColor="@color/yuwathi_text_medium"-->
+<!--                android:textSize="13sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Must contain a number and least of 6 characters"
-                    android:textColor="#E0E0E0"
-                    android:textSize="10sp" />
+<!--            <FrameLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Confirm Password"
-                    android:textColor="@color/white" />
+<!--                <EditText-->
+<!--                    android:id="@+id/et_confirm_password"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:autofillHints="newPassword"-->
+<!--                    android:background="@drawable/bg_input_underline_pink"-->
+<!--                    android:hint="@string/hint_confirm_password"-->
+<!--                    android:inputType="textPassword"-->
+<!--                    android:paddingStart="0dp"-->
+<!--                    android:paddingEnd="40dp"-->
+<!--                    android:textColor="@color/yuwathi_text_dark"-->
+<!--                    android:textColorHint="@color/yuwathi_text_hint"-->
+<!--                    android:textSize="14sp" />-->
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_show_confirm_password"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:layout_gravity="end|center_vertical"-->
+<!--                    android:layout_marginEnd="4dp"-->
+<!--                    android:contentDescription="@string/toggle_password"-->
+<!--                    android:src="@android:drawable/ic_menu_view"-->
+<!--                    app:tint="@color/yuwathi_pink_light" />-->
+<!--            </FrameLayout>-->
 
-                    <EditText
-                        android:id="@+id/et_confirm_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:inputType="textPassword"
-                        android:textColor="@color/white" />
+<!--            &lt;!&ndash; Register Button &ndash;&gt;-->
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/btn_register"-->
+<!--                android:layout_width="200dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:backgroundTint="@color/yuwathi_pink"-->
+<!--                android:text="@string/register"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:cornerRadius="24dp" />-->
 
-                    <ImageView
-                        android:id="@+id/iv_show_confirm_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@android:drawable/ic_menu_view"
-                        app:tint="@color/white" />
-                </RelativeLayout>
+<!--            &lt;!&ndash; Login link &ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Must contain a number and least of 6 characters"
-                    android:textColor="#E0E0E0"
-                    android:textSize="10sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/already_have_account"-->
+<!--                    android:textColor="@color/yuwathi_text_hint"-->
+<!--                    android:textSize="14sp" />-->
 
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_login_link"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/log_in"-->
+<!--                    android:textColor="@color/yuwathi_pink"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="bold" />-->
+<!--            </LinearLayout>-->
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_register"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:backgroundTint="@color/white"
-                android:text="Register"
-                android:textAllCaps="false"
-                android:textColor="#FF208E"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:cornerRadius="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_form" />
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:gravity="center"-->
+<!--                android:paddingHorizontal="16dp"-->
+<!--                android:text="@string/permissions_note"-->
+<!--                android:textColor="@color/yuwathi_text_hint"-->
+<!--                android:textSize="11sp" />-->
 
-            <TextView
-                android:id="@+id/tv_login_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Have an account? Log In"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_register" />
+<!--        </LinearLayout>-->
+<!--    </androidx.core.widget.NestedScrollView>-->
 
-            <TextView
-                android:id="@+id/tv_footer_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="center"
-                android:paddingHorizontal="48dp"
-                android:text="We need permission for the service you use\nLearn More"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_login_link" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--</LinearLayout>-->

@@ -1,6 +1,339 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@color/yuwathi_bg"-->
+<!--    android:orientation="vertical">-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--    &lt;!&ndash; ===== TOP PINK HEADER ===== &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/yuwathi_pink"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:paddingStart="20dp"-->
+<!--        android:paddingTop="40dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:paddingBottom="20dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Welcome back,"-->
+<!--                android:textColor="#E0E0E0"-->
+<!--                android:textSize="13sp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_user_name"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Yuwathi User"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold" />-->
+<!--        </LinearLayout>-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_profile_avatar"-->
+<!--            android:layout_width="44dp"-->
+<!--            android:layout_height="44dp"-->
+<!--            android:background="@drawable/bg_circle_white"-->
+<!--            android:padding="8dp"-->
+<!--            android:src="@drawable/ic_profile_nav"-->
+<!--            app:tint="@color/yuwathi_pink"-->
+<!--            android:contentDescription="Profile" />-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; ===== SCROLLABLE CONTENT ===== &ndash;&gt;-->
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:fillViewport="true">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:paddingBottom="80dp">-->
+
+<!--            &lt;!&ndash; Safety Status Banner &ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:background="@drawable/bg_card_white"-->
+<!--                android:elevation="4dp"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="16dp">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:background="@drawable/bg_circle_pink_light"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:src="@drawable/ic_shield"-->
+<!--                    app:tint="@color/yuwathi_pink"-->
+<!--                    android:contentDescription="Shield" />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="You are Safe"-->
+<!--                        android:textColor="@color/yuwathi_text_dark"-->
+<!--                        android:textSize="15sp"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Location sharing is off"-->
+<!--                        android:textColor="@color/yuwathi_text_hint"-->
+<!--                        android:textSize="12sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                <View-->
+<!--                    android:layout_width="10dp"-->
+<!--                    android:layout_height="10dp"-->
+<!--                    android:background="@drawable/bg_circle_pink" />-->
+<!--            </LinearLayout>-->
+
+<!--            &lt;!&ndash; SOS BUTTON - CENTER DOMINANT &ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingTop="32dp"-->
+<!--                android:paddingBottom="16dp">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/sos_hold_message"-->
+<!--                    android:textColor="@color/yuwathi_text_medium"-->
+<!--                    android:textSize="13sp"-->
+<!--                    android:layout_marginBottom="16dp" />-->
+
+<!--                &lt;!&ndash; SOS outer glow ring &ndash;&gt;-->
+<!--                <FrameLayout-->
+<!--                    android:layout_width="200dp"-->
+<!--                    android:layout_height="200dp"-->
+<!--                    android:layout_gravity="center">-->
+
+<!--                    <View-->
+<!--                        android:layout_width="200dp"-->
+<!--                        android:layout_height="200dp"-->
+<!--                        android:alpha="0.15"-->
+<!--                        android:background="@drawable/bg_circle_red" />-->
+
+<!--                    <View-->
+<!--                        android:layout_width="170dp"-->
+<!--                        android:layout_height="170dp"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:alpha="0.25"-->
+<!--                        android:background="@drawable/bg_circle_red" />-->
+
+<!--                    <com.google.android.material.button.MaterialButton-->
+<!--                        android:id="@+id/btn_sos"-->
+<!--                        android:layout_width="140dp"-->
+<!--                        android:layout_height="140dp"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:backgroundTint="@color/yuwathi_red"-->
+<!--                        android:text="SOS"-->
+<!--                        android:textAllCaps="false"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="32sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:cornerRadius="70dp"-->
+<!--                        app:elevation="8dp" />-->
+<!--                </FrameLayout>-->
+<!--            </LinearLayout>-->
+
+<!--            &lt;!&ndash; Quick Action Grid &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="Quick Actions"-->
+<!--                android:textColor="@color/yuwathi_text_dark"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:layout_marginTop="12dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                &lt;!&ndash; Share Location &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/btn_share_location"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@drawable/bg_card_white"-->
+<!--                    android:elevation="2dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="16dp">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="36dp"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:background="@drawable/bg_circle_pink"-->
+<!--                        android:padding="8dp"-->
+<!--                        android:src="@drawable/ic_location_pin"-->
+<!--                        android:contentDescription="Location" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Share\nLocation"-->
+<!--                        android:textColor="@color/yuwathi_text_dark"-->
+<!--                        android:textSize="12sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                &lt;!&ndash; Contacts &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/btn_contacts"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@drawable/bg_card_white"-->
+<!--                    android:elevation="2dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="16dp">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="36dp"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:background="@drawable/bg_circle_pink"-->
+<!--                        android:padding="8dp"-->
+<!--                        android:src="@drawable/ic_add_contact"-->
+<!--                        android:contentDescription="Contacts" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Emergency\nContacts"-->
+<!--                        android:textColor="@color/yuwathi_text_dark"-->
+<!--                        android:textSize="12sp" />-->
+<!--                </LinearLayout>-->
+
+<!--                &lt;!&ndash; Report &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/btn_report"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@drawable/bg_card_white"-->
+<!--                    android:elevation="2dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="16dp">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="36dp"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:background="@drawable/bg_circle_pink"-->
+<!--                        android:padding="8dp"-->
+<!--                        android:src="@drawable/ic_warning"-->
+<!--                        android:contentDescription="Report" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Report\nIncident"-->
+<!--                        android:textColor="@color/yuwathi_text_dark"-->
+<!--                        android:textSize="12sp" />-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+
+<!--            &lt;!&ndash; Safety Tips teaser &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:text="Today's Safety Tip"-->
+<!--                android:textColor="@color/yuwathi_text_dark"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/card_safety_tip"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/bg_card_white"-->
+<!--                android:elevation="2dp"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="16dp">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="36dp"-->
+<!--                    android:layout_height="36dp"-->
+<!--                    android:background="@drawable/bg_circle_pink_light"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:src="@drawable/ic_tips_nav"-->
+<!--                    app:tint="@color/yuwathi_pink"-->
+<!--                    android:contentDescription="Tip" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_tip_preview"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Always inform a trusted person of your travel route and expected arrival time."-->
+<!--                    android:textColor="@color/yuwathi_text_medium"-->
+<!--                    android:textSize="13sp" />-->
+<!--            </LinearLayout>-->
+
+<!--        </LinearLayout>-->
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+<!--    &lt;!&ndash; ===== BOTTOM NAVIGATION ===== &ndash;&gt;-->
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_nav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/white"-->
+<!--        android:elevation="8dp"-->
+<!--        app:itemIconTint="@color/nav_icon_color"-->
+<!--        app:itemTextColor="@color/nav_icon_color"-->
+<!--        app:menu="@menu/bottom_menu" />-->
+
+<!--</LinearLayout>-->
+<!--&lt;!&ndash;&ndash;&gt;-->

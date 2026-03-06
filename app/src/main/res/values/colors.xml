@@ -7,6 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="yuwathi_pink">#FF208E</color>
-    <color name="yuwathi_pink_dark">#D81B60</color>
+    <color name="yuwathi_pink">#E91E63</color>
+    <color name="yuwathi_pink_dark">#C2185B</color>
+    <color name="yuwathi_pink_light">#F48FB1</color>
+    <color name="yuwathi_pink_ultra_light">#FCE4EC</color>
+    <color name="yuwathi_bg">#FFF5F8</color>
+    <color name="yuwathi_gray">#F5F5F5</color>
+    <color name="yuwathi_text_dark">#333333</color>
+    <color name="yuwathi_text_medium">#666666</color>
+    <color name="yuwathi_text_hint">#AAAAAA</color>
+    <color name="yuwathi_red">#D32F2F</color>
+    <color name="yuwathi_red_dark">#B71C1C</color>
+    <color name="yuwathi_red_light">#FFCDD2</color>
+    <color name="yuwathi_divider">#FFCDD2</color>
 </resources>

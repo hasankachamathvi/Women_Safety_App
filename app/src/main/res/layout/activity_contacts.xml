@@ -1,6 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+﻿<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@color/yuwathi_bg"-->
+<!--    android:orientation="vertical">-->
+<!--    &lt;!&ndash; Pink Header &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/yuwathi_pink"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:paddingStart="20dp"-->
+<!--        android:paddingTop="40dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:paddingBottom="20dp">-->
+<!--        <ImageView-->
+<!--            android:id="@+id/btn_back"-->
+<!--            android:layout_width="32dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:src="@android:drawable/ic_media_previous"-->
+<!--            app:tint="@color/white"-->
+<!--            android:contentDescription="Back" />-->
+<!--        <TextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Emergency Contacts"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold" />-->
+<!--        <ImageView-->
+<!--            android:layout_width="32dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:contentDescription="placeholder" />-->
+<!--    </LinearLayout>-->
+<!--    &lt;!&ndash; Add contact button &ndash;&gt;-->
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/btn_add_contact"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="52dp"-->
+<!--        android:layout_marginHorizontal="20dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:backgroundTint="@color/yuwathi_pink"-->
+<!--        android:text="+ Add Emergency Contact"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:cornerRadius="12dp"-->
+<!--        app:icon="@drawable/ic_add_contact"-->
+<!--        app:iconTint="@color/white" />-->
+<!--    &lt;!&ndash; Contacts list &ndash;&gt;-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rv_contacts"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:paddingHorizontal="20dp"-->
+<!--        android:paddingBottom="20dp"-->
+<!--        android:clipToPadding="false" />-->
+<!--    &lt;!&ndash; Bottom Nav &ndash;&gt;-->
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_nav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/white"-->
+<!--        android:elevation="8dp"-->
+<!--        app:itemIconTint="@color/nav_icon_color"-->
+<!--        app:itemTextColor="@color/nav_icon_color"-->
+<!--        app:menu="@menu/bottom_menu" />-->
+<!--</LinearLayout>-->
