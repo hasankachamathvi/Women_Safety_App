@@ -1,6 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+﻿<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@color/yuwathi_bg"-->
+<!--    android:orientation="vertical">-->
+<!--    &lt;!&ndash; Pink Header &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/yuwathi_pink"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingTop="40dp"-->
+<!--        android:paddingBottom="24dp"-->
+<!--        android:paddingHorizontal="20dp">-->
+<!--        <ImageView-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:background="@drawable/bg_circle_white"-->
+<!--            android:padding="10dp"-->
+<!--            android:src="@drawable/ic_tips_nav"-->
+<!--            app:tint="@color/yuwathi_pink"-->
+<!--            android:contentDescription="Tips icon" />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:text="Safety Tips"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="24sp"-->
+<!--            android:textStyle="bold" />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:text="Stay safe, stay aware"-->
+<!--            android:textColor="#E0E0E0"-->
+<!--            android:textSize="13sp" />-->
+<!--    </LinearLayout>-->
+<!--    &lt;!&ndash; Tips RecyclerView &ndash;&gt;-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rv_tips"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:paddingHorizontal="20dp"-->
+<!--        android:paddingTop="16dp"-->
+<!--        android:paddingBottom="80dp"-->
+<!--        android:clipToPadding="false" />-->
+<!--    &lt;!&ndash; Bottom Nav &ndash;&gt;-->
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_nav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/white"-->
+<!--        android:elevation="8dp"-->
+<!--        app:itemIconTint="@color/nav_icon_color"-->
+<!--        app:itemTextColor="@color/nav_icon_color"-->
+<!--        app:menu="@menu/bottom_menu" />-->
+<!--</LinearLayout>-->
