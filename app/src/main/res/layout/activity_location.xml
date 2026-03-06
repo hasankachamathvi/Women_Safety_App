@@ -1,136 +1,136 @@
-﻿<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:background="@color/yuwathi_bg"-->
-<!--    android:orientation="vertical">-->
-<!--    &lt;!&ndash; Pink Header &ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/yuwathi_pink"-->
-<!--        android:gravity="center_vertical"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:paddingStart="20dp"-->
-<!--        android:paddingTop="40dp"-->
-<!--        android:paddingEnd="20dp"-->
-<!--        android:paddingBottom="20dp">-->
-<!--        <ImageView-->
-<!--            android:id="@+id/btn_back"-->
-<!--            android:layout_width="32dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:src="@android:drawable/ic_media_previous"-->
-<!--            app:tint="@color/white"-->
-<!--            android:contentDescription="Back" />-->
-<!--        <TextView-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Live Location"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold" />-->
-<!--        <ImageView-->
-<!--            android:layout_width="32dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:contentDescription="placeholder" />-->
-<!--    </LinearLayout>-->
-<!--    &lt;!&ndash; Map placeholder &ndash;&gt;-->
-<!--    <FrameLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:background="#E8EAF6">-->
-<!--        <androidx.fragment.app.FragmentContainerView-->
-<!--            android:id="@+id/map_fragment"-->
-<!--            class="com.google.android.gms.maps.SupportMapFragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-<!--        &lt;!&ndash; Floating location indicator &ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="top|end"-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:background="@drawable/bg_card_white"-->
-<!--            android:elevation="4dp"-->
-<!--            android:orientation="vertical"-->
-<!--            android:padding="12dp">-->
-<!--            <TextView-->
-<!--                android:id="@+id/tv_location_status"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Locating..."-->
-<!--                android:textColor="@color/yuwathi_text_medium"-->
-<!--                android:textSize="12sp" />-->
-<!--        </LinearLayout>-->
-<!--    </FrameLayout>-->
-<!--    &lt;!&ndash; Bottom panel &ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/bg_white_rounded_top"-->
-<!--        android:orientation="vertical"-->
-<!--        android:paddingHorizontal="20dp"-->
-<!--        android:paddingTop="20dp"-->
-<!--        android:paddingBottom="16dp"-->
-<!--        android:elevation="8dp">-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Your Current Location"-->
-<!--            android:textColor="@color/yuwathi_text_dark"-->
-<!--            android:textSize="15sp"-->
-<!--            android:textStyle="bold" />-->
-<!--        <TextView-->
-<!--            android:id="@+id/tv_address"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:text="Fetching address..."-->
-<!--            android:textColor="@color/yuwathi_text_hint"-->
-<!--            android:textSize="13sp" />-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:orientation="horizontal">-->
-<!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/btn_share_location_action"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="48dp"-->
-<!--                android:layout_marginEnd="8dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:backgroundTint="@color/yuwathi_pink"-->
-<!--                android:text="Share Location"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="14sp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:cornerRadius="12dp" />-->
-<!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/btn_stop_sharing"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="48dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:backgroundTint="@color/yuwathi_gray"-->
-<!--                android:text="Stop Sharing"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:textColor="@color/yuwathi_text_dark"-->
-<!--                android:textSize="14sp"-->
-<!--                app:cornerRadius="12dp" />-->
-<!--        </LinearLayout>-->
-<!--    </LinearLayout>-->
-<!--    &lt;!&ndash; Bottom Nav &ndash;&gt;-->
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_nav"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/white"-->
-<!--        android:elevation="8dp"-->
-<!--        app:itemIconTint="@color/nav_icon_color"-->
-<!--        app:itemTextColor="@color/nav_icon_color"-->
-<!--        app:menu="@menu/bottom_menu" />-->
-<!--</LinearLayout>-->
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yuwathi_bg"
+    android:orientation="vertical">
+    <!-- Pink Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yuwathi_pink"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="40dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_media_previous"
+            app:tint="@color/white"
+            android:contentDescription="Back" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Live Location"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="placeholder" />
+    </LinearLayout>
+    <!-- Map placeholder -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#E8EAF6">
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map_fragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!-- Floating location indicator -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="12dp">
+            <TextView
+                android:id="@+id/tv_location_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Locating..."
+                android:textColor="@color/yuwathi_text_medium"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </FrameLayout>
+    <!-- Bottom panel -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_rounded_top"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp"
+        android:elevation="8dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Current Location"
+            android:textColor="@color/yuwathi_text_dark"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Fetching address..."
+            android:textColor="@color/yuwathi_text_hint"
+            android:textSize="13sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_share_location_action"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/yuwathi_pink"
+                android:text="Share Location"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_stop_sharing"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/yuwathi_gray"
+                android:text="Stop Sharing"
+                android:textAllCaps="false"
+                android:textColor="@color/yuwathi_text_dark"
+                android:textSize="14sp"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Bottom Nav -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="8dp"
+        app:itemIconTint="@color/nav_icon_color"
+        app:itemTextColor="@color/nav_icon_color"
+        app:menu="@menu/bottom_menu" />
+</LinearLayout>
