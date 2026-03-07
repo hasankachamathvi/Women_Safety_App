@@ -34,7 +34,7 @@ android {
         viewBinding false
     }
 
-    lintOptions {
+    lint {
         abortOnError false
         checkReleaseBuilds false
     }

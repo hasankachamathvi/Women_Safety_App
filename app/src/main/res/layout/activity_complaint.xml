@@ -6,51 +6,64 @@
     android:layout_height="match_parent"
     android:background="#FF208E">
 
-    <!-- Top Right Logo -->
-    <ImageView
-        android:id="@+id/iv_top_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@mipmap/ic_launcher"
-        android:alpha="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Main Title -->
     <TextView
         android:id="@+id/tv_app_name_sinhala"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/app_name_sinhala"
+        android:layout_marginTop="24dp"
+        android:text="යුවති"
         android:textColor="@color/white"
-        android:textSize="64sp"
+        android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Subtitle -->
     <TextView
         android:id="@+id/tv_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:letterSpacing="0.1"
         android:text="REPORT INCIDENT"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:letterSpacing="0.1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_app_name_sinhala" />
 
+    <!-- Action Button (Bottom) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/white"
+        android:padding="10dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="#FF208E"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Scrollable Form (Middle) -->
+    <!-- Fixed height constraint to ensure it occupies the space between header and button -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_form"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_header">
 
         <LinearLayout
@@ -58,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:orientation="vertical"
-            android:paddingBottom="24dp">
+            android:paddingBottom="40dp">
 
             <!-- 1. Incident Overview -->
             <TextView
@@ -67,7 +80,7 @@
                 android:layout_marginTop="16dp"
                 android:text="1. Incident Overview"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -82,8 +95,8 @@
                 android:id="@+id/spinner_category"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:backgroundTint="@color/white"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,12 +110,13 @@
                 android:id="@+id/et_incident_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@color/white"
                 android:focusable="false"
                 android:hint="Select Date &amp; Time"
                 android:textColor="@color/white"
                 android:textColorHint="#CCFFFFFF"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_ongoing"
@@ -115,14 +129,14 @@
                 app:thumbTint="@color/white"
                 app:trackTint="#80FFFFFF" />
 
-            <!-- 2. Location &amp; Identification -->
+            <!-- 2. Location & Identification -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="2. Location &amp; Identification"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -137,11 +151,12 @@
                 android:id="@+id/et_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@color/white"
                 android:hint="Landmarks, street or shop names"
                 android:textColor="@color/white"
                 android:textColorHint="#CCFFFFFF"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -155,28 +170,33 @@
                 android:id="@+id/et_vehicle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@color/white"
                 android:hint="Plate number, color, or model"
                 android:textColor="@color/white"
                 android:textColorHint="#CCFFFFFF"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Can you describe the individual(s)?"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_suspect_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white"
+                android:hint="Height, clothing, tattoos, etc."
+                android:textColor="@color/white"
+                android:textColorHint="#CCFFFFFF"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_next"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:text="Next"
-        android:textAllCaps="false"
-        android:textColor="#FF208E"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:cornerRadius="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="621dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
