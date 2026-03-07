@@ -165,6 +165,17 @@
                     android:textColorHint="@color/yuwathi_pink_light"
                     android:textSize="14sp" />
 
+                <!-- Password visibility toggle -->
+                <ImageView
+                    android:id="@+id/iv_toggle_password"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@string/toggle_password"
+                    android:src="@android:drawable/ic_menu_view"
+                    app:tint="@color/yuwathi_pink_light" />
+
             </FrameLayout>
 
             <!-- Sign In Button -->
@@ -181,6 +192,17 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="24dp" />
+
+            <!-- Forgot Password link -->
+            <TextView
+                android:id="@+id/tv_forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="@string/forgot_password"
+                android:textColor="@color/yuwathi_pink"
+                android:textSize="13sp" />
 
             <!-- Remember Me + Forgot Password -->
 
