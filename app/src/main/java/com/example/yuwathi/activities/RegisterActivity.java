@@ -15,7 +15,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Simple placeholder - registration functionality to be implemented
+        // Simple placeholder
         Toast.makeText(this, "Register Activity - Under Development", Toast.LENGTH_SHORT).show();
     }
 }
