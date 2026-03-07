@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SOS Activity Layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yuwathi_pink"
+    android:background="#E91E63"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp">
@@ -14,18 +13,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Emergency SOS"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:textSize="28sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="5"
-        android:textColor="@color/white"
-        android:textSize="72sp"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
         android:textStyle="bold" />
 
     <com.google.android.material.button.MaterialButton
@@ -35,21 +35,21 @@
         android:layout_marginTop="32dp"
         android:backgroundTint="#FF0000"
         android:text="SOS"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:cornerRadius="100dp" />
+        app:cornerRadius="100dp"
+        app:elevation="8dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel_sos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="#FFFFFF"
         android:text="Cancel"
-        android:textColor="@color/yuwathi_pink"
+        android:textColor="#E91E63"
         android:textSize="16sp"
         app:cornerRadius="24dp" />
 
 </LinearLayout>
-

@@ -51,7 +51,6 @@
         android:textSize="15sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"
-        app:icon="@drawable/ic_add_contact"
         app:iconTint="@color/white" />
     <!-- Contacts list -->
     <androidx.recyclerview.widget.RecyclerView

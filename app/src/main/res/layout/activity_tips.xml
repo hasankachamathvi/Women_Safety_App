@@ -15,14 +15,7 @@
         android:paddingTop="40dp"
         android:paddingBottom="24dp"
         android:paddingHorizontal="20dp">
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_circle_white"
-            android:padding="10dp"
-            android:src="@drawable/ic_tips_nav"
-            app:tint="@color/yuwathi_pink"
-            android:contentDescription="Tips icon" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

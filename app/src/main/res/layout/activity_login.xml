@@ -1,114 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#E91E63">
 
-    <!--  SECTION -->
-    <FrameLayout
+    <!-- Top Pink Section (Header) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_header"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.1"
-        android:background="@color/yuwathi_pink">
+        app:layout_constraintHeight_percent="0.45"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Decorative circles top-left -->
+        <!-- Decorative circles -->
         <View
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_gravity="top|start"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:alpha="0.3"
-            android:background="@drawable/bg_circle_pink_light" />
+            android:background="@drawable/bg_circle_pink_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="top|start"
-            android:layout_marginStart="55dp"
-            android:layout_marginTop="5dp"
-            android:alpha="0.25"
-            android:background="@drawable/bg_circle_pink_light" />
-
-        <!-- Decorative circles top-right -->
         <View
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:layout_gravity="top|end"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:alpha="0.3"
-            android:background="@drawable/bg_circle_pink_light" />
-
-        <View
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_gravity="top|end"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="50dp"
-            android:alpha="0.25"
-            android:background="@drawable/bg_circle_pink_light" />
+            android:background="@drawable/bg_circle_pink_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Center content -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="40dp"
-            android:paddingBottom="16dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- "One tap. Instant help" -->
             <TextView
-                android:id="@+id/tv_hero_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="යුවති"
+                android:textColor="#FFFFFF"
+                android:textSize="56sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:gravity="center"
                 android:text="@string/one_tap"
-                android:textColor="@color/white"
-                android:textSize="32sp"
-                android:textStyle="bold" />
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center" />
 
-            <!-- Star decorations + Logo circle -->
+            <!-- Logo -->
             <FrameLayout
-                android:layout_width="220dp"
-                android:layout_height="220dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:layout_marginTop="8dp">
-
-                <!-- Semi-transparent ring -->
                 <View
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
-                    android:layout_gravity="center"
-                    android:alpha="0.2"
-                    android:background="@drawable/bg_circle_white" />
-
-                <!-- Logo -->
-                <ImageView
-                    android:id="@+id/iv_logo"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
+                    android:alpha="0.2"
+                    android:background="@drawable/bg_circle_white" />
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="center"
-                    android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_launcher"
                     android:scaleType="centerCrop" />
             </FrameLayout>
-
-            <!-- Sinhala app name below logo -->
-
         </LinearLayout>
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- ===== BOTTOM WHITE CONTENT SECTION ===== -->
+    <!-- Bottom White Section -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:background="@drawable/bg_white_rounded_top"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_header">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,82 +101,54 @@
             android:paddingTop="32dp"
             android:paddingBottom="24dp">
 
-            <!-- Section title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-black"
                 android:text="@string/enter_detail"
-                android:textColor="@color/yuwathi_pink"
-                android:textSize="22sp"
+                android:textColor="#E91E63"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Username / Email / Phone -->
             <EditText
                 android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:autofillHints="username"
                 android:background="@drawable/bg_input_underline_pink"
                 android:hint="@string/username_hint"
                 android:inputType="text"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:textColor="@color/yuwathi_text_dark"
-                android:textColorHint="@color/yuwathi_pink_light"
+                android:textColor="#333333"
+                android:textColorHint="#F48FB1"
                 android:textSize="14sp" />
 
-            <!-- Password field -->
-            <FrameLayout
+            <EditText
+                android:id="@+id/et_password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_input_underline_pink"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:textColor="#333333"
+                android:textColorHint="#F48FB1"
+                android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:autofillHints="password"
-                    android:background="@drawable/bg_input_underline_pink"
-                    android:hint="@string/password_hint"
-                    android:inputType="textPassword"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="40dp"
-                    android:textColor="@color/yuwathi_text_dark"
-                    android:textColorHint="@color/yuwathi_pink_light"
-                    android:textSize="14sp" />
-
-                <!-- Password visibility toggle -->
-                <ImageView
-                    android:id="@+id/iv_toggle_password"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="4dp"
-                    android:contentDescription="@string/toggle_password"
-                    android:src="@android:drawable/ic_menu_view"
-                    app:tint="@color/yuwathi_pink_light" />
-
-            </FrameLayout>
-
-            <!-- Sign In Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_in"
                 android:layout_width="180dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="28dp"
-                android:backgroundTint="@color/yuwathi_pink"
+                android:backgroundTint="#E91E63"
                 android:text="@string/sign_in"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="24dp" />
 
-            <!-- Forgot Password link -->
             <TextView
                 android:id="@+id/tv_forgot_password"
                 android:layout_width="wrap_content"
@@ -201,32 +156,27 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:text="@string/forgot_password"
-                android:textColor="@color/yuwathi_pink"
+                android:textColor="#E91E63"
                 android:textSize="13sp" />
 
-            <!-- Remember Me + Forgot Password -->
-
-            <!-- Register link -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_account"
-                    android:textColor="@color/yuwathi_text_hint"
+                    android:textColor="#AAAAAA"
                     android:textSize="14sp" />
-
                 <TextView
                     android:id="@+id/tv_register_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/register"
-                    android:textColor="@color/yuwathi_pink"
+                    android:textColor="#E91E63"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -234,4 +184,4 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
