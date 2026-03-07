@@ -151,27 +151,6 @@
                 android:layout_marginTop="4dp"
                 android:backgroundTint="@color/white" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_anonymous"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Do you want to remain anonymous?"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:thumbTint="@color/white"
-                app:trackTint="#80FFFFFF" />
-
-            <CheckBox
-                android:id="@+id/cb_medical_support"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:buttonTint="@color/white"
-                android:text="Do you require medical support?"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -179,7 +158,6 @@
         android:id="@+id/btn_submit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
         android:text="Submit"
         android:textAllCaps="false"
@@ -187,22 +165,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_footer_text2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_footer_text2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:paddingHorizontal="48dp"
-        android:text="Page 2 of 2"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="635dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
