@@ -98,14 +98,6 @@
             </FrameLayout>
 
             <!-- Sinhala app name below logo -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/app_name_sinhala"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
 
         </LinearLayout>
     </FrameLayout>
@@ -173,15 +165,6 @@
                     android:textColorHint="@color/yuwathi_pink_light"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:id="@+id/iv_toggle_password"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="4dp"
-                    android:contentDescription="@string/password_hint"
-                    android:src="@android:drawable/ic_menu_view"
-                    app:tint="@color/yuwathi_pink_light" />
             </FrameLayout>
 
             <!-- Sign In Button -->
@@ -200,35 +183,6 @@
                 app:cornerRadius="24dp" />
 
             <!-- Remember Me + Forgot Password -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/cb_remember_me"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/yuwathi_pink"
-                    android:text="@string/remember_me"
-                    android:textColor="@color/yuwathi_text_medium"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/tv_forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/forgot_password"
-                    android:textColor="@color/yuwathi_pink"
-                    android:textSize="13sp" />
-            </LinearLayout>
 
             <!-- Register link -->
             <LinearLayout
