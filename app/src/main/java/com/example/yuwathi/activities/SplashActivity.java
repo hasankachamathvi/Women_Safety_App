@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.yuwathi.R;
-
+//main
 public class SplashActivity extends AppCompatActivity {
 
     @Override
