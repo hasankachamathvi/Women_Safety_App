@@ -1,172 +1,172 @@
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:background="@color/yuwathi_pink"-->
-<!--    android:gravity="center"-->
-<!--    android:orientation="vertical">-->
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yuwathi_pink"
+    android:gravity="center"
+    android:orientation="vertical">
 
-<!--    &lt;!&ndash; Decorative circles top-left &ndash;&gt;-->
-<!--    <FrameLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1">-->
 
-<!--        <View-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_gravity="top|start"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:alpha="0.3"-->
-<!--            android:background="@drawable/bg_circle_pink_light" />-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-<!--        <View-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_gravity="top|start"-->
-<!--            android:layout_marginStart="60dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:alpha="0.3"-->
-<!--            android:background="@drawable/bg_circle_pink_light" />-->
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.3"
+            android:background="@drawable/bg_circle_pink_light" />
 
-<!--        <View-->
-<!--            android:layout_width="60dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_gravity="top|end"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:alpha="0.3"-->
-<!--            android:background="@drawable/bg_circle_pink_light" />-->
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="8dp"
+            android:alpha="0.3"
+            android:background="@drawable/bg_circle_pink_light" />
 
-<!--        <View-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_gravity="top|end"-->
-<!--            android:layout_marginTop="56dp"-->
-<!--            android:layout_marginEnd="56dp"-->
-<!--            android:alpha="0.3"-->
-<!--            android:background="@drawable/bg_circle_pink_light" />-->
+        <View
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:alpha="0.3"
+            android:background="@drawable/bg_circle_pink_light" />
 
-<!--        &lt;!&ndash; Title &ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="vertical"-->
-<!--            android:padding="24dp">-->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="56dp"
+            android:alpha="0.3"
+            android:background="@drawable/bg_circle_pink_light" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/tv_tagline"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="sans-serif-black"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/one_tap"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="36sp"-->
-<!--                android:textStyle="bold" />-->
+        <!-- Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-<!--        </LinearLayout>-->
-<!--    </FrameLayout>-->
+            <TextView
+                android:id="@+id/tv_tagline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="@string/one_tap"
+                android:textColor="@color/white"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-<!--    &lt;!&ndash; Logo circle &ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1.2"-->
-<!--        android:gravity="center"-->
-<!--        android:orientation="vertical">-->
+        </LinearLayout>
+    </FrameLayout>
 
-<!--        &lt;!&ndash; Logo ring &ndash;&gt;-->
-<!--        <FrameLayout-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:layout_gravity="center">-->
+    <!-- Logo circle -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
+        android:gravity="center"
+        android:orientation="vertical">
 
-<!--            <View-->
-<!--                android:layout_width="200dp"-->
-<!--                android:layout_height="200dp"-->
-<!--                android:alpha="0.25"-->
-<!--                android:background="@drawable/bg_circle_white" />-->
+        <!-- Logo -->
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center">
 
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_logo"-->
-<!--                android:layout_width="160dp"-->
-<!--                android:layout_height="160dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:src="@drawable/ic_launcher"-->
-<!--                android:scaleType="centerCrop" />-->
-<!--        </FrameLayout>-->
+            <View
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:alpha="0.25"
+                android:background="@drawable/bg_circle_white" />
 
-<!--        &lt;!&ndash; App name in Sinhala &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/tv_app_name"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="12dp"-->
-<!--            android:text="@string/app_name_sinhala"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="32sp"-->
-<!--            android:textStyle="bold" />-->
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_launcher"
+                android:scaleType="centerCrop" />
+        </FrameLayout>
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:text="@string/tagline"-->
-<!--            android:textColor="#E0F5FF"-->
-<!--            android:textSize="13sp" />-->
+        <!-- App name in Sinhala -->
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/app_name_sinhala"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-<!--    </LinearLayout>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/tagline"
+            android:textColor="#E0F5FF"
+            android:textSize="13sp" />
 
-<!--    &lt;!&ndash; White wave bottom section &ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="0.5"-->
-<!--        android:background="@drawable/bg_white_rounded_top"-->
-<!--        android:gravity="center"-->
-<!--        android:orientation="vertical"-->
-<!--        android:paddingTop="16dp">-->
+    </LinearLayout>
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/app_name"-->
-<!--            android:textColor="@color/yuwathi_pink"-->
-<!--            android:textSize="22sp"-->
-<!--            android:textStyle="bold" />-->
+    <!-- White wave bottom section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/bg_white_rounded_top"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="16dp">
 
-<!--        &lt;!&ndash; Dot loading indicator &ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:orientation="horizontal">-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/yuwathi_pink"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-<!--            <View-->
-<!--                android:layout_width="10dp"-->
-<!--                android:layout_height="10dp"-->
-<!--                android:layout_marginEnd="6dp"-->
-<!--                android:background="@drawable/bg_circle_pink" />-->
+        <!-- Dot loading indicator -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
-<!--            <View-->
-<!--                android:layout_width="10dp"-->
-<!--                android:layout_height="10dp"-->
-<!--                android:layout_marginEnd="6dp"-->
-<!--                android:alpha="0.5"-->
-<!--                android:background="@drawable/bg_circle_pink" />-->
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_circle_pink" />
 
-<!--            <View-->
-<!--                android:layout_width="10dp"-->
-<!--                android:layout_height="10dp"-->
-<!--                android:alpha="0.3"-->
-<!--                android:background="@drawable/bg_circle_pink" />-->
-<!--        </LinearLayout>-->
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="6dp"
+                android:alpha="0.5"
+                android:background="@drawable/bg_circle_pink" />
 
-<!--    </LinearLayout>-->
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:alpha="0.3"
+                android:background="@drawable/bg_circle_pink" />
+        </LinearLayout>
 
-<!--</LinearLayout>-->
+    </LinearLayout>
+
+</LinearLayout>
