@@ -69,5 +69,17 @@
         <!-- Profile Page - view/edit user profile and settings -->
         <activity android:name=".activities.ProfileActivity" android:exported="true" />
 
+        <!-- Admin Panel Activities -->
+        <!-- Admin Dashboard - main admin panel with overview -->
+        <activity android:name=".activities.AdminDashboardActivity" android:exported="true" />
+        <!-- Admin User Management - manage app users -->
+        <activity android:name=".activities.AdminUsersActivity" android:exported="true" />
+        <!-- Admin Complaints Management - view and manage complaints -->
+        <activity android:name=".activities.AdminComplaintsActivity" android:exported="true" />
+        <!-- Admin Reports - view analytics and statistics -->
+        <activity android:name=".activities.AdminReportsActivity" android:exported="true" />
+        <!-- Admin Safety Tips - manage safety tips content -->
+        <activity android:name=".activities.AdminSafetyTipsActivity" android:exported="true" />
+
     </application>
 </manifest>

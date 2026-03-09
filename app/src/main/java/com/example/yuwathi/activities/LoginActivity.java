@@ -28,20 +28,33 @@ public class LoginActivity extends AppCompatActivity {
 
         // Handle Sign In button click
         btnSignIn.setOnClickListener(v -> {
-            /*
             String username = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
+            // Check if fields are empty
             if (username.isEmpty() || password.isEmpty()) {
+                android.widget.Toast.makeText(LoginActivity.this, 
+                    "Please enter username and password", 
+                    android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
-            */
 
-            // For now, just go to Home page without validation
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
-            startActivity(intent);
-            finish(); // Close login page
+            // Check for admin credentials
+            // TODO: Replace with actual API authentication
+            if (username.equals("admin") && password.equals("admin123")) {
+                // Admin login - go to Admin Dashboard
+                Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                // Regular user login - go to Home page
+                // In production, validate credentials via API first
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
         });
 
         // Handle "Register" link click - go to Register page
