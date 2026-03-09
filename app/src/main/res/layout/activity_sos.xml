@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_sos.xml - SOS Emergency Page Layout -->
+<!-- Full pink/red screen with: -->
+<!-- 1. Status text (shows instructions or "SOS Activated") -->
+<!-- 2. Countdown number (3, 2, 1 when holding button) -->
+<!-- 3. Big red SOS button (hold for 3 seconds to activate) -->
+<!-- 4. Cancel button to go back -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"

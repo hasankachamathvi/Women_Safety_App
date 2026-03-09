@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_register.xml - Registration Page Layout -->
+<!-- Full pink background with scrollable form -->
+<!-- Fields: Email/Phone, Full Name, Username, Password, Confirm Password -->
+<!-- Also has Register button, Login link, and footer text -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"

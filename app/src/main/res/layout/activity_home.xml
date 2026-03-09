@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_home.xml - Main Home/Dashboard Page Layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -6,7 +7,7 @@
     android:background="#FFF5F8"
     android:orientation="vertical">
 
-    <!-- HEADER -->
+    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,10 +41,8 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
     </LinearLayout>
 
-    <!-- ===== SCROLLABLE CONTENT ===== -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -56,13 +55,14 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <!-- Safety Status Banner -->
+            <!-- Status Card - Fixed background -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:elevation="4dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -72,7 +72,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="8dp"
-                    android:src="@android:drawable/ic_lock_idle_lock"
+                    android:src="@drawable/ic_shield"
                     android:contentDescription="Shield" />
 
                 <LinearLayout
@@ -99,7 +99,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- SOS BUTTON -->
+            <!-- SOS Button Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +131,6 @@
                     app:elevation="8dp" />
             </LinearLayout>
 
-            <!-- Quick Action Grid -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,10 +141,12 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Quick Action Buttons - Fixed background -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
@@ -155,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="@android:drawable/dialog_holo_light_frame"
+                    android:background="@drawable/bg_card_white"
                     android:elevation="2dp"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -176,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="@android:drawable/dialog_holo_light_frame"
+                    android:background="@drawable/bg_card_white"
                     android:elevation="2dp"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -196,7 +197,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@android:drawable/dialog_holo_light_frame"
+                    android:background="@drawable/bg_card_white"
                     android:elevation="2dp"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -212,15 +213,15 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-            <!-- Safety Tip Card -->
+            <!-- Safety Tip Card - Fixed background -->
             <LinearLayout
                 android:id="@+id/card_safety_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:elevation="4dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -230,7 +231,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="8dp"
-                    android:src="@android:drawable/ic_menu_info_details"
+                    android:src="@drawable/ic_tips_nav"
                     android:contentDescription="Tip" />
 
                 <LinearLayout
@@ -257,7 +258,6 @@
                         android:layout_marginTop="4dp" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -268,5 +268,4 @@
         android:background="#FFFFFF"
         android:elevation="8dp"
         app:menu="@menu/bottom_menu" />
-
 </LinearLayout>

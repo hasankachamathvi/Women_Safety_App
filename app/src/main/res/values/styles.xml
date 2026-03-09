@@ -1,6 +1,8 @@
+<!-- styles.xml - Custom widget styles used in the app -->
 <resources>
+    <!-- Custom style for text input fields with pink outline border -->
     <style name="Widget.Yuwathi.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/yuwathi_pink</item>
-        <item name="hintTextColor">@color/yuwathi_pink</item>
+        <item name="boxStrokeColor">@color/yuwathi_pink</item>  <!-- Pink border color -->
+        <item name="hintTextColor">@color/yuwathi_pink</item>   <!-- Pink hint text -->
     </style>
 </resources>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_login.xml - Login Page Layout -->
+<!-- Top pink section: shows app name in Sinhala, subtitle, and logo -->
+<!-- Bottom white section: username input, password input, sign in button, forgot password, register link -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +9,7 @@
     android:layout_height="match_parent"
     android:background="#E91E63">
 
-    <!-- Top Pink Section (Header) -->
+    <!-- Top Pink Section (Header with app branding) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_header"
         android:layout_width="match_parent"
@@ -84,7 +87,7 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Bottom White Section -->
+    <!-- Bottom White Section (Login form with inputs and buttons) -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

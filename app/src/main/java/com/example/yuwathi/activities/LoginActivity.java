@@ -1,5 +1,6 @@
 package com.example.yuwathi.activities;
 
+// Import required Android classes
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -15,16 +16,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set the login screen layout
         setContentView(R.layout.activity_login);
 
-        // Initialize views
-        EditText etUsername = findViewById(R.id.et_username);
-        EditText etPassword = findViewById(R.id.et_password);
-        MaterialButton btnSignIn = findViewById(R.id.btn_sign_in);
-        TextView tvRegister = findViewById(R.id.tv_register_link);
-        TextView tvForgot = findViewById(R.id.tv_forgot_password);
+        // Find all input fields and buttons from the layout
+        EditText etUsername = findViewById(R.id.et_username);       // Username input field
+        EditText etPassword = findViewById(R.id.et_password);       // Password input field
+        MaterialButton btnSignIn = findViewById(R.id.btn_sign_in);  // Sign In button
+        TextView tvRegister = findViewById(R.id.tv_register_link);  // "Register" link text
+        TextView tvForgot = findViewById(R.id.tv_forgot_password);  // "Forgot password" link text
 
-        // Sign In logic commented out
+        // Handle Sign In button click
         btnSignIn.setOnClickListener(v -> {
             /*
             String username = etUsername.getText().toString().trim();
@@ -35,21 +37,20 @@ public class LoginActivity extends AppCompatActivity {
             }
             */
 
-            // Still keeping navigation so you can see the next UI
+            // For now, just go to Home page without validation
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
             startActivity(intent);
-            finish();
+            finish(); // Close login page
         });
 
-        // Navigate to Register screen
+        // Handle "Register" link click - go to Register page
         tvRegister.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
         );
 
-        // Forgot password logic commented out
+        // Handle "Forgot password" link click
         tvForgot.setOnClickListener(v -> {
-            // Logic for forgot password
         });
     }
 }

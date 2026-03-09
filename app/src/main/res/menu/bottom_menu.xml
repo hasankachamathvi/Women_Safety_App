@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- bottom_menu.xml - Bottom Navigation Bar Menu Items -->
+<!-- Defines the 5 tabs shown at the bottom of most pages -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nav_home"     android:icon="@drawable/ic_home_nav"     android:title="@string/home" />
-    <item android:id="@+id/nav_contacts" android:icon="@drawable/ic_contacts_nav" android:title="@string/contacts" />
-    <item android:id="@+id/nav_sos"      android:icon="@drawable/ic_sos_nav"      android:title="@string/sos" />
-    <item android:id="@+id/nav_tips"     android:icon="@drawable/ic_tips_nav"     android:title="@string/safety_tips" />
-    <item android:id="@+id/nav_profile"  android:icon="@drawable/ic_profile_nav"  android:title="@string/profile" />
+    <item android:id="@+id/nav_home"     android:icon="@drawable/ic_home_nav"     android:title="@string/home" />      <!-- Home tab -->
+    <item android:id="@+id/nav_contacts" android:icon="@drawable/ic_contacts_nav" android:title="@string/contacts" />  <!-- Contacts tab -->
+    <item android:id="@+id/nav_sos"      android:icon="@drawable/ic_sos_nav"      android:title="@string/sos" />       <!-- SOS tab -->
+    <item android:id="@+id/nav_tips"     android:icon="@drawable/ic_tips_nav"     android:title="@string/safety_tips" /> <!-- Tips tab -->
+    <item android:id="@+id/nav_profile"  android:icon="@drawable/ic_profile_nav"  android:title="@string/profile" />   <!-- Profile tab -->
 </menu>
