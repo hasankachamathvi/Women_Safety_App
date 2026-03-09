@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FF208E">
 
-    <!-- Main Title -->
+    <!-- App title in Sinhala -->
     <TextView
         android:id="@+id/tv_app_name_sinhala"
         android:layout_width="wrap_content"
@@ -53,7 +53,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Scrollable Form (Middle) -->
-    <!-- Fixed height constraint to ensure it occupies the space between header and button -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_form"
         android:layout_width="0dp"

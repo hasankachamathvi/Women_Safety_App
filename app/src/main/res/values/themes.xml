@@ -1,15 +1,19 @@
+<!-- themes.xml - App themes (colors and styles for the whole app) -->
 <resources>
-    <style name="Theme.Women_Safety_App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/yuwathi_pink</item>
-        <item name="colorPrimaryVariant">@color/yuwathi_pink_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/yuwathi_pink_light</item>
+    <!-- Main App Theme - Pink color scheme, no action bar (we use custom headers) -->
+    <style name="Theme.Women_Safety_App" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/yuwathi_pink</item>            <!-- Main pink color -->
+        <item name="colorPrimaryVariant">@color/yuwathi_pink_dark</item> <!-- Darker pink -->
+        <item name="colorOnPrimary">@color/white</item>                  <!-- Text on pink = white -->
+        <item name="colorSecondary">@color/yuwathi_pink_light</item>     <!-- Secondary = light pink -->
         <item name="colorSecondaryVariant">@color/yuwathi_pink_dark</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor">@color/yuwathi_pink_dark</item>
+        <item name="android:statusBarColor">@color/yuwathi_pink_dark</item> <!-- Status bar = dark pink -->
     </style>
+
+    <!-- SOS Theme - Same as main but with RED colors for emergency feel -->
     <style name="Theme.Women_Safety_App.SOS" parent="Theme.Women_Safety_App">
-        <item name="colorPrimary">@color/yuwathi_red</item>
-        <item name="android:statusBarColor">@color/yuwathi_red_dark</item>
+        <item name="colorPrimary">@color/yuwathi_red</item>              <!-- Red primary -->
+        <item name="android:statusBarColor">@color/yuwathi_red_dark</item> <!-- Red status bar -->
     </style>
 </resources>

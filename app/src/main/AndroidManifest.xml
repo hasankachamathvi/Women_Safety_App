@@ -1,13 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- AndroidManifest.xml - App configuration file -->
+<!-- Declares all permissions, features, and activities (pages) used in the app -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permission to access internet (for API calls) -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permission to get exact GPS location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Permission to get approximate location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Permission to send SMS messages (for SOS alerts) -->
     <uses-permission
         android:name="android.permission.SEND_SMS"
         tools:ignore="ProtectedPermissions,MissingPermission" />
+    <!-- Permission to make phone calls (for emergency calls) -->
     <uses-permission
         android:name="android.permission.CALL_PHONE"
         tools:ignore="MissingPermission" />
@@ -26,11 +33,12 @@
         android:theme="@style/Theme.Women_Safety_App"
         tools:targetApi="31">
 
-        <!-- Add your Google Maps API Key here to prevent LocationActivity from crashing -->
+        <!-- Google Maps API Key - required for location/map features -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_API_KEY_HERE" />
 
+        <!-- Splash Screen - first page that opens when app starts (LAUNCHER) -->
         <activity android:name=".activities.SplashActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,17 +46,27 @@
             </intent-filter>
         </activity>
 
+        <!-- Login Page - user enters username and password -->
         <activity android:name=".activities.LoginActivity"    android:exported="true" />
+        <!-- Location Page - share live location with contacts -->
         <activity android:name=".activities.LocationActivity" android:exported="true" />
+        <!-- Register Page - new user registration -->
         <activity android:name=".activities.RegisterActivity" android:exported="true" />
+        <!-- Home Page - main dashboard with SOS and quick actions -->
         <activity android:name=".activities.HomeActivity"    android:exported="true" />
+        <!-- Contacts Page - manage emergency contacts -->
         <activity android:name=".activities.ContactsActivity"   android:exported="true" />
+        <!-- Safety Tips Page - view safety tips -->
         <activity android:name=".activities.SafetyTipsActivity" android:exported="true" />
+        <!-- Complaint Page 1 - report incident (category, location, suspect) -->
         <activity android:name=".activities.ComplaintActivity"  android:exported="true" />
+        <!-- Complaint Page 2 - report incident (evidence, privacy, submit) -->
         <activity android:name=".activities.Complaint2Activity" android:exported="true" />
+        <!-- SOS Page - hold button to send emergency alerts (uses special SOS theme) -->
         <activity android:name=".activities.SosActivity"
             android:exported="true"
             android:theme="@style/Theme.Women_Safety_App.SOS" />
+        <!-- Profile Page - view/edit user profile and settings -->
         <activity android:name=".activities.ProfileActivity" android:exported="true" />
 
     </application>

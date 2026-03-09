@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_complaint2.xml - Report Incident Page 2 of 2 -->
+<!-- Scrollable form with pink background -->
+<!-- Section 3: Detailed Evidence - incident description, witnesses, upload evidence -->
+<!-- Section 4: Safety & Privacy - contact preference dropdown -->
+<!-- "Submit" button at bottom submits the complaint -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

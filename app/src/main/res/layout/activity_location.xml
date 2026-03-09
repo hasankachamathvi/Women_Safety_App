@@ -6,7 +6,7 @@
     android:background="#FFF5F8"
     android:orientation="vertical">
 
-    <!-- Pink Header -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -130,3 +130,7 @@
         android:elevation="8dp"
         app:menu="@menu/bottom_menu" />
 </LinearLayout>
+
+    <!-- activity_location.xml - Live Location Sharing Page Layout -->
+    <!-- Shows: header, map area, current address, share/stop buttons, bottom nav -->
+    <!-- Users can share their live location with emergency contacts -->

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_profile.xml - User Profile Page Layout -->
+<!-- Shows: pink header with app name, profile info card (name, email), -->
+<!-- Settings: Edit Profile, Emergency Contacts, Safety Tips, Logout -->
+<!-- Bottom navigation bar -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"

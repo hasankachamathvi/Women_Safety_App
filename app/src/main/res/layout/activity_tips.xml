@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/yuwathi_bg"
     android:orientation="vertical">
-    <!-- Pink Header -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,3 +53,8 @@
         app:itemTextColor="@color/nav_icon_color"
         app:menu="@menu/bottom_menu" />
 </LinearLayout>
+
+    <!-- activity_tips.xml - Safety Tips Page Layout -->
+    <!-- Shows: pink header with title "Safety Tips", -->
+    <!-- RecyclerView (scrollable list) for displaying safety tips, -->
+    <!-- Bottom navigation bar -->
