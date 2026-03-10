@@ -307,9 +307,14 @@ body {
 }
 
 .bottom-nav-item:hover,
-.bottom-nav-item:active {
+.bottom-nav-item:active,
+.bottom-nav-item.active {
     color: #f5576c;
     background: rgba(245, 87, 108, 0.1);
+}
+
+.bottom-nav-item.active {
+    font-weight: 600;
 }
 
 .bottom-nav-item .nav-icon {
