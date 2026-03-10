@@ -260,6 +260,7 @@ body {
         margin-left: 70px;
         width: calc(100% - 70px);
         padding: 20px;
+        padding-bottom: 80px; /* Add space for bottom nav */
     }
 
     .cards-container {
@@ -268,5 +269,89 @@ body {
 
     .header h1 {
         font-size: 24px;
+    }
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+    display: none; /* Hidden by default on desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.bottom-nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    max-width: 100%;
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #666;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    min-width: 60px;
+}
+
+.bottom-nav-item:hover,
+.bottom-nav-item:active {
+    color: #f5576c;
+    background: rgba(245, 87, 108, 0.1);
+}
+
+.bottom-nav-item .nav-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.bottom-nav-item .nav-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Show bottom nav on mobile and tablet */
+@media (max-width: 992px) {
+    .bottom-nav {
+        display: block;
+    }
+    
+    .sidebar {
+        display: none; /* Hide sidebar on mobile */
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding-bottom: 80px; /* Add space for bottom nav */
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .bottom-nav-item .nav-label {
+        font-size: 10px;
+    }
+    
+    .bottom-nav-item .nav-icon {
+        font-size: 20px;
+    }
+    
+    .bottom-nav-item {
+        padding: 6px 8px;
+        min-width: 50px;
     }
 }
