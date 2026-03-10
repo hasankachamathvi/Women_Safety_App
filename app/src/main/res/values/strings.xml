@@ -51,4 +51,11 @@
     <string name="log_in">Log In</string>
     <string name="toggle_password">Toggle password visibility</string>
     <string name="permissions_note">We need certain permissions to provide our safety services.</string>
+
+    <!-- Admin bottom navigation bar labels -->
+    <string name="admin_dashboard">Dashboard</string>
+    <string name="admin_users">Users</string>
+    <string name="admin_complaints">Complaints</string>
+    <string name="admin_reports">Reports</string>
+    <string name="admin_safety_tips">Tips</string>
 </resources>

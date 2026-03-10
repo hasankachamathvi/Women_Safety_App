@@ -3,7 +3,6 @@ package com.example.yuwathi.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
@@ -12,7 +11,7 @@ import com.google.android.material.button.MaterialButton;
  * Admin Dashboard Activity
  * Main admin panel showing overview statistics and quick navigation
  */
-public class AdminDashboardActivity extends AppCompatActivity {
+public class AdminDashboardActivity extends BaseAdminActivity {
 
     // UI Components
     private TextView tvTotalUsers, tvTotalComplaints, tvResolvedComplaints, tvTotalReports;
@@ -27,6 +26,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
         initializeViews();
         setupListeners();
         loadStatistics();
+    }
+
+    @Override
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_admin_dashboard;
     }
 
     /**
