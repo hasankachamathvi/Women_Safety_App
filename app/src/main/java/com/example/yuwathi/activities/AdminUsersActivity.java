@@ -2,7 +2,6 @@ package com.example.yuwathi.activities;
 
 import android.os.Bundle;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,7 @@ import java.util.List;
  * Admin Users Management Activity
  * View, search, and manage app users
  */
-public class AdminUsersActivity extends AppCompatActivity {
+public class AdminUsersActivity extends BaseAdminActivity {
 
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
@@ -40,6 +39,11 @@ public class AdminUsersActivity extends AppCompatActivity {
         setupRecyclerView();
         loadUsers();
         setupSearch();
+    }
+
+    @Override
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_admin_users;
     }
 
     private void initializeViews() {
