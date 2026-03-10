@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- activity_profile.xml - User Profile Page Layout -->
-<!-- Shows: pink header with app name, profile info card (name, email), -->
-<!-- Settings: Edit Profile, Emergency Contacts, Safety Tips, Logout -->
-<!-- Bottom navigation bar -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -49,15 +46,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="24dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
             android:paddingTop="24dp"
             android:paddingBottom="80dp">
 
-            <!-- Profile Info Card -->
+            <!-- Profile Info Card - Fixed background -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -98,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -113,11 +111,12 @@
                     android:textColor="#333333"
                     android:textSize="15sp" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_media_next"
-                    app:tint="#666666" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="→"
+                    android:textColor="#666666"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- Emergency Contacts -->
@@ -126,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -141,11 +140,12 @@
                     android:textColor="#333333"
                     android:textSize="15sp" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_media_next"
-                    app:tint="#666666" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="→"
+                    android:textColor="#666666"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- Safety Tips -->
@@ -154,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -169,11 +169,12 @@
                     android:textColor="#333333"
                     android:textSize="15sp" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_media_next"
-                    app:tint="#666666" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="→"
+                    android:textColor="#666666"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- Logout -->
@@ -182,7 +183,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@android:drawable/dialog_holo_light_frame"
+                android:background="@drawable/bg_card_white"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -198,11 +199,11 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_lock_power_off"
-                    app:tint="#D32F2F" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🚪"
+                    android:textSize="18sp" />
             </LinearLayout>
 
         </LinearLayout>
