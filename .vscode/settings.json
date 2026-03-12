@@ -1,0 +1,14 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.project.sourcePaths": [
+    "app/src/main/java"
+  ],
+  "java.project.outputPath": "app/build/intermediates/javac",
+  "java.project.referencedLibraries": [
+    "app/build/intermediates/**/*.jar",
+    "${env:ANDROID_HOME}/platforms/android-34/**/*.jar"
+  ]
+}
