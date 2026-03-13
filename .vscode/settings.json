@@ -10,5 +10,7 @@
   "java.project.referencedLibraries": [
     "app/build/intermediates/**/*.jar",
     "${env:ANDROID_HOME}/platforms/android-34/**/*.jar"
-  ]
+  ],
+  "java.errors.incompleteClasspath.severity": "ignore",
+  "java.maxConcurrentBuilds": 1
 }
