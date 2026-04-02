@@ -2,6 +2,7 @@ package com.example.yuwathi.activities;
 
 import android.os.Bundle;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yuwathi.R;
 import com.example.yuwathi.adapters.ComplaintAdapter;
 import com.example.yuwathi.models.Complaint;
+import com.example.yuwathi.services.FirebaseFirestoreService;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +27,14 @@ public class AdminComplaintsActivity extends AppCompatActivity {
     private ChipGroup chipGroupStatus;
     private List<Complaint> complaintList;
     private String currentFilter = "All";
+    private FirebaseFirestoreService firestoreService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_complaints);
+
+        firestoreService = FirebaseFirestoreService.getInstance();
 
         // Set up toolbar
         if (getSupportActionBar() != null) {
@@ -54,20 +59,54 @@ public class AdminComplaintsActivity extends AppCompatActivity {
         complaintAdapter = new ComplaintAdapter(this, complaintList, new ComplaintAdapter.OnComplaintActionListener() {
             @Override
             public void onViewDetails(Complaint complaint) {
-                // TODO: Show complaint details
-                Toast.makeText(AdminComplaintsActivity.this, "Details: " + complaint.getTitle(), Toast.LENGTH_SHORT).show();
+                String details = "Type: " + complaint.getTitle() +
+                        "\nLocation: " + complaint.getLocation() +
+                        "\nDate: " + complaint.getDate() +
+                        "\nStatus: " + complaint.getStatus() +
+                        "\nPriority: " + complaint.getPriority() +
+                        "\nDescription: " + String.valueOf(complaint.getDescription());
+                new AlertDialog.Builder(AdminComplaintsActivity.this)
+                        .setTitle("Complaint Details")
+                        .setMessage(details)
+                        .setPositiveButton("OK", null)
+                        .show();
             }
 
             @Override
             public void onUpdateStatus(Complaint complaint, String newStatus) {
-                // TODO: Update complaint status via API
-                Toast.makeText(AdminComplaintsActivity.this, "Status updated to: " + newStatus, Toast.LENGTH_SHORT).show();
+                firestoreService.updateComplaintStatus(complaint.getId(), newStatus, new FirebaseFirestoreService.OnOperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(AdminComplaintsActivity.this, "Status updated to: " + newStatus, Toast.LENGTH_SHORT).show();
+                        loadComplaints();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(AdminComplaintsActivity.this, "Update failed: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onDelete(Complaint complaint) {
-                // TODO: Confirm and delete
-                Toast.makeText(AdminComplaintsActivity.this, "Delete: " + complaint.getTitle(), Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(AdminComplaintsActivity.this)
+                        .setTitle("Delete Complaint")
+                        .setMessage("Delete this complaint permanently?")
+                        .setPositiveButton("Delete", (dialog, which) -> firestoreService.deleteComplaint(complaint.getId(), new FirebaseFirestoreService.OnOperationCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(AdminComplaintsActivity.this, "Complaint deleted", Toast.LENGTH_SHORT).show();
+                                loadComplaints();
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Toast.makeText(AdminComplaintsActivity.this, "Delete failed: " + error, Toast.LENGTH_SHORT).show();
+                            }
+                        }))
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
 
@@ -76,18 +115,21 @@ public class AdminComplaintsActivity extends AppCompatActivity {
     }
 
     private void loadComplaints() {
-        // Mock data - replace with actual API call
-        complaintList.clear();
-        complaintList.add(new Complaint("1", "Harassment at Bus Stand", "Colombo 07", "2024-03-08", "Pending", "High"));
-        complaintList.add(new Complaint("2", "Suspicious Person", "Kandy", "2024-03-07", "Under Review", "Medium"));
-        complaintList.add(new Complaint("3", "Inappropriate Behavior", "Galle", "2024-03-06", "Resolved", "High"));
-        complaintList.add(new Complaint("4", "Street Harassment", "Negombo", "2024-03-05", "Pending", "Medium"));
-        complaintList.add(new Complaint("5", "Stalking Incident", "Colombo 03", "2024-03-04", "Resolved", "High"));
-        complaintAdapter.notifyDataSetChanged();
+        firestoreService.getAllComplaints(new FirebaseFirestoreService.OnComplaintsListCallback() {
+            @Override
+            public void onSuccess(List<Complaint> complaints) {
+                complaintAdapter.setComplaints(complaints);
+                complaintAdapter.filterByStatus(currentFilter);
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(AdminComplaintsActivity.this, "Failed to load complaints: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupFilters() {
-        // Status filter chips
         chipGroupStatus.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
                 int chipId = checkedIds.get(0);
@@ -104,7 +146,6 @@ public class AdminComplaintsActivity extends AppCompatActivity {
             }
         });
 
-        // Search functionality
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

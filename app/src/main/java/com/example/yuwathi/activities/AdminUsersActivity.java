@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yuwathi.R;
 import com.example.yuwathi.adapters.UserAdapter;
 import com.example.yuwathi.models.User;
+import com.example.yuwathi.services.FirebaseFirestoreService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,15 @@ public class AdminUsersActivity extends BaseAdminActivity {
     private FloatingActionButton fabAdd;
     private List<User> userList;
 
+    private FirebaseFirestoreService firestoreService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_users);
+
+        // Initialize Firestore service
+        firestoreService = FirebaseFirestoreService.getInstance();
 
         // Set up toolbar with back button
         if (getSupportActionBar() != null) {
@@ -52,7 +58,6 @@ public class AdminUsersActivity extends BaseAdminActivity {
         fabAdd = findViewById(R.id.fab_add_user);
 
         fabAdd.setOnClickListener(v -> {
-            // TODO: Open dialog or new activity to add user
             Toast.makeText(this, "Add User - Coming Soon", Toast.LENGTH_SHORT).show();
         });
     }
@@ -62,19 +67,16 @@ public class AdminUsersActivity extends BaseAdminActivity {
         userAdapter = new UserAdapter(this, userList, new UserAdapter.OnUserActionListener() {
             @Override
             public void onEdit(User user) {
-                // TODO: Open edit dialog
                 Toast.makeText(AdminUsersActivity.this, "Edit: " + user.getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDelete(User user) {
-                // TODO: Confirm and delete user
-                Toast.makeText(AdminUsersActivity.this, "Delete: " + user.getName(), Toast.LENGTH_SHORT).show();
+                deleteUser(user.getId(), user.getName());
             }
 
             @Override
             public void onViewDetails(User user) {
-                // TODO: Show user details
                 Toast.makeText(AdminUsersActivity.this, "Details: " + user.getName(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -84,13 +86,32 @@ public class AdminUsersActivity extends BaseAdminActivity {
     }
 
     private void loadUsers() {
-        // Mock data - replace with actual API call
-        userList.clear();
-        userList.add(new User("1", "Amaya Perera", "amaya@example.com", "077-1234567", "Active"));
-        userList.add(new User("2", "Sanduni Silva", "sanduni@example.com", "076-9876543", "Active"));
-        userList.add(new User("3", "Dilini Fernando", "dilini@example.com", "071-5556789", "Inactive"));
-        userList.add(new User("4", "Nimasha Jayasinghe", "nimasha@example.com", "072-4443332", "Active"));
-        userAdapter.notifyDataSetChanged();
+        firestoreService.getAllUsers(new FirebaseFirestoreService.OnUsersListCallback() {
+            @Override
+            public void onSuccess(List<User> users) {
+                userAdapter.setUsers(users);
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(AdminUsersActivity.this, "Failed to load users: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteUser(String userId, String userName) {
+        firestoreService.deleteUser(userId, new FirebaseFirestoreService.OnOperationCallback() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(AdminUsersActivity.this, userName + " deleted successfully", Toast.LENGTH_SHORT).show();
+                loadUsers();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(AdminUsersActivity.this, "Failed to delete: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupSearch() {

@@ -41,6 +41,12 @@ public class SafetyTipAdapter extends RecyclerView.Adapter<SafetyTipAdapter.Safe
         return new SafetyTipViewHolder(view);
     }
 
+    public void setTips(List<SafetyTip> tips) {
+        safetyTipList.clear();
+        safetyTipList.addAll(tips);
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull SafetyTipViewHolder holder, int position) {
         SafetyTip tip = safetyTipList.get(position);
@@ -48,12 +54,14 @@ public class SafetyTipAdapter extends RecyclerView.Adapter<SafetyTipAdapter.Safe
         holder.tvTitle.setText(tip.getTitle());
         holder.tvDescription.setText(tip.getDescription());
         holder.tvCategory.setText(tip.getCategory().toUpperCase());
+        holder.switchVisible.setOnCheckedChangeListener(null);
         holder.switchVisible.setChecked(tip.isVisible());
 
         // Button listeners
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(tip));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(tip));
         holder.switchVisible.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            tip.setVisible(isChecked);
             listener.onToggleVisibility(tip);
         });
     }

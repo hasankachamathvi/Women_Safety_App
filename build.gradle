@@ -10,6 +10,8 @@ buildscript {
     dependencies {
         // Android Gradle Plugin - needed to build Android apps
         classpath "com.android.tools.build:gradle:8.7.3"
+        // Required for apply plugin: 'com.google.gms.google-services'
+        classpath "com.google.gms:google-services:4.4.4"
     }
 }
 

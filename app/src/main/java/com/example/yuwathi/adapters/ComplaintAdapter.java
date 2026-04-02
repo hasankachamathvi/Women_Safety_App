@@ -23,6 +23,8 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
     private List<Complaint> complaintList;
     private List<Complaint> complaintListFull;
     private OnComplaintActionListener listener;
+    private String currentSearchQuery = "";
+    private String currentStatusFilter = "All";
 
     public interface OnComplaintActionListener {
         void onViewDetails(Complaint complaint);
@@ -93,37 +95,40 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         return complaintList.size();
     }
 
+    public void setComplaints(List<Complaint> complaints) {
+        complaintList.clear();
+        complaintList.addAll(complaints);
+        complaintListFull.clear();
+        complaintListFull.addAll(complaints);
+        applyFilters();
+    }
+
     /**
      * Filter complaints based on search query
      */
     public void filter(String query) {
-        complaintList.clear();
-        if (query.isEmpty()) {
-            complaintList.addAll(complaintListFull);
-        } else {
-            String lowerCaseQuery = query.toLowerCase();
-            for (Complaint complaint : complaintListFull) {
-                if (complaint.getTitle().toLowerCase().contains(lowerCaseQuery) ||
-                    complaint.getLocation().toLowerCase().contains(lowerCaseQuery)) {
-                    complaintList.add(complaint);
-                }
-            }
-        }
-        notifyDataSetChanged();
+        currentSearchQuery = query == null ? "" : query;
+        applyFilters();
     }
 
     /**
      * Filter complaints by status
      */
     public void filterByStatus(String status) {
+        currentStatusFilter = status == null ? "All" : status;
+        applyFilters();
+    }
+
+    private void applyFilters() {
         complaintList.clear();
-        if ("All".equals(status)) {
-            complaintList.addAll(complaintListFull);
-        } else {
-            for (Complaint complaint : complaintListFull) {
-                if (status.equals(complaint.getStatus())) {
-                    complaintList.add(complaint);
-                }
+        String lowerCaseQuery = currentSearchQuery.toLowerCase();
+        for (Complaint complaint : complaintListFull) {
+            boolean matchesStatus = "All".equals(currentStatusFilter) || currentStatusFilter.equals(complaint.getStatus());
+            boolean matchesQuery = currentSearchQuery.isEmpty() ||
+                    (complaint.getTitle() != null && complaint.getTitle().toLowerCase().contains(lowerCaseQuery)) ||
+                    (complaint.getLocation() != null && complaint.getLocation().toLowerCase().contains(lowerCaseQuery));
+            if (matchesStatus && matchesQuery) {
+                complaintList.add(complaint);
             }
         }
         notifyDataSetChanged();
