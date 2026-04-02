@@ -10,18 +10,37 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.yuwathi.R;
+import com.example.yuwathi.services.FirebaseAuthService;
+import com.example.yuwathi.services.FirebaseRealtimeDatabaseService;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SosActivity extends AppCompatActivity {
 
     private CountDownTimer countDownTimer;  // Timer for the 3-second countdown
     private boolean isActivated = false;    // Flag to track if SOS is already activated
+    private FirebaseAuthService authService;
+    private FirebaseRealtimeDatabaseService realtimeDatabaseService;
+    private String currentUserId;
+    private String currentUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set the SOS screen layout
         setContentView(R.layout.activity_sos);
+
+        authService = new FirebaseAuthService();
+        realtimeDatabaseService = FirebaseRealtimeDatabaseService.getInstance();
+        FirebaseUser user = authService.getCurrentUser();
+        if (user != null) {
+            currentUserId = user.getUid();
+            currentUserName = user.getEmail() != null ? user.getEmail() : "User";
+        } else {
+            Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Find buttons and text views from the layout
         MaterialButton btnSos = findViewById(R.id.btn_sos_main);     // Main SOS button (hold to activate)
@@ -82,7 +101,18 @@ public class SosActivity extends AppCompatActivity {
     }
 
     private void activateSOS() {
-        Toast.makeText(this, "SOS Alert Sent to Emergency Contacts!", Toast.LENGTH_LONG).show();
+        realtimeDatabaseService.sendSOSAlert(currentUserId, currentUserName, 0.0, 0.0,
+                "Emergency assistance needed", new FirebaseRealtimeDatabaseService.OnOperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(SosActivity.this, "SOS Alert Sent to Emergency Contacts!", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(SosActivity.this, "Failed to send SOS: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

@@ -3,9 +3,13 @@ package com.example.yuwathi.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.cardview.widget.CardView;
+import androidx.appcompat.app.AlertDialog;
 import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
+import com.example.yuwathi.services.FirebaseAuthService;
+import com.example.yuwathi.services.FirebaseFirestoreService;
 
 /**
  * Admin Dashboard Activity
@@ -18,10 +22,18 @@ public class AdminDashboardActivity extends BaseAdminActivity {
     private CardView cardUsers, cardComplaints, cardReports, cardSafetyTips;
     private MaterialButton btnLogout;
 
+    // Services
+    private FirebaseAuthService authService;
+    private FirebaseFirestoreService firestoreService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
+
+        // Initialize services
+        authService = new FirebaseAuthService();
+        firestoreService = FirebaseFirestoreService.getInstance();
 
         initializeViews();
         setupListeners();
@@ -78,24 +90,51 @@ public class AdminDashboardActivity extends BaseAdminActivity {
         });
 
         // Logout
-        btnLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminDashboardActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+        btnLogout.setOnClickListener(v -> showLogoutConfirmation());
+    }
+
+    /**
+     * Load statistics from Firebase Firestore
+     */
+    private void loadStatistics() {
+        firestoreService.getDashboardStats(new FirebaseFirestoreService.OnStatsCallback() {
+            @Override
+            public void onSuccess(java.util.Map<String, Integer> stats) {
+                tvTotalUsers.setText(String.valueOf(stats.get("totalUsers")));
+                tvTotalComplaints.setText(String.valueOf(stats.get("totalComplaints")));
+                tvResolvedComplaints.setText(String.valueOf(stats.get("resolvedComplaints")));
+                tvTotalReports.setText(String.valueOf(stats.get("pendingComplaints")));
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(AdminDashboardActivity.this,
+                    "Failed to load statistics: " + error, Toast.LENGTH_SHORT).show();
+                // Set default values on error
+                tvTotalUsers.setText("0");
+                tvTotalComplaints.setText("0");
+                tvResolvedComplaints.setText("0");
+                tvTotalReports.setText("0");
+            }
         });
     }
 
     /**
-     * Load statistics from backend API
-     * TODO: Implement actual API call
+     * Show logout confirmation dialog
      */
-    private void loadStatistics() {
-        // Mock data for now - replace with actual API call
-        tvTotalUsers.setText("142");
-        tvTotalComplaints.setText("28");
-        tvResolvedComplaints.setText("21");
-        tvTotalReports.setText("35");
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    authService.logout();
+                    Intent intent = new Intent(AdminDashboardActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     @Override
@@ -104,3 +143,4 @@ public class AdminDashboardActivity extends BaseAdminActivity {
         // Admin must logout explicitly
     }
 }
+

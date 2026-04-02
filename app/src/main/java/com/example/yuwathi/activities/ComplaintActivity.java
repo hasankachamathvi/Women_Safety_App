@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
+import android.widget.EditText;
 
 public class ComplaintActivity extends AppCompatActivity {
 
@@ -26,6 +28,11 @@ public class ComplaintActivity extends AppCompatActivity {
 
         // Find the category dropdown (spinner) from the layout
         Spinner spinnerCategory = findViewById(R.id.spinner_category);
+        EditText etIncidentTime = findViewById(R.id.et_incident_time);
+        SwitchCompat switchOngoing = findViewById(R.id.switch_ongoing);
+        EditText etLocation = findViewById(R.id.et_location);
+        EditText etVehicle = findViewById(R.id.et_vehicle);
+        EditText etSuspectDesc = findViewById(R.id.et_suspect_desc);
 
         // List of incident categories for the dropdown
         String[] categories = {
@@ -55,8 +62,15 @@ public class ComplaintActivity extends AppCompatActivity {
 
         // Handle Next button click - go to Complaint page 2
         MaterialButton btnNext = findViewById(R.id.btn_next);
-        btnNext.setOnClickListener(v ->
-                startActivity(new Intent(ComplaintActivity.this, Complaint2Activity.class))
-        );
+        btnNext.setOnClickListener(v -> {
+            Intent intent = new Intent(ComplaintActivity.this, Complaint2Activity.class);
+            intent.putExtra("category", spinnerCategory.getSelectedItem().toString());
+            intent.putExtra("incident_time", etIncidentTime.getText().toString().trim());
+            intent.putExtra("ongoing", switchOngoing.isChecked());
+            intent.putExtra("location", etLocation.getText().toString().trim());
+            intent.putExtra("vehicle", etVehicle.getText().toString().trim());
+            intent.putExtra("suspect_desc", etSuspectDesc.getText().toString().trim());
+            startActivity(intent);
+        });
     }
 }

@@ -10,7 +10,7 @@ android {
     compileSdk 34                     // Android API level to compile against
 
     defaultConfig {
-        applicationId "com.example.yuwathi"  // Unique app ID on Google Play
+        applicationId "com.yuwathi.project"  // Must match Firebase Android package name
         minSdk 24                             // Minimum Android version (Android 7.0)
         targetSdk 34                          // Target Android version (Android 14)
         versionCode 1                         // App version number (for updates)
@@ -45,6 +45,27 @@ android {
 
 // Libraries (dependencies) used in the app
 dependencies {
+    // Import the Firebase BoM to keep Firebase SDK versions compatible
+    implementation platform('com.google.firebase:firebase-bom:34.11.0')
+    // Firebase Analytics
+    implementation 'com.google.firebase:firebase-analytics'
+    // Firebase Authentication
+    implementation 'com.google.firebase:firebase-auth'
+    // Firebase Firestore (Real-time Database)
+    implementation 'com.google.firebase:firebase-firestore'
+    // Firebase Realtime Database (for SOS and location)
+    implementation 'com.google.firebase:firebase-database'
+    // Firebase Storage (for image uploads)
+    implementation 'com.google.firebase:firebase-storage'
+    // Retrofit for REST API calls (if needed for backend APIs)
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // Gson for JSON parsing
+    implementation 'com.google.code.gson:gson:2.10.1'
+    // Coroutines for async operations
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
+
     // Android core libraries
     implementation 'androidx.core:core:1.9.0'                          // Core Android utilities
     implementation 'androidx.appcompat:appcompat:1.6.1'                // Backward compatibility support
@@ -64,3 +85,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
+
+// Apply after dependencies when using project-level buildscript classpath
+apply plugin: 'com.google.gms.google-services'

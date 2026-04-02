@@ -70,19 +70,27 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return userList.size();
     }
 
+    public void setUsers(List<User> users) {
+        userList.clear();
+        userList.addAll(users);
+        userListFull.clear();
+        userListFull.addAll(users);
+        notifyDataSetChanged();
+    }
+
     /**
      * Filter users based on search query
      */
     public void filter(String query) {
         userList.clear();
-        if (query.isEmpty()) {
+        if (query == null || query.isEmpty()) {
             userList.addAll(userListFull);
         } else {
             String lowerCaseQuery = query.toLowerCase();
             for (User user : userListFull) {
-                if (user.getName().toLowerCase().contains(lowerCaseQuery) ||
-                    user.getEmail().toLowerCase().contains(lowerCaseQuery) ||
-                    user.getPhone().contains(query)) {
+                if ((user.getName() != null && user.getName().toLowerCase().contains(lowerCaseQuery)) ||
+                    (user.getEmail() != null && user.getEmail().toLowerCase().contains(lowerCaseQuery)) ||
+                    (user.getPhone() != null && user.getPhone().contains(query))) {
                     userList.add(user);
                 }
             }
