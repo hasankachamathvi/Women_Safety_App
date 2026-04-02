@@ -3,7 +3,6 @@ package com.example.yuwathi.activities;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,7 @@ import java.util.List;
  * Admin Complaints Management Activity
  * View, filter, and manage complaints submitted by users
  */
-public class AdminComplaintsActivity extends AppCompatActivity {
+public class AdminComplaintsActivity extends BaseAdminActivity {
 
     private RecyclerView recyclerView;
     private ComplaintAdapter complaintAdapter;
@@ -169,5 +168,10 @@ public class AdminComplaintsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_admin_complaints;
     }
 }

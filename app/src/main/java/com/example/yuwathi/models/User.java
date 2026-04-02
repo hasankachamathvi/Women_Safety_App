@@ -10,16 +10,22 @@ public class User {
     private String email;
     private String phone;
     private String status; // Active, Inactive, Blocked
+    private String role;   // user, admin
 
     public User() {
     }
 
     public User(String id, String name, String email, String phone, String status) {
+        this(id, name, email, phone, status, "user");
+    }
+
+    public User(String id, String name, String email, String phone, String status, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.status = status;
+        this.role = role;
     }
 
     // Getters
@@ -43,6 +49,10 @@ public class User {
         return status;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     // Setters
     public void setId(String id) {
         this.id = id;
@@ -62,5 +72,9 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

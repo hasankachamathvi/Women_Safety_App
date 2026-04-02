@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "sos_alerts": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".write": "auth != null && auth.uid === $uid",
+        "userId": { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "userName": { ".validate": "newData.isString()" },
+        "latitude": { ".validate": "newData.isNumber()" },
+        "longitude": { ".validate": "newData.isNumber()" },
+        "message": { ".validate": "newData.isString() && newData.val().length <= 500" },
+        "timestamp": { ".validate": "newData.isNumber()" },
+        "status": { ".validate": "newData.isString()" }
+      }
+    },
+    "live_locations": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".write": "auth != null && auth.uid === $uid",
+        "userId": { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "userName": { ".validate": "newData.isString()" },
+        "latitude": { ".validate": "newData.isNumber()" },
+        "longitude": { ".validate": "newData.isNumber()" },
+        "timestamp": { ".validate": "newData.isNumber()" }
+      }
+    },
+    ".read": false,
+    ".write": false
+  }
+}
+

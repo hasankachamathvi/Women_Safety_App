@@ -31,6 +31,15 @@ public class HomeActivity extends AppCompatActivity {
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
 
+        // Initialize Views before any async callbacks update UI
+        tvUserName = findViewById(R.id.tv_user_name);
+        MaterialButton btnSos = findViewById(R.id.btn_sos);
+        LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
+        LinearLayout btnContacts = findViewById(R.id.btn_contacts);
+        LinearLayout btnReport = findViewById(R.id.btn_report);
+        LinearLayout cardTip = findViewById(R.id.card_safety_tip);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+
         // Get current user
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
@@ -39,16 +48,8 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             // Redirect to login if not authenticated
             redirectToLogin();
+            return;
         }
-
-        // Initialize Views
-        tvUserName = findViewById(R.id.tv_user_name);
-        MaterialButton btnSos = findViewById(R.id.btn_sos);
-        LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
-        LinearLayout btnContacts = findViewById(R.id.btn_contacts);
-        LinearLayout btnReport = findViewById(R.id.btn_report);
-        LinearLayout cardTip = findViewById(R.id.card_safety_tip);
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
         // 1. Set Listener FIRST
         bottomNav.setOnItemSelectedListener(item -> {

@@ -10,6 +10,11 @@ import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
 import com.example.yuwathi.services.FirebaseAuthService;
 import com.example.yuwathi.services.FirebaseFirestoreService;
+import com.example.yuwathi.services.FirebaseRealtimeDatabaseService;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import androidx.annotation.NonNull;
 
 /**
  * Admin Dashboard Activity
@@ -25,6 +30,7 @@ public class AdminDashboardActivity extends BaseAdminActivity {
     // Services
     private FirebaseAuthService authService;
     private FirebaseFirestoreService firestoreService;
+    private ValueEventListener sosListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class AdminDashboardActivity extends BaseAdminActivity {
         initializeViews();
         setupListeners();
         loadStatistics();
+        listenToLiveSOSAlerts(); // Add real-time SOS listener
     }
 
     @Override
@@ -119,6 +126,27 @@ public class AdminDashboardActivity extends BaseAdminActivity {
         });
     }
 
+    private void listenToLiveSOSAlerts() {
+        FirebaseRealtimeDatabaseService realtimeService = FirebaseRealtimeDatabaseService.getInstance();
+        sosListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // This fires whenever SOS data changes in Realtime DB
+                if (snapshot.exists()) {
+                    // You have live SOS data here
+                    // Could update a list or UI badge
+                    Toast.makeText(AdminDashboardActivity.this, "Live SOS received", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        };
+        realtimeService.listenToSOSAlerts(sosListener);
+    }
+
     /**
      * Show logout confirmation dialog
      */
@@ -135,6 +163,15 @@ public class AdminDashboardActivity extends BaseAdminActivity {
                 })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to prevent memory leaks
+        if (sosListener != null) {
+            FirebaseRealtimeDatabaseService.getInstance().removeListener("sos_alerts", sosListener);
+        }
     }
 
     @Override

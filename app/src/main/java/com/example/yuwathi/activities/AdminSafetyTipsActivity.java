@@ -6,7 +6,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.yuwathi.R;
@@ -21,13 +20,18 @@ import java.util.List;
  * Admin Safety Tips Management Activity
  * Manage safety tips shown to users in the main app
  */
-public class AdminSafetyTipsActivity extends AppCompatActivity {
+public class AdminSafetyTipsActivity extends BaseAdminActivity {
 
     private RecyclerView recyclerView;
     private SafetyTipAdapter safetyTipAdapter;
     private FloatingActionButton fabAdd;
     private List<SafetyTip> safetyTipList;
     private FirebaseFirestoreService firestoreService;
+
+    @Override
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_admin_safety_tips;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

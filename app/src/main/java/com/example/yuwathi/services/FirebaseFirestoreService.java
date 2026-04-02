@@ -8,7 +8,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.auth.FirebaseAuth;
 import com.example.yuwathi.models.User;
 import com.example.yuwathi.models.SafetyTip;
 import com.example.yuwathi.models.Complaint;
@@ -447,8 +446,6 @@ public class FirebaseFirestoreService {
      * Get dashboard statistics (admin)
      */
     public void getDashboardStats(OnStatsCallback callback) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
         // Get total users
         db.collection(USERS_COLLECTION).get()
                 .addOnSuccessListener(usersSnapshot -> {
@@ -477,6 +474,26 @@ public class FirebaseFirestoreService {
                             .addOnFailureListener(e -> callback.onError(e.getMessage()));
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    /**
+     * Resolve whether a user is an admin based on Firestore role.
+     */
+    public void isUserAdmin(String userId, OnAdminCheckCallback callback) {
+        getUser(userId, new OnUserFetchCallback() {
+            @Override
+            public void onSuccess(User user) {
+                boolean isAdmin = user != null
+                        && "Active".equalsIgnoreCase(user.getStatus())
+                        && "admin".equalsIgnoreCase(user.getRole());
+                callback.onResult(isAdmin);
+            }
+
+            @Override
+            public void onError(String error) {
+                callback.onResult(false);
+            }
+        });
     }
 
     // ========== CALLBACKS ==========
@@ -515,5 +532,8 @@ public class FirebaseFirestoreService {
         void onSuccess(Map<String, Integer> stats);
         void onError(String error);
     }
-}
 
+    public interface OnAdminCheckCallback {
+        void onResult(boolean isAdmin);
+    }
+}

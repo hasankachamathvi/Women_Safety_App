@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import com.example.yuwathi.R;
 
-public class AdminReportsActivity extends AppCompatActivity {
+public class AdminReportsActivity extends BaseAdminActivity {
 
     private TextView tvUserGrowth, tvComplaintTrends, tvResponseTime, tvTopLocations;
     private CardView cardUserStats, cardComplaintStats, cardLocationStats, cardTimeStats;
@@ -48,5 +48,10 @@ public class AdminReportsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_admin_reports;
     }
 }

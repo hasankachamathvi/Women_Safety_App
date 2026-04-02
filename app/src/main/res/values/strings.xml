@@ -58,4 +58,7 @@
     <string name="admin_complaints">Complaints</string>
     <string name="admin_reports">Reports</string>
     <string name="admin_safety_tips">Tips</string>
+
+    <!-- Maps config -->
+    <string name="google_maps_key">YOUR_API_KEY_HERE</string>
 </resources>

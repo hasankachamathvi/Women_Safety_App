@@ -36,7 +36,7 @@
         <!-- Google Maps API Key - required for location/map features -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY_HERE" />
+            android:value="@string/google_maps_key" />
 
         <!-- Splash Screen - first page that opens when app starts (LAUNCHER) -->
         <activity android:name=".activities.SplashActivity" android:exported="true">
