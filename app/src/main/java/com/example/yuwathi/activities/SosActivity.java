@@ -225,7 +225,7 @@ public class SosActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                Toast.makeText(SosActivity.this, "Could not load emergency contacts: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SosActivity.this, "Could not load contacts. Check Firebase rules.", Toast.LENGTH_SHORT).show();
                 showEmergencyOptionsDialog(message, latitude, longitude, new ArrayList<>());
             }
         });

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- activity_login.xml - Dual Login System (Admin & User) -->
+<!-- activity_login.xml - Simplified Login Screen -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="යුවති"
+                android:text="@string/app_name_sinhala"
                 android:textColor="#FFFFFF"
                 android:textSize="56sp"
                 android:textStyle="bold" />
@@ -30,15 +30,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="One tap.\nInstant help"
+                android:gravity="center"
+                android:text="@string/login_tagline"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="center" />
-
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Bottom Form Section with Tabs -->
+        <!-- Login Form Section -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -51,193 +50,90 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="32dp"
-                android:paddingTop="24dp"
+                android:paddingTop="32dp"
                 android:paddingBottom="24dp">
 
-                <!-- Tab Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="24dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_tab_user"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="User Login"
-                        android:textAllCaps="false"
-                        android:backgroundTint="#E91E63"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginEnd="8dp"
-                        app:cornerRadius="12dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_tab_admin"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Admin Login"
-                        android:textAllCaps="false"
-                        android:backgroundTint="#CCCCCC"
-                        android:textColor="#666666"
-                        android:layout_marginStart="8dp"
-                        app:cornerRadius="12dp" />
-                </LinearLayout>
-
-                <!-- User Login Form -->
-                <LinearLayout
-                    android:id="@+id/container_user_login"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/login"
+                    android:textColor="#E91E63"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Welcome Back!"
-                        android:textColor="#E91E63"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="24dp" />
-
-                    <EditText
-                        android:id="@+id/et_user_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_input_underline_pink"
-                        android:hint="Email or Phone"
-                        android:inputType="text"
-                        android:textColor="#333333"
-                        android:textColorHint="#F48FB1"
-                        android:textSize="14sp" />
-
-                    <EditText
-                        android:id="@+id/et_user_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_input_underline_pink"
-                        android:hint="Password"
-                        android:inputType="textPassword"
-                        android:textColor="#333333"
-                        android:textColorHint="#F48FB1"
-                        android:textSize="14sp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_user_sign_in"
-                        android:layout_width="180dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="28dp"
-                        android:backgroundTint="#E91E63"
-                        android:text="Sign In"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="24dp" />
-
-                    <TextView
-                        android:id="@+id/tv_user_forgot_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:text="Forgot Password?"
-                        android:textColor="#E91E63"
-                        android:textSize="13sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="24dp"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Don't have an account? "
-                            android:textColor="#AAAAAA"
-                            android:textSize="14sp" />
-                        <TextView
-                            android:id="@+id/tv_user_register_link"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Register"
-                            android:textColor="#E91E63"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Admin Login Form -->
-                <LinearLayout
-                    android:id="@+id/container_admin_login"
+                <EditText
+                    android:id="@+id/et_user_email"
                     android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:autofillHints="emailAddress"
+                    android:background="@drawable/bg_input_underline_pink"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#333333"
+                    android:textColorHint="#F48FB1"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/et_user_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:autofillHints="password"
+                    android:background="@drawable/bg_input_underline_pink"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:textColor="#333333"
+                    android:textColorHint="#F48FB1"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_user_sign_in"
+                    android:layout_width="180dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="28dp"
+                    android:backgroundTint="#E91E63"
+                    android:text="@string/sign_in"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="24dp" />
+
+                <TextView
+                    android:id="@+id/tv_user_forgot_password"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/forgot_password"
+                    android:textColor="#E91E63"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Admin Panel"
-                        android:textColor="#FF6B00"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="24dp" />
-
-                    <EditText
-                        android:id="@+id/et_admin_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_input_underline_pink"
-                        android:hint="Admin Email"
-                        android:inputType="textEmailAddress"
-                        android:textColor="#333333"
-                        android:textColorHint="#F48FB1"
-                        android:textSize="14sp" />
-
-                    <EditText
-                        android:id="@+id/et_admin_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_input_underline_pink"
-                        android:hint="Admin Password"
-                        android:inputType="textPassword"
-                        android:textColor="#333333"
-                        android:textColorHint="#F48FB1"
+                        android:text="@string/dont_have_account"
+                        android:textColor="#AAAAAA"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_user_register_link"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🔒 Hardcoded Admin Credentials Required"
-                        android:textColor="#FF6B00"
-                        android:textSize="12sp"
-                        android:gravity="center"
-                        android:layout_marginTop="12dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_admin_sign_in"
-                        android:layout_width="180dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="28dp"
-                        android:backgroundTint="#FF6B00"
-                        android:text="Sign In"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="24dp" />
-
+                        android:text="@string/register"
+                        android:textColor="#E91E63"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>

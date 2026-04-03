@@ -163,14 +163,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
                             @Override
                             public void onError(String error) {
-                                Toast.makeText(LocationActivity.this, "Shared live, history save failed: " + error, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LocationActivity.this, "Location shared, but history save failed.", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
 
                     @Override
                     public void onError(String error) {
-                        Toast.makeText(LocationActivity.this, "Share failed: " + error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LocationActivity.this, "Could not share location. Check connection/Firebase rules.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -184,7 +184,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
             @Override
             public void onError(String error) {
-                Toast.makeText(LocationActivity.this, "Stop failed: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this, "Could not stop sharing right now.", Toast.LENGTH_SHORT).show();
             }
         });
     }

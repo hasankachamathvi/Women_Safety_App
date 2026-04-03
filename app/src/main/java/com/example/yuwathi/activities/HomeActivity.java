@@ -129,6 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    com.example.yuwathi.utils.AdminSessionManager.clearSession(this);
                     authService.logout();
                     redirectToLogin();
                 })
