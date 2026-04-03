@@ -69,7 +69,11 @@ public class AdminReportsActivity extends BaseAdminActivity {
                             + "\nLocation: " + (complaint.getLocation() != null ? complaint.getLocation() : "N/A")
                             + "\nPriority: " + (complaint.getPriority() != null ? complaint.getPriority() : "N/A")
                             + "\nDescription: " + (complaint.getDescription() != null ? complaint.getDescription() : "N/A")
-                            + "\nEvidence: " + (complaint.getEvidence() != null && !complaint.getEvidence().isEmpty() ? complaint.getEvidence() : "None"));
+                            + "\nWitnesses: " + (complaint.getWitnesses() != null ? complaint.getWitnesses() : "N/A")
+                            + "\nVehicle: " + (complaint.getVehicle() != null ? complaint.getVehicle() : "N/A")
+                            + "\nSuspect: " + (complaint.getSuspectDescription() != null ? complaint.getSuspectDescription() : "N/A")
+                            + "\nEvidence: " + (complaint.getEvidence() != null && !complaint.getEvidence().isEmpty() ? complaint.getEvidence() : "N/A")
+                            + "\nEvidence files: " + (complaint.getEvidenceUrls() != null ? complaint.getEvidenceUrls().size() : 0));
                     tvStatus.setText("Status: " + (complaint.getStatus() != null ? complaint.getStatus() : "Pending"));
 
                     btnTakeAction.setOnClickListener(v -> firestoreService.updateComplaintStatus(

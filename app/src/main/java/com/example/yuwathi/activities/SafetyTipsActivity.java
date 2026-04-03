@@ -85,7 +85,18 @@ public class SafetyTipsActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                android.widget.Toast.makeText(SafetyTipsActivity.this, "Failed to load tips: " + error, android.widget.Toast.LENGTH_SHORT).show();
+                // Fallback to all tips so admin-added tips still appear if visibility field differs.
+                firestoreService.getAllSafetyTips(new FirebaseFirestoreService.OnSafetyTipsListCallback() {
+                    @Override
+                    public void onSuccess(List<SafetyTip> tips) {
+                        safetyTipAdapter.setTips(tips);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        android.widget.Toast.makeText(SafetyTipsActivity.this, "Failed to load tips", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

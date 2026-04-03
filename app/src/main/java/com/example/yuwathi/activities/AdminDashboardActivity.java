@@ -74,10 +74,15 @@ public class AdminDashboardActivity extends BaseAdminActivity {
                     row.setText((i + 1) + ") "
                             + (c.getTitle() != null ? c.getTitle() : "Complaint")
                             + "\nStatus: " + (c.getStatus() != null ? c.getStatus() : "Pending")
+                            + "\nPriority: " + (c.getPriority() != null ? c.getPriority() : "N/A")
                             + "\nDate: " + (c.getDate() != null ? c.getDate() : "N/A")
                             + "\nLocation: " + (c.getLocation() != null ? c.getLocation() : "N/A")
                             + "\nDescription: " + (c.getDescription() != null ? c.getDescription() : "N/A")
-                            + "\nEvidence: " + (c.getEvidence() != null && !c.getEvidence().isEmpty() ? c.getEvidence() : "None"));
+                            + "\nWitnesses: " + (c.getWitnesses() != null ? c.getWitnesses() : "N/A")
+                            + "\nVehicle: " + (c.getVehicle() != null ? c.getVehicle() : "N/A")
+                            + "\nSuspect: " + (c.getSuspectDescription() != null ? c.getSuspectDescription() : "N/A")
+                            + "\nEvidence: " + (c.getEvidence() != null && !c.getEvidence().isEmpty() ? c.getEvidence() : "None")
+                            + "\nEvidence files: " + (c.getEvidenceUrls() != null ? c.getEvidenceUrls().size() : 0));
                     incidentsContainer.addView(row);
                 }
             }

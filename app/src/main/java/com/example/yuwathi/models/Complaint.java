@@ -1,5 +1,8 @@
 package com.example.yuwathi.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Complaint {
     private String id;
     private String userId;
@@ -15,6 +18,7 @@ public class Complaint {
     private boolean ongoing;
     private String contactPreference;
     private String evidence;
+    private List<String> evidenceUrls = new ArrayList<>();
 
     public Complaint() {
     }
@@ -129,5 +133,13 @@ public class Complaint {
 
     public void setEvidence(String evidence) {
         this.evidence = evidence;
+    }
+
+    public List<String> getEvidenceUrls() {
+        return evidenceUrls;
+    }
+
+    public void setEvidenceUrls(List<String> evidenceUrls) {
+        this.evidenceUrls = evidenceUrls;
     }
 }
