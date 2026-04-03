@@ -1,37 +1,26 @@
 package com.example.yuwathi.activities;
 
 import android.os.Bundle;
-import android.widget.CheckBox;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.yuwathi.R;
-import com.example.yuwathi.adapters.SafetyTipAdapter;
 import com.example.yuwathi.models.SafetyTip;
 import com.example.yuwathi.services.FirebaseFirestoreService;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
+
 import java.util.List;
 
-/**
- * Admin Safety Tips Management Activity
- * Manage safety tips shown to users in the main app
- */
 public class AdminSafetyTipsActivity extends BaseAdminActivity {
 
-    private RecyclerView recyclerView;
-    private SafetyTipAdapter safetyTipAdapter;
-    private FloatingActionButton fabAdd;
-    private List<SafetyTip> safetyTipList;
     private FirebaseFirestoreService firestoreService;
-
-    @Override
-    protected int getNavigationMenuItemId() {
-        return R.id.nav_admin_safety_tips;
-    }
+    private LinearLayout tipsContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,156 +28,120 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
         setContentView(R.layout.activity_admin_safety_tips);
 
         firestoreService = FirebaseFirestoreService.getInstance();
+        tipsContainer = findViewById(R.id.tips_container);
 
-        // Set up toolbar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Safety Tips Management");
-        }
+        Button btnAddTip = findViewById(R.id.btn_add_tip);
+        btnAddTip.setOnClickListener(v -> showAddTipDialog());
 
-        setupAdminBackButton();
-        initializeViews();
-        setupRecyclerView();
-        loadSafetyTips();
+        loadTips();
     }
 
-    private void initializeViews() {
-        recyclerView = findViewById(R.id.recycler_safety_tips);
-        fabAdd = findViewById(R.id.fab_add_tip);
-
-        fabAdd.setOnClickListener(v -> showTipDialog(null));
-    }
-
-    private void setupRecyclerView() {
-        safetyTipList = new ArrayList<>();
-        safetyTipAdapter = new SafetyTipAdapter(this, safetyTipList, new SafetyTipAdapter.OnSafetyTipActionListener() {
-            @Override
-            public void onEdit(SafetyTip tip) {
-                showTipDialog(tip);
-            }
-
-            @Override
-            public void onDelete(SafetyTip tip) {
-                new AlertDialog.Builder(AdminSafetyTipsActivity.this)
-                        .setTitle("Delete Safety Tip")
-                        .setMessage("Delete this safety tip permanently?")
-                        .setPositiveButton("Delete", (dialog, which) -> firestoreService.deleteSafetyTip(tip.getId(), new FirebaseFirestoreService.OnOperationCallback() {
-                            @Override
-                            public void onSuccess() {
-                                Toast.makeText(AdminSafetyTipsActivity.this, "Tip deleted", Toast.LENGTH_SHORT).show();
-                                loadSafetyTips();
-                            }
-
-                            @Override
-                            public void onError(String error) {
-                                Toast.makeText(AdminSafetyTipsActivity.this, "Delete failed: " + error, Toast.LENGTH_SHORT).show();
-                            }
-                        }))
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }
-
-            @Override
-            public void onToggleVisibility(SafetyTip tip) {
-                firestoreService.updateSafetyTip(tip.getId(), tip, new FirebaseFirestoreService.OnOperationCallback() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(AdminSafetyTipsActivity.this, tip.isVisible() ? "Tip now visible" : "Tip now hidden", Toast.LENGTH_SHORT).show();
-                        loadSafetyTips();
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        Toast.makeText(AdminSafetyTipsActivity.this, "Update failed: " + error, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(safetyTipAdapter);
-    }
-
-    private void loadSafetyTips() {
+    private void loadTips() {
         firestoreService.getAllSafetyTips(new FirebaseFirestoreService.OnSafetyTipsListCallback() {
             @Override
             public void onSuccess(List<SafetyTip> tips) {
-                safetyTipAdapter.setTips(tips);
+                renderTips(tips);
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(AdminSafetyTipsActivity.this, "Failed to load tips: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminSafetyTipsActivity.this, "Could not load safety tips", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void showTipDialog(SafetyTip existingTip) {
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        int padding = (int) (16 * getResources().getDisplayMetrics().density);
-        layout.setPadding(padding, padding, padding, padding);
+    private void renderTips(List<SafetyTip> tips) {
+        tipsContainer.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (SafetyTip tip : tips) {
+            View card = inflater.inflate(R.layout.item_admin_tip_card, tipsContainer, false);
+            TextView tvTitle = card.findViewById(R.id.tv_tip_title);
+            TextView tvDesc = card.findViewById(R.id.tv_tip_desc);
+            Button btnToggle = card.findViewById(R.id.btn_tip_toggle);
+            Button btnDelete = card.findViewById(R.id.btn_tip_delete);
 
-        EditText etTitle = new EditText(this);
-        etTitle.setHint("Title");
-        layout.addView(etTitle);
+            tvTitle.setText(tip.getTitle() != null ? tip.getTitle() : "Safety Tip");
+            tvDesc.setText((tip.getDescription() != null ? tip.getDescription() : "")
+                    + "\nCategory: " + (tip.getCategory() != null ? tip.getCategory() : "General")
+                    + "\nVisible: " + tip.isVisible());
 
-        EditText etDescription = new EditText(this);
-        etDescription.setHint("Description");
-        layout.addView(etDescription);
+            btnToggle.setText(tip.isVisible() ? "Hide" : "Show");
+            btnToggle.setOnClickListener(v -> {
+                tip.setVisible(!tip.isVisible());
+                firestoreService.updateSafetyTip(tip.getId(), tip, new FirebaseFirestoreService.OnOperationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        loadTips();
+                    }
 
-        EditText etCategory = new EditText(this);
-        etCategory.setHint("Category");
-        layout.addView(etCategory);
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(AdminSafetyTipsActivity.this, "Could not update tip", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
 
-        CheckBox cbVisible = new CheckBox(this);
-        cbVisible.setText("Visible");
-        cbVisible.setChecked(existingTip == null || existingTip.isVisible());
-        layout.addView(cbVisible);
+            btnDelete.setOnClickListener(v -> firestoreService.deleteSafetyTip(tip.getId(), new FirebaseFirestoreService.OnOperationCallback() {
+                @Override
+                public void onSuccess() {
+                    loadTips();
+                }
 
-        if (existingTip != null) {
-            etTitle.setText(existingTip.getTitle());
-            etDescription.setText(existingTip.getDescription());
-            etCategory.setText(existingTip.getCategory());
+                @Override
+                public void onError(String error) {
+                    Toast.makeText(AdminSafetyTipsActivity.this, "Could not delete tip", Toast.LENGTH_SHORT).show();
+                }
+            }));
+
+            tipsContainer.addView(card);
         }
+    }
+
+    private void showAddTipDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_tip, null);
+        EditText etTitle = view.findViewById(R.id.et_tip_title);
+        EditText etDesc = view.findViewById(R.id.et_tip_desc);
+        EditText etCategory = view.findViewById(R.id.et_tip_category);
 
         new AlertDialog.Builder(this)
-                .setTitle(existingTip == null ? "Add Safety Tip" : "Edit Safety Tip")
-                .setView(layout)
+                .setTitle("Add Safety Tip")
+                .setView(view)
                 .setPositiveButton("Save", (dialog, which) -> {
-                    SafetyTip tip = existingTip == null ? new SafetyTip() : existingTip;
-                    tip.setTitle(etTitle.getText().toString().trim());
-                    tip.setDescription(etDescription.getText().toString().trim());
-                    tip.setCategory(etCategory.getText().toString().trim());
-                    tip.setVisible(cbVisible.isChecked());
+                    String title = etTitle.getText().toString().trim();
+                    String desc = etDesc.getText().toString().trim();
+                    String category = etCategory.getText().toString().trim();
 
-                    FirebaseFirestoreService.OnOperationCallback callback = new FirebaseFirestoreService.OnOperationCallback() {
+                    if (title.isEmpty() || desc.isEmpty()) {
+                        Toast.makeText(this, "Please fill title and description", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    SafetyTip tip = new SafetyTip();
+                    tip.setTitle(title);
+                    tip.setDescription(desc);
+                    tip.setCategory(category.isEmpty() ? "General" : category);
+                    tip.setVisible(true);
+
+                    firestoreService.addSafetyTip(tip, new FirebaseFirestoreService.OnOperationCallback() {
                         @Override
                         public void onSuccess() {
-                            Toast.makeText(AdminSafetyTipsActivity.this, existingTip == null ? "Tip added" : "Tip updated", Toast.LENGTH_SHORT).show();
-                            loadSafetyTips();
+                            Toast.makeText(AdminSafetyTipsActivity.this, "Tip added", Toast.LENGTH_SHORT).show();
+                            loadTips();
                         }
 
                         @Override
                         public void onError(String error) {
-                            Toast.makeText(AdminSafetyTipsActivity.this, "Save failed: " + error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminSafetyTipsActivity.this, "Could not add tip", Toast.LENGTH_SHORT).show();
                         }
-                    };
-
-                    if (existingTip == null) {
-                        firestoreService.addSafetyTip(tip, callback);
-                    } else {
-                        firestoreService.updateSafetyTip(existingTip.getId(), tip, callback);
-                    }
+                    });
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        navigateToDashboard();
-        return true;
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_admin_safety_tips;
     }
 
     @Override
@@ -196,3 +149,4 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
         navigateToDashboard();
     }
 }
+

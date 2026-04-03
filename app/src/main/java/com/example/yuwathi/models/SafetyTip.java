@@ -1,15 +1,11 @@
 package com.example.yuwathi.models;
 
-/**
- * Safety Tip Model Class
- * Represents a safety tip in the system
- */
 public class SafetyTip {
     private String id;
     private String title;
     private String description;
     private String category;
-    private boolean isVisible;
+    private boolean isVisible = true;
 
     public SafetyTip() {
     }
@@ -22,45 +18,44 @@ public class SafetyTip {
         this.isVisible = isVisible;
     }
 
-    // Getters
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public boolean isVisible() {
-        return isVisible;
-    }
-
-    // Setters
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
     }
 
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
 }
+

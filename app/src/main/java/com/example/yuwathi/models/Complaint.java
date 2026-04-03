@@ -1,139 +1,133 @@
 package com.example.yuwathi.models;
 
-/**
- * Complaint Model Class
- * Represents a complaint submitted by a user
- */
 public class Complaint {
     private String id;
     private String userId;
     private String title;
     private String location;
     private String date;
-    private String status; // Pending, Under Review, Resolved
-    private String priority; // Low, Medium, High
+    private String status;
+    private String priority;
     private String description;
     private String witnesses;
     private String vehicle;
     private String suspectDescription;
     private boolean ongoing;
     private String contactPreference;
+    private String evidence;
 
     public Complaint() {
     }
 
-    public Complaint(String id, String title, String location, String date, String status, String priority) {
-        this.id = id;
-        this.title = title;
-        this.location = location;
-        this.date = date;
-        this.status = status;
-        this.priority = priority;
-    }
-
-    // Getters
     public String getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getPriority() {
-        return priority;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public String getDescription() {
-        return description;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getWitnesses() {
-        return witnesses;
-    }
-
-    public String getVehicle() {
-        return vehicle;
-    }
-
-    public String getSuspectDescription() {
-        return suspectDescription;
-    }
-
-    public boolean isOngoing() {
-        return ongoing;
-    }
-
-    public String getContactPreference() {
-        return contactPreference;
-    }
-
-    // Setters
-    public void setId(String id) {
-        this.id = id;
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPriority() {
+        return priority;
     }
 
     public void setPriority(String priority) {
         this.priority = priority;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getWitnesses() {
+        return witnesses;
+    }
+
     public void setWitnesses(String witnesses) {
         this.witnesses = witnesses;
+    }
+
+    public String getVehicle() {
+        return vehicle;
     }
 
     public void setVehicle(String vehicle) {
         this.vehicle = vehicle;
     }
 
+    public String getSuspectDescription() {
+        return suspectDescription;
+    }
+
     public void setSuspectDescription(String suspectDescription) {
         this.suspectDescription = suspectDescription;
+    }
+
+    public boolean isOngoing() {
+        return ongoing;
     }
 
     public void setOngoing(boolean ongoing) {
         this.ongoing = ongoing;
     }
 
+    public String getContactPreference() {
+        return contactPreference;
+    }
+
     public void setContactPreference(String contactPreference) {
         this.contactPreference = contactPreference;
+    }
+
+    public String getEvidence() {
+        return evidence;
+    }
+
+    public void setEvidence(String evidence) {
+        this.evidence = evidence;
     }
 }

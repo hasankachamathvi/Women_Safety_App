@@ -1,112 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Database Connection Test Activity Layout -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF5F8"
-    android:padding="16dp">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
 
-    <!-- Title -->
     <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🔍 Database Connection Test"
+        android:text="Database Connection Test"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#FF208E"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textStyle="bold" />
 
-    <!-- Test Buttons -->
-    <LinearLayout
-        android:id="@+id/ll_buttons"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_marginTop="12dp"
+        android:text="Diagnostic screen is available." />
 
-        <!-- Firestore Test Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_test_firestore"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test Firestore"
-            android:layout_marginBottom="8dp"
-            app:backgroundTint="#FF208E"
-            android:textColor="@color/white" />
-
-        <!-- Auth Test Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_test_auth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test Firebase Auth"
-            android:layout_marginBottom="8dp"
-            app:backgroundTint="#E91E63"
-            android:textColor="@color/white" />
-
-        <!-- Realtime DB Test Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_test_realtime_db"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test Realtime DB"
-            android:layout_marginBottom="8dp"
-            app:backgroundTint="#C2185B"
-            android:textColor="@color/white" />
-
-        <!-- Test All Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_test_all"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🚀 Run All Tests"
-            android:layout_marginBottom="8dp"
-            app:backgroundTint="#009688"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <!-- Clear Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_clear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Clear Results"
-            app:backgroundTint="#757575"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-    <!-- Results Display -->
-    <ScrollView
-        android:id="@+id/sv_results"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/white"
-        android:padding="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/ll_buttons"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/tv_results"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tap buttons above to run tests...\n\nLogs will appear here."
-            android:textSize="12sp"
-            android:textColor="#333333"
-            android:fontFamily="monospace" />
-
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 
