@@ -46,6 +46,7 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
             getSupportActionBar().setTitle("Safety Tips Management");
         }
 
+        setupAdminBackButton();
         initializeViews();
         setupRecyclerView();
         loadSafetyTips();
@@ -186,7 +187,12 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        navigateToDashboard();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToDashboard();
     }
 }

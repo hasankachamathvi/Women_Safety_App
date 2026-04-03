@@ -41,6 +41,7 @@ public class AdminUsersActivity extends BaseAdminActivity {
             getSupportActionBar().setTitle("User Management");
         }
 
+        setupAdminBackButton();
         initializeViews();
         setupRecyclerView();
         loadUsers();
@@ -132,7 +133,12 @@ public class AdminUsersActivity extends BaseAdminActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        navigateToDashboard();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToDashboard();
     }
 }

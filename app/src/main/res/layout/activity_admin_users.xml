@@ -14,43 +14,71 @@
         android:layout_above="@+id/admin_bottom_nav"
         android:orientation="vertical">
 
-    <!-- Search Bar -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_users"
+        <!-- Top Header -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            app:iconifiedByDefault="false"
-            app:queryHint="Search users by name, email, phone..." />
-    </androidx.cardview.widget.CardView>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#E91E63"
+            android:padding="16dp">
 
-    <!-- Users RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_users"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="16dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_admin_back"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="← Back"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="20dp"
+                app:backgroundTint="#C2185B" />
 
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        android:src="@android:drawable/ic_input_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="#E91E63" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="User Management"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
+        <!-- Search Bar -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_users"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                app:iconifiedByDefault="false"
+                app:queryHint="Search users by name, email, phone..." />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Users RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_users"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp" />
+
+        <!-- Floating Action Button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="24dp"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="@android:color/white"
+            app:backgroundTint="#E91E63" />
     </LinearLayout>
 
     <!-- Bottom Navigation Bar -->
@@ -65,5 +93,4 @@
         app:itemTextColor="@android:color/darker_gray"
         app:labelVisibilityMode="labeled"
         app:elevation="8dp" />
-
 </RelativeLayout>

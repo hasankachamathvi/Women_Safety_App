@@ -2,6 +2,7 @@ package com.example.yuwathi.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
@@ -103,6 +104,33 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
 
                 return false;
             });
+        }
+    }
+
+    /**
+     * Wire a custom back button in the layout to return to the admin dashboard.
+     * NoActionBar theme means we need an explicit button in the screen layout.
+     */
+    protected void setupAdminBackButton() {
+        int backButtonId = getResources().getIdentifier("btn_admin_back", "id", getPackageName());
+        if (backButtonId != 0) {
+            View backButton = findViewById(backButtonId);
+            if (backButton != null) {
+                backButton.setOnClickListener(v -> navigateToDashboard());
+            }
+        }
+    }
+
+    /**
+     * Return to the admin dashboard.
+     */
+    protected void navigateToDashboard() {
+        if (!this.getClass().equals(AdminDashboardActivity.class)) {
+            Intent intent = new Intent(this, AdminDashboardActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
         }
     }
 

@@ -21,6 +21,7 @@ public class AdminReportsActivity extends BaseAdminActivity {
             getSupportActionBar().setTitle("Reports and Analytics"); // Fixed '&'
         }
 
+        setupAdminBackButton();
         initializeViews();
         loadReportData();
     }
@@ -46,8 +47,13 @@ public class AdminReportsActivity extends BaseAdminActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        navigateToDashboard();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToDashboard();
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SosActivity extends AppCompatActivity {
@@ -146,12 +147,29 @@ public class SosActivity extends AppCompatActivity {
     private void sendSosWithCoordinates(double latitude, double longitude) {
         // Build the SOS message with coordinates
         String message = sosHelper.buildSosMessage(latitude, longitude);
+
+        // Step 1: Send SOS alert to database
         realtimeDatabaseService.sendSOSAlert(currentUserId, currentUserName, latitude, longitude,
                 message, new FirebaseRealtimeDatabaseService.OnOperationCallback() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(SosActivity.this, "SOS alert sent", Toast.LENGTH_LONG).show();
-                        promptEmergencyContactAlert(message); // Prompt to notify emergency contacts
+                        Toast.makeText(SosActivity.this, "SOS alert sent!", Toast.LENGTH_LONG).show();
+
+                        // Step 2: Share location with emergency contacts
+                        realtimeDatabaseService.shareLocation(currentUserId, currentUserName, latitude, longitude,
+                                new FirebaseRealtimeDatabaseService.OnOperationCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        // Step 3: Send SMS to emergency contacts
+                                        sendAlertsToEmergencyContacts(message, latitude, longitude);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Toast.makeText(SosActivity.this, "Location sharing failed: " + error, Toast.LENGTH_SHORT).show();
+                                        sendAlertsToEmergencyContacts(message, latitude, longitude);
+                                    }
+                                });
                     }
 
                     @Override
@@ -161,41 +179,96 @@ public class SosActivity extends AppCompatActivity {
                 });
     }
 
-    private void promptEmergencyContactAlert(String message) {
-        // Retrieve emergency contacts and prompt the user to notify them
+    private void sendAlertsToEmergencyContacts(String message, double latitude, double longitude) {
+        // Retrieve emergency contacts and automatically send SMS
         firestoreService.getEmergencyContacts(currentUserId, new FirebaseFirestoreService.OnContactsListCallback() {
             @Override
             public void onSuccess(List<Map<String, Object>> contacts) {
-                List<String> numbers = new ArrayList<>();
+                if (contacts == null || contacts.isEmpty()) {
+                    showEmergencyOptionsDialog(message, latitude, longitude, new ArrayList<>());
+                    return;
+                }
+
+                // Extract phone numbers and contact names
+                List<String> phoneNumbers = new ArrayList<>();
+                List<String> contactNames = new ArrayList<>();
+
                 for (Map<String, Object> contact : contacts) {
                     Object phone = contact.get("phone");
+                    Object name = contact.get("name");
+
                     if (phone != null) {
-                        numbers.add(String.valueOf(phone));
+                        phoneNumbers.add(String.valueOf(phone));
+                        if (name != null) {
+                            contactNames.add(String.valueOf(name));
+                        }
                     }
                 }
 
-                // Show a dialog to notify emergency contacts via SMS or call
-                new AlertDialog.Builder(SosActivity.this)
-                        .setTitle("Notify Emergency Contacts")
-                        .setMessage(numbers.isEmpty()
-                                ? "No emergency contacts found. You can call emergency services now."
-                                : "SOS is saved. Do you want to open your SMS app to notify saved emergency contacts?")
-                        .setPositiveButton(numbers.isEmpty() ? "Call 119" : "Open SMS", (dialog, which) -> {
-                            if (numbers.isEmpty()) {
-                                sosHelper.openEmergencyDialer(); // Open dialer with emergency number
-                            } else {
-                                sosHelper.openSmsComposer(numbers, message); // Open SMS composer with contact numbers
-                            }
-                        })
-                        .setNegativeButton("Close", null)
-                        .show();
+                if (!phoneNumbers.isEmpty()) {
+                    // Automatically send SMS to all emergency contacts
+                    String locationUrl = String.format(Locale.getDefault(),
+                            "https://maps.google.com/?q=%f,%f", latitude, longitude);
+                    String smsMessage = String.format(Locale.getDefault(),
+                            "🚨 EMERGENCY SOS ALERT 🚨\n\n" +
+                            "User: %s\n" +
+                            "Location: %s\n\n" +
+                            "They need help! Please check on them immediately.",
+                            currentUserName, locationUrl);
+
+                    sosHelper.openSmsComposer(phoneNumbers, smsMessage);
+                    showEmergencyAlertSummary(contactNames, phoneNumbers.size());
+                }
+
+                showEmergencyOptionsDialog(message, latitude, longitude, phoneNumbers);
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(SosActivity.this, "Contacts not loaded: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SosActivity.this, "Could not load emergency contacts: " + error, Toast.LENGTH_SHORT).show();
+                showEmergencyOptionsDialog(message, latitude, longitude, new ArrayList<>());
             }
         });
+    }
+
+    private void showEmergencyAlertSummary(List<String> contactNames, int contactCount) {
+        if (contactNames.isEmpty()) {
+            return;
+        }
+
+        String contacts = android.text.TextUtils.join(", ", contactNames);
+        String message = String.format(Locale.getDefault(),
+                "SOS alert activated!\n\nAlerts sent to %d contact(s):\n%s\n\nLocation has been shared.",
+                contactCount, contacts);
+
+        new AlertDialog.Builder(this)
+                .setTitle("🚨 SOS Activated")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    finish();
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    private void showEmergencyOptionsDialog(String message, double latitude, double longitude, List<String> phoneNumbers) {
+        new AlertDialog.Builder(this)
+                .setTitle("Emergency SOS Activated")
+                .setMessage(phoneNumbers.isEmpty()
+                        ? "No emergency contacts found.\n\nYour location has been shared.\n\nWould you like to call emergency services?"
+                        : "SOS alerts sent to emergency contacts!\n\nYour location has been shared.\n\nWould you like to call emergency services?")
+                .setPositiveButton(phoneNumbers.isEmpty() ? "Call 119" : "Call Emergency", (dialog, which) -> {
+                    sosHelper.openEmergencyDialer();
+                })
+                .setNegativeButton("Close", (dialog, which) -> finish())
+                .setCancelable(false)
+                .show();
+    }
+
+    @Deprecated
+    // This method is replaced by sendAlertsToEmergencyContacts
+    private void promptEmergencyContactAlert(String message) {
+        // Old implementation - use sendAlertsToEmergencyContacts instead
     }
 
     @Override
