@@ -74,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Handle Logout click - go back to Login page and clear all history
         btnLogout.setOnClickListener(v -> {
+            com.example.yuwathi.utils.AdminSessionManager.clearSession(ProfileActivity.this);
             authService.logout();
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack

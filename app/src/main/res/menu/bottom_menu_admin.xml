@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- bottom_menu_admin.xml - Bottom Navigation Bar Menu Items for Admin -->
-<!-- Defines the navigation tabs shown at the bottom of admin pages -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item 
-        android:id="@+id/nav_admin_dashboard" 
-        android:icon="@drawable/ic_admin_dashboard" 
-        android:title="@string/admin_dashboard" />
-    
-    <item 
-        android:id="@+id/nav_admin_users" 
-        android:icon="@drawable/ic_admin_users" 
-        android:title="@string/admin_users" />
-    
-    <item 
-        android:id="@+id/nav_admin_complaints" 
-        android:icon="@drawable/ic_admin_complaints" 
-        android:title="@string/admin_complaints" />
-    
-    <item 
-        android:id="@+id/nav_admin_reports" 
-        android:icon="@drawable/ic_admin_reports" 
-        android:title="@string/admin_reports" />
-    
-    <item 
-        android:id="@+id/nav_admin_safety_tips" 
-        android:icon="@drawable/ic_admin_tips" 
-        android:title="@string/admin_safety_tips" />
+    <item
+        android:id="@+id/nav_admin_dashboard"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Dashboard" />
+
+    <item
+        android:id="@+id/nav_admin_users"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Users" />
+
+    <item
+        android:id="@+id/nav_admin_complaints"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Complaints" />
+
+    <item
+        android:id="@+id/nav_admin_reports"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Reports" />
+
+    <item
+        android:id="@+id/nav_admin_safety_tips"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="Tips" />
 </menu>
+

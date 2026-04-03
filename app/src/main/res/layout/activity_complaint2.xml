@@ -140,10 +140,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Upload Evidence"
+                android:text="Add Photos / Audio / Video"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:strokeColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_evidence_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="No evidence selected"
+                android:textColor="#CCFFFFFF"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/et_evidence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:hint="Evidence details or link"
+                android:textColor="@color/white"
+                android:textColorHint="#CCFFFFFF"
+                android:textSize="14sp" />
 
             <!-- 4. Safety & Privacy -->
             <TextView
