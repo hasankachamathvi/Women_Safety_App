@@ -28,10 +28,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Initialize Firebase helper services used by this screen.
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
 
-        // Connect XML views
+        // Link Java variables to UI elements from activity_home.xml.
         tvUserName = findViewById(R.id.tv_user_name);
         MaterialButton btnSos = findViewById(R.id.btn_sos);
         LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
@@ -40,21 +41,23 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout cardTip = findViewById(R.id.card_safety_tip);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
-        // Check current user
+        // Allow only logged-in users to stay on Home; otherwise go to Login.
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
+            // Load the user's name from Firestore and show it on the screen.
             loadUserProfile();
         } else {
             redirectToLogin();
             return;
         }
 
-        // Bottom navigation
+        // Handle bottom menu taps and open the selected screen.
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
+                // Already on Home, so no navigation is needed.
                 return true;
             } else if (id == R.id.nav_contacts) {
                 startActivity(new Intent(this, ContactsActivity.class));
@@ -73,9 +76,10 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         });
 
+        // Highlight Home icon because this activity is the Home screen.
         bottomNav.setSelectedItemId(R.id.nav_home);
 
-        // Buttons
+        // Quick action buttons on the home dashboard.
         btnSos.setOnClickListener(v -> startActivity(new Intent(this, SosActivity.class)));
         btnShareLoc.setOnClickListener(v -> startActivity(new Intent(this, LocationActivity.class)));
         btnContacts.setOnClickListener(v -> startActivity(new Intent(this, ContactsActivity.class)));
@@ -86,27 +90,31 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadUserProfile() {
+        // Read current user's profile from Firestore using the UID from Firebase Auth.
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
             @Override
             public void onSuccess(com.example.yuwathi.models.User user) {
                 if (user != null) {
+                    // Show user's name in the welcome/header text view.
                     tvUserName.setText(user.getName());
                 }
             }
 
             @Override
             public void onError(String error) {
+                // Keep UI usable even if profile fetch fails.
                 Toast.makeText(HomeActivity.this, "Failed to load user profile", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void setUpLogoutListener() {
-        // handled in onBackPressed
+        // Logout is intentionally handled when user presses back.
     }
 
     private void redirectToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
+        // Clear back stack so user cannot return to Home after logout/login redirect.
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -114,10 +122,12 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // Ask confirmation before logging out when user presses the back button.
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    // Clear local admin session, sign out Firebase user, then go to Login.
                     com.example.yuwathi.utils.AdminSessionManager.clearSession(this);
                     authService.logout();
                     redirectToLogin();
