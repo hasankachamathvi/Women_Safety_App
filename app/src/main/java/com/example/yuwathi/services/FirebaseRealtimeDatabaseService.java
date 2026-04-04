@@ -9,6 +9,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Realtime Database service for live alerts and location updates.
+ */
 public class FirebaseRealtimeDatabaseService {
     private static final String TAG = "RealtimeDBService";
     private static FirebaseRealtimeDatabaseService instance;

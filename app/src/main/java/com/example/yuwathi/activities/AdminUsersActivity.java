@@ -13,6 +13,9 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 
 import java.util.List;
 
+/**
+ * Admin screen for viewing and managing users.
+ */
 public class AdminUsersActivity extends BaseAdminActivity {
 
     private FirebaseFirestoreService firestoreService;

@@ -12,6 +12,9 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Admin analytics view for complaint and user reports.
+ */
 public class AdminReportsActivity extends BaseAdminActivity {
 
     private FirebaseFirestoreService firestoreService;

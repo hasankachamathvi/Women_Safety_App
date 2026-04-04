@@ -3,6 +3,9 @@ package com.example.yuwathi.services;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Wrapper around Firebase Authentication operations.
+ */
 public class FirebaseAuthService {
     private final FirebaseAuth auth;
 

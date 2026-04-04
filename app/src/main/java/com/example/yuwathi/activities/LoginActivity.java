@@ -14,6 +14,9 @@ import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
 import com.example.yuwathi.services.FirebaseAuthService;
 
+/**
+ * Authenticates users and routes them by role.
+ */
 public class LoginActivity extends AppCompatActivity {
     // Service for login and password-reset operations.
     private FirebaseAuthService authService;

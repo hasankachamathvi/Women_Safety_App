@@ -21,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Shows and updates the logged-in user profile.
+ */
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuthService authService;

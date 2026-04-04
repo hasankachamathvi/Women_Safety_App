@@ -16,6 +16,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays safety tips to end users.
+ */
 public class SafetyTipsActivity extends AppCompatActivity {
 
     private SafetyTipAdapter safetyTipAdapter;

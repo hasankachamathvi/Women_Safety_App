@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 // App resources (layouts, view ids, etc.).
 import com.example.yuwathi.R;
 
-// Launch screen shown briefly before moving to login.
+/**
+ * App entry splash screen that shows branding before navigation.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @Override

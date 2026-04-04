@@ -24,6 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * Collects first-step complaint details from users.
+ */
 public class ComplaintActivity extends AppCompatActivity {
 
     @Override

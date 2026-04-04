@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Centralized Firestore data access layer for app features.
+ */
 public class FirebaseFirestoreService {
     private static final String TAG = "FirestoreService";
     private static final String USERS_COLLECTION = "users";

@@ -15,6 +15,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles account registration and initial user profile creation.
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;

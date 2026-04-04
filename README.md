@@ -5,3 +5,5 @@ The application allows users to easily report unsafe environments and view safet
 Yuwathi also encourages awareness by helping users stay informed about potentially unsafe conditions such as poor lighting, isolated areas or locations with previous incidents. By sharing this information, the app helps women make safer decisions about their surroundings.
 
 Overall, Yuwathi aims to create a safer environment for women by combining technology, awareness and community support through a simple and accessible mobile platform
+
+Detailed implementation documentation is available in CODEBASE_DOCUMENTATION.md.

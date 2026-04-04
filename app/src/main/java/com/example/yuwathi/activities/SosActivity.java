@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Handles emergency SOS activation, location capture, and alert dispatch.
+ */
 public class SosActivity extends AppCompatActivity {
 
     private static final int REQ_LOCATION = 102; // Request code for location permission
