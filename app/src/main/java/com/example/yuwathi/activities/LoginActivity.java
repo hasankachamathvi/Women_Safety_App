@@ -50,8 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            // Primary auth path: Firebase Authentication.
-            // This supports both users and admins that exist as Firebase accounts.
+            // 1) Try Firebase login first (normal path for both user/admin accounts stored in Firebase)
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful() && mAuth.getCurrentUser() != null) {
@@ -61,8 +60,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-
-                            // Role lookup decides which dashboard the authenticated account should open.
                             db.collection("users").document(uid).get()
                                     .addOnSuccessListener(documentSnapshot -> {
                                         String role = documentSnapshot.exists() ? documentSnapshot.getString("role") : null;
@@ -77,8 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
 
-                        // Secondary auth path: hardcoded admin fallback.
-                        // Keeps admin access possible if Firestore role data is unavailable.
+                        // 2) Fallback: local hardcoded admin credentials
                         if (ADMIN_EMAIL.equalsIgnoreCase(email) && ADMIN_PASSWORD.equals(password)) {
                             AdminSessionManager.startAdminSession(LoginActivity.this);
                             startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
@@ -89,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                     });
         });
 
-        // Lightweight navigation helpers for account creation and support.
         tvRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
         tvForgot.setOnClickListener(v -> Toast.makeText(this, "Contact support for password reset", Toast.LENGTH_SHORT).show());
     }

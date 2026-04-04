@@ -21,19 +21,17 @@ public class SplashActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.tv_app_name);
         TextView subtitle = findViewById(R.id.tv_subtitle);
 
-        // Run lightweight fade-in animations to make the brand screen feel intentional,
-        // while keeping total startup delay short.
         if (title != null) {
             title.setAlpha(0f);
             title.animate().alpha(1f).setDuration(800).start();
         }
-
+        
         if (subtitle != null) {
             subtitle.setAlpha(0f);
             subtitle.animate().alpha(1f).setDuration(800).setStartDelay(300).start();
         }
 
-        // Splash lasts only long enough to show branding; authentication/role checks happen on login.
+        // Reduced delay slightly and ensured clean transition
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);

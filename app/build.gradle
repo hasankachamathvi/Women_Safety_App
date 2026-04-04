@@ -86,5 +86,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
-// Apply after dependencies when using project-level buildscript classpath
-apply plugin: 'com.google.gms.google-services'
+// Apply Google Services only when local Firebase config exists.
+def googleServicesFile = file("google-services.json")
+if (googleServicesFile.exists()) {
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    logger.lifecycle("google-services.json not found in app/. Skipping Google Services plugin for this local build.")
+}
