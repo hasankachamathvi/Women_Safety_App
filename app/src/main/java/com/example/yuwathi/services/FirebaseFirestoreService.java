@@ -1,37 +1,33 @@
 package com.example.yuwathi.services;
 
 import android.util.Log;
+
 import androidx.annotation.NonNull;
-import com.google.firebase.firestore.CollectionReference;
+
+import com.example.yuwathi.models.Complaint;
+import com.example.yuwathi.models.SafetyTip;
+import com.example.yuwathi.models.User;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.auth.FirebaseAuth;
-import com.example.yuwathi.models.User;
-import com.example.yuwathi.models.SafetyTip;
-import com.example.yuwathi.models.Complaint;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Date;
 
-/**
- * Firebase Firestore Service
- * Handles all database operations for users, complaints, safety tips, and contacts
- */
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class FirebaseFirestoreService {
     private static final String TAG = "FirestoreService";
-    private static FirebaseFirestoreService instance;
-    private FirebaseFirestore db;
-
-    // Collection names
     private static final String USERS_COLLECTION = "users";
+    private static final String CONTACTS_COLLECTION = "emergency_contacts";
     private static final String COMPLAINTS_COLLECTION = "complaints";
     private static final String SAFETY_TIPS_COLLECTION = "safety_tips";
-    private static final String CONTACTS_COLLECTION = "emergency_contacts";
     private static final String LOCATIONS_COLLECTION = "locations";
+
+    private static FirebaseFirestoreService instance;
+    private final FirebaseFirestore db;
 
     private FirebaseFirestoreService() {
         db = FirebaseFirestore.getInstance();
@@ -44,145 +40,194 @@ public class FirebaseFirestoreService {
         return instance;
     }
 
-    // ========== USER OPERATIONS ==========
-
-    /**
-     * Add or update user profile
-     */
-    public void addUser(User user, OnOperationCallback callback) {
-        db.collection(USERS_COLLECTION).document(user.getId())
-                .set(user)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "User added successfully");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error adding user", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Get user by ID
-     */
     public void getUser(String userId, OnUserFetchCallback callback) {
-        db.collection(USERS_COLLECTION).document(userId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        User user = documentSnapshot.toObject(User.class);
-                        callback.onSuccess(user);
-                    } else {
+        db.collection(USERS_COLLECTION).document(userId).get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!snapshot.exists()) {
                         callback.onError("User not found");
+                        return;
                     }
+                    User user = mapUser(snapshot);
+                    callback.onSuccess(user);
                 })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching user", e);
-                    callback.onError(e.getMessage());
-                });
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
     }
 
-    /**
-     * Get all users (for admin)
-     */
+    public void updateUser(String userId, Map<String, Object> updates, OnOperationCallback callback) {
+        db.collection(USERS_COLLECTION).document(userId)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void addEmergencyContact(String userId, Map<String, Object> contact, OnOperationCallback callback) {
+        DocumentReference ref = db.collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CONTACTS_COLLECTION)
+                .document();
+        contact.put("id", ref.getId());
+        ref.set(contact)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void getEmergencyContacts(String userId, OnContactsListCallback callback) {
+        db.collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CONTACTS_COLLECTION)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Map<String, Object>> contacts = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        Map<String, Object> data = doc.getData();
+                        if (data == null) {
+                            data = new HashMap<>();
+                        }
+                        data.put("id", doc.getId());
+                        contacts.add(data);
+                    }
+                    callback.onSuccess(contacts);
+                })
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void deleteEmergencyContact(String userId, String contactId, OnOperationCallback callback) {
+        db.collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CONTACTS_COLLECTION)
+                .document(contactId)
+                .delete()
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void saveLocation(String userId, double latitude, double longitude, OnOperationCallback callback) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("userId", userId);
+        payload.put("latitude", latitude);
+        payload.put("longitude", longitude);
+        payload.put("timestamp", new Date());
+
+        db.collection(LOCATIONS_COLLECTION)
+                .add(payload)
+                .addOnSuccessListener(ref -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void submitComplaint(Complaint complaint, OnOperationCallback callback) {
+        DocumentReference ref = db.collection(COMPLAINTS_COLLECTION).document();
+        complaint.setId(ref.getId());
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("id", complaint.getId());
+        payload.put("userId", complaint.getUserId());
+        payload.put("title", complaint.getTitle());
+        payload.put("location", complaint.getLocation());
+        payload.put("date", complaint.getDate());
+        payload.put("status", complaint.getStatus());
+        payload.put("priority", complaint.getPriority());
+        payload.put("description", complaint.getDescription());
+        payload.put("witnesses", complaint.getWitnesses());
+        payload.put("vehicle", complaint.getVehicle());
+        payload.put("suspectDescription", complaint.getSuspectDescription());
+        payload.put("ongoing", complaint.isOngoing());
+        payload.put("contactPreference", complaint.getContactPreference());
+        payload.put("evidence", complaint.getEvidence());
+        payload.put("timestamp", new Date());
+
+        ref.set(payload)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void getSafetyTips(OnSafetyTipsListCallback callback) {
+        db.collection(SAFETY_TIPS_COLLECTION)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<SafetyTip> tips = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        SafetyTip tip = doc.toObject(SafetyTip.class);
+                        if (tip == null) {
+                            continue;
+                        }
+                        tip.setId(doc.getId());
+
+                        Boolean visible = doc.getBoolean("visible");
+                        Boolean legacyVisible = doc.getBoolean("isVisible");
+                        boolean shouldShow = (visible != null && visible) || (legacyVisible != null && legacyVisible);
+
+                        // Backward compatibility: if visibility field is missing, show tip by default.
+                        if (visible == null && legacyVisible == null) {
+                            shouldShow = true;
+                        }
+
+                        if (shouldShow) {
+                            tips.add(tip);
+                        }
+                    }
+                    callback.onSuccess(tips);
+                })
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void getAllSafetyTips(OnSafetyTipsListCallback callback) {
+        db.collection(SAFETY_TIPS_COLLECTION)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<SafetyTip> tips = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        SafetyTip tip = doc.toObject(SafetyTip.class);
+                        if (tip != null) {
+                            tip.setId(doc.getId());
+                            tips.add(tip);
+                        }
+                    }
+                    callback.onSuccess(tips);
+                })
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void addSafetyTip(SafetyTip tip, OnOperationCallback callback) {
+        DocumentReference ref = db.collection(SAFETY_TIPS_COLLECTION).document();
+        tip.setId(ref.getId());
+        ref.set(tip)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void updateSafetyTip(String tipId, SafetyTip tip, OnOperationCallback callback) {
+        db.collection(SAFETY_TIPS_COLLECTION).document(tipId)
+                .set(tip)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
+    public void deleteSafetyTip(String tipId, OnOperationCallback callback) {
+        db.collection(SAFETY_TIPS_COLLECTION).document(tipId)
+                .delete()
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
     public void getAllUsers(OnUsersListCallback callback) {
         db.collection(USERS_COLLECTION)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    List<User> users = querySnapshot.toObjects(User.class);
+                    List<User> users = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        User user = mapUser(doc);
+                        users.add(user);
+                    }
                     callback.onSuccess(users);
                 })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching users", e);
-                    callback.onError(e.getMessage());
-                });
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
     }
 
-    /**
-     * Update user profile
-     */
-    public void updateUser(String userId, Map<String, Object> updates, OnOperationCallback callback) {
-        db.collection(USERS_COLLECTION).document(userId)
-                .update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "User updated successfully");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error updating user", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Delete user (admin only)
-     */
-    public void deleteUser(String userId, OnOperationCallback callback) {
-        db.collection(USERS_COLLECTION).document(userId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "User deleted successfully");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting user", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    // ========== COMPLAINT OPERATIONS ==========
-
-    /**
-     * Submit a new complaint
-     */
-    public void submitComplaint(Complaint complaint, OnOperationCallback callback) {
-        DocumentReference docRef = db.collection(COMPLAINTS_COLLECTION).document();
-        complaint.setId(docRef.getId());
-        docRef.set(complaint)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Complaint submitted with ID: " + docRef.getId());
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error submitting complaint", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Get all complaints by user
-     */
-    public void getComplaintsByUser(String userId, OnComplaintsListCallback callback) {
-        db.collection(COMPLAINTS_COLLECTION)
-                .whereEqualTo("userId", userId)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<Complaint> complaints = new java.util.ArrayList<>();
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        Complaint complaint = doc.toObject(Complaint.class);
-                        if (complaint != null) {
-                            complaint.setId(doc.getId());
-                            complaints.add(complaint);
-                        }
-                    }
-                    callback.onSuccess(complaints);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching complaints", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Get all complaints (for admin)
-     */
     public void getAllComplaints(OnComplaintsListCallback callback) {
         db.collection(COMPLAINTS_COLLECTION)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    List<Complaint> complaints = new java.util.ArrayList<>();
+                    List<Complaint> complaints = new ArrayList<>();
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                         Complaint complaint = doc.toObject(Complaint.class);
                         if (complaint != null) {
@@ -192,15 +237,9 @@ public class FirebaseFirestoreService {
                     }
                     callback.onSuccess(complaints);
                 })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching complaints", e);
-                    callback.onError(e.getMessage());
-                });
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
     }
 
-    /**
-     * Update complaint status
-     */
     public void updateComplaintStatus(String complaintId, String status, OnOperationCallback callback) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("status", status);
@@ -208,278 +247,83 @@ public class FirebaseFirestoreService {
 
         db.collection(COMPLAINTS_COLLECTION).document(complaintId)
                 .update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Complaint status updated");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error updating complaint", e);
-                    callback.onError(e.getMessage());
-                });
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
     }
 
-    /**
-     * Delete complaint (admin only)
-     */
-    public void deleteComplaint(String complaintId, OnOperationCallback callback) {
-        db.collection(COMPLAINTS_COLLECTION).document(complaintId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Complaint deleted successfully");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting complaint", e);
-                    callback.onError(e.getMessage());
-                });
+    public void isUserAdmin(String userId, OnAdminCheckCallback callback) {
+        getUser(userId, new OnUserFetchCallback() {
+            @Override
+            public void onSuccess(User user) {
+                boolean isAdmin = user != null && "admin".equalsIgnoreCase(user.getRole());
+                callback.onResult(isAdmin);
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.w(TAG, "Admin check failed: " + error);
+                callback.onResult(false);
+            }
+        });
     }
 
-    // ========== SAFETY TIPS OPERATIONS ==========
-
-    /**
-     * Get all safety tips (admin view, includes hidden tips)
-     */
-    public void getAllSafetyTips(OnSafetyTipsListCallback callback) {
-        db.collection(SAFETY_TIPS_COLLECTION)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<SafetyTip> tips = new java.util.ArrayList<>();
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        SafetyTip tip = doc.toObject(SafetyTip.class);
-                        if (tip != null) {
-                            tip.setId(doc.getId());
-                            tips.add(tip);
-                        }
-                    }
-                    callback.onSuccess(tips);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching all safety tips", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Get all safety tips
-     */
-    public void getSafetyTips(OnSafetyTipsListCallback callback) {
-        db.collection(SAFETY_TIPS_COLLECTION)
-                .whereEqualTo("isVisible", true)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<SafetyTip> tips = new java.util.ArrayList<>();
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        SafetyTip tip = doc.toObject(SafetyTip.class);
-                        if (tip != null) {
-                            tip.setId(doc.getId());
-                            tips.add(tip);
-                        }
-                    }
-                    callback.onSuccess(tips);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching safety tips", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Get all safety tips by category
-     */
-    public void getSafetyTipsByCategory(String category, OnSafetyTipsListCallback callback) {
-        db.collection(SAFETY_TIPS_COLLECTION)
-                .whereEqualTo("category", category)
-                .whereEqualTo("isVisible", true)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<SafetyTip> tips = new java.util.ArrayList<>();
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        SafetyTip tip = doc.toObject(SafetyTip.class);
-                        if (tip != null) {
-                            tip.setId(doc.getId());
-                            tips.add(tip);
-                        }
-                    }
-                    callback.onSuccess(tips);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching safety tips", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Add safety tip (admin only)
-     */
-    public void addSafetyTip(SafetyTip tip, OnOperationCallback callback) {
-        DocumentReference docRef = db.collection(SAFETY_TIPS_COLLECTION).document();
-        tip.setId(docRef.getId());
-        docRef.set(tip)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Safety tip added with ID: " + docRef.getId());
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error adding safety tip", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Update safety tip (admin only)
-     */
-    public void updateSafetyTip(String tipId, SafetyTip tip, OnOperationCallback callback) {
-        db.collection(SAFETY_TIPS_COLLECTION).document(tipId)
-                .set(tip)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Safety tip updated");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error updating safety tip", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Delete safety tip (admin only)
-     */
-    public void deleteSafetyTip(String tipId, OnOperationCallback callback) {
-        db.collection(SAFETY_TIPS_COLLECTION).document(tipId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Safety tip deleted");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting safety tip", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    // ========== EMERGENCY CONTACTS OPERATIONS ==========
-
-    /**
-     * Add emergency contact for user
-     */
-    public void addEmergencyContact(String userId, Map<String, Object> contact, OnOperationCallback callback) {
-        DocumentReference docRef = db.collection(USERS_COLLECTION).document(userId)
-                .collection(CONTACTS_COLLECTION).document();
-        contact.put("id", docRef.getId());
-        docRef.set(contact)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Emergency contact added");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error adding emergency contact", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Get emergency contacts for user
-     */
-    public void getEmergencyContacts(String userId, OnContactsListCallback callback) {
-        db.collection(USERS_COLLECTION).document(userId)
-                .collection(CONTACTS_COLLECTION)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<Map<String, Object>> contacts = new java.util.ArrayList<>();
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        Map<String, Object> contact = doc.getData();
-                        if (contact != null) {
-                            contact.put("id", doc.getId());
-                            contacts.add(contact);
-                        }
-                    }
-                    callback.onSuccess(contacts);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error fetching emergency contacts", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    /**
-     * Delete emergency contact
-     */
-    public void deleteEmergencyContact(String userId, String contactId, OnOperationCallback callback) {
-        db.collection(USERS_COLLECTION).document(userId)
-                .collection(CONTACTS_COLLECTION).document(contactId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Emergency contact deleted");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting emergency contact", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    // ========== LOCATION OPERATIONS ==========
-
-    /**
-     * Save user location for emergency
-     */
-    public void saveLocation(String userId, double latitude, double longitude, OnOperationCallback callback) {
-        Map<String, Object> location = new HashMap<>();
-        location.put("userId", userId);
-        location.put("latitude", latitude);
-        location.put("longitude", longitude);
-        location.put("timestamp", new Date());
-
-        db.collection(LOCATIONS_COLLECTION).add(location)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Location saved");
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error saving location", e);
-                    callback.onError(e.getMessage());
-                });
-    }
-
-    // ========== ADMIN STATISTICS ==========
-
-    /**
-     * Get dashboard statistics (admin)
-     */
     public void getDashboardStats(OnStatsCallback callback) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        // Get total users
         db.collection(USERS_COLLECTION).get()
-                .addOnSuccessListener(usersSnapshot -> {
-                    int totalUsers = (int) usersSnapshot.getDocuments().size();
-
-                    // Get total complaints
+                .addOnSuccessListener(users -> {
+                    int totalUsers = users.size();
                     db.collection(COMPLAINTS_COLLECTION).get()
-                            .addOnSuccessListener(complaintsSnapshot -> {
-                                int totalComplaints = (int) complaintsSnapshot.getDocuments().size();
-
-                                // Get resolved complaints
+                            .addOnSuccessListener(complaints -> {
+                                int totalComplaints = complaints.size();
                                 db.collection(COMPLAINTS_COLLECTION)
                                         .whereEqualTo("status", "Resolved")
                                         .get()
-                                        .addOnSuccessListener(resolvedSnapshot -> {
-                                            int resolvedComplaints = (int) resolvedSnapshot.getDocuments().size();
+                                        .addOnSuccessListener(resolved -> {
                                             Map<String, Integer> stats = new HashMap<>();
                                             stats.put("totalUsers", totalUsers);
                                             stats.put("totalComplaints", totalComplaints);
-                                            stats.put("resolvedComplaints", resolvedComplaints);
-                                            stats.put("pendingComplaints", totalComplaints - resolvedComplaints);
+                                            stats.put("resolvedComplaints", resolved.size());
+                                            stats.put("pendingComplaints", Math.max(totalComplaints - resolved.size(), 0));
                                             callback.onSuccess(stats);
                                         })
-                                        .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                                        .addOnFailureListener(e -> callback.onError(messageOf(e)));
                             })
-                            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                            .addOnFailureListener(e -> callback.onError(messageOf(e)));
                 })
-                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
     }
 
-    // ========== CALLBACKS ==========
+    private User mapUser(@NonNull DocumentSnapshot snapshot) {
+        User user = snapshot.toObject(User.class);
+        if (user == null) {
+            user = new User();
+        }
+        user.setId(snapshot.getId());
+
+        Object fullName = snapshot.get("fullName");
+        Object name = snapshot.get("name");
+        Object username = snapshot.get("username");
+        Object email = snapshot.get("email");
+        Object phone = snapshot.get("phone");
+        Object role = snapshot.get("role");
+        Object status = snapshot.get("status");
+
+        if (name instanceof String) user.setName((String) name);
+        if (fullName instanceof String) user.setFullName((String) fullName);
+        if (username instanceof String) user.setUsername((String) username);
+        if (email instanceof String) user.setEmail((String) email);
+        if (phone instanceof String) user.setPhone((String) phone);
+        if (role instanceof String) user.setRole((String) role);
+        if (status instanceof String) user.setStatus((String) status);
+
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("user");
+        }
+        return user;
+    }
+
+    private String messageOf(Exception e) {
+        return e != null && e.getMessage() != null ? e.getMessage() : "Unknown error";
+    }
 
     public interface OnOperationCallback {
         void onSuccess();
@@ -501,19 +345,23 @@ public class FirebaseFirestoreService {
         void onError(String error);
     }
 
-    public interface OnSafetyTipsListCallback {
-        void onSuccess(List<SafetyTip> tips);
+    public interface OnContactsListCallback {
+        void onSuccess(List<Map<String, Object>> contacts);
         void onError(String error);
     }
 
-    public interface OnContactsListCallback {
-        void onSuccess(List<Map<String, Object>> contacts);
+    public interface OnSafetyTipsListCallback {
+        void onSuccess(List<SafetyTip> tips);
         void onError(String error);
     }
 
     public interface OnStatsCallback {
         void onSuccess(Map<String, Integer> stats);
         void onError(String error);
+    }
+
+    public interface OnAdminCheckCallback {
+        void onResult(boolean isAdmin);
     }
 }
 

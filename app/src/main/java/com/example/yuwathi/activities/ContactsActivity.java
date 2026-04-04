@@ -142,10 +142,19 @@ public class ContactsActivity extends AppCompatActivity {
                 .setTitle("Add Emergency Contact")
                 .setView(layout)
                 .setPositiveButton("Save", (dialog, which) -> {
+                    String name = etName.getText().toString().trim();
+                    String phone = etPhone.getText().toString().trim();
+                    String relationship = etRelationship.getText().toString().trim();
+
+                    if (name.isEmpty() || phone.isEmpty()) {
+                        Toast.makeText(this, "Please enter contact name and phone number", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     Map<String, Object> contact = new HashMap<>();
-                    contact.put("name", etName.getText().toString().trim());
-                    contact.put("phone", etPhone.getText().toString().trim());
-                    contact.put("relationship", etRelationship.getText().toString().trim());
+                    contact.put("name", name);
+                    contact.put("phone", phone);
+                    contact.put("relationship", relationship);
                     firestoreService.addEmergencyContact(currentUserId, contact, new FirebaseFirestoreService.OnOperationCallback() {
                         @Override
                         public void onSuccess() {
@@ -155,7 +164,7 @@ public class ContactsActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(String error) {
-                            Toast.makeText(ContactsActivity.this, "Save failed: " + error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ContactsActivity.this, "Could not add contact. Check connection/Firebase rules.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 })

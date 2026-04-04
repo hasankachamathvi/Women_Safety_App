@@ -1,12 +1,15 @@
 package com.example.yuwathi.activities;
 
 // Import required Android classes
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,7 +19,10 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
-import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class ComplaintActivity extends AppCompatActivity {
 
@@ -33,6 +39,13 @@ public class ComplaintActivity extends AppCompatActivity {
         EditText etLocation = findViewById(R.id.et_location);
         EditText etVehicle = findViewById(R.id.et_vehicle);
         EditText etSuspectDesc = findViewById(R.id.et_suspect_desc);
+
+        etIncidentTime.setOnClickListener(v -> showDateTimePicker(etIncidentTime));
+        etIncidentTime.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                showDateTimePicker(etIncidentTime);
+            }
+        });
 
         // List of incident categories for the dropdown
         String[] categories = {
@@ -72,5 +85,36 @@ public class ComplaintActivity extends AppCompatActivity {
             intent.putExtra("suspect_desc", etSuspectDesc.getText().toString().trim());
             startActivity(intent);
         });
+    }
+
+    private void showDateTimePicker(EditText targetField) {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    Calendar selected = Calendar.getInstance();
+                    selected.set(Calendar.YEAR, year);
+                    selected.set(Calendar.MONTH, month);
+                    selected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(
+                            this,
+                            (timeView, hourOfDay, minute) -> {
+                                selected.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                selected.set(Calendar.MINUTE, minute);
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                                targetField.setText(formatter.format(selected.getTime()));
+                            },
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE),
+                            true
+                    );
+                    timePickerDialog.show();
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
     }
 }
