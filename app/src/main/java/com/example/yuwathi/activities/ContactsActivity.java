@@ -46,6 +46,7 @@ public class ContactsActivity extends AppCompatActivity {
         authService = new FirebaseAuthService();
         FirebaseUser user = authService.getCurrentUser();
         if (user == null) {
+            // Contacts are user-scoped data; without auth we cannot safely read/write.
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
@@ -64,6 +65,7 @@ public class ContactsActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.nav_contacts);
 
         contactList = new ArrayList<>();
+        // Adapter delegates delete action back to this screen so DB writes stay centralized.
         contactAdapter = new ContactAdapter(this, contactList, contact -> {
             String contactId = String.valueOf(contact.get("id"));
             firestoreService.deleteEmergencyContact(currentUserId, contactId, new FirebaseFirestoreService.OnOperationCallback() {
@@ -82,6 +84,7 @@ public class ContactsActivity extends AppCompatActivity {
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
         rvContacts.setAdapter(contactAdapter);
 
+        // Initial fetch hydrates list from Firestore.
         loadContacts();
 
         // Handle Add Contact button click
@@ -110,6 +113,7 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void loadContacts() {
+        // Pull fresh list each time to stay consistent after add/delete operations.
         firestoreService.getEmergencyContacts(currentUserId, new FirebaseFirestoreService.OnContactsListCallback() {
             @Override
             public void onSuccess(List<Map<String, Object>> contacts) {
@@ -124,6 +128,7 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void showAddContactDialog() {
+        // Dynamic dialog keeps contact creation lightweight without another activity/fragment.
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         int padding = (int) (16 * getResources().getDisplayMetrics().density);
@@ -149,6 +154,7 @@ public class ContactsActivity extends AppCompatActivity {
                     String phone = etPhone.getText().toString().trim();
                     String relationship = etRelationship.getText().toString().trim();
 
+                    // Minimum required fields ensure SOS workflows always have usable recipients.
                     if (name.isEmpty() || phone.isEmpty()) {
                         Toast.makeText(this, "Please enter contact name and phone number", Toast.LENGTH_SHORT).show();
                         return;

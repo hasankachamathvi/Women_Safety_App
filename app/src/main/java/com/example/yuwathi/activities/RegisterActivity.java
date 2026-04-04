@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
             String password = etPassword.getText().toString();
             String confirmPassword = etConfirmPassword.getText().toString();
 
+            // Basic client-side validation avoids unnecessary network calls.
             if (email.isEmpty() || fullName.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
@@ -56,13 +57,13 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // 1. Create User in Firebase Auth
+            // Registration is a two-step write:
+            // 1) create credentials in Firebase Auth, 2) store profile fields in Firestore.
             mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         String uid = mAuth.getCurrentUser().getUid();
-                        
-                        // 2. Save additional details to Firestore
+
                         Map<String, Object> user = new HashMap<>();
                         user.put("uid", uid);
                         user.put("fullName", fullName);
@@ -86,6 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                 });
         });
 
+        // Return path for users who already have an account.
         tvLoginLink.setOnClickListener(v -> finish());
     }
 }

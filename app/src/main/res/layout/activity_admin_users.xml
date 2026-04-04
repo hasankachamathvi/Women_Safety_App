@@ -19,6 +19,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Back action and page title -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_admin_back"
                 android:layout_width="wrap_content"
@@ -34,6 +35,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <!-- Total users loaded from Firestore -->
             <TextView
                 android:id="@+id/tv_users_count"
                 android:layout_width="wrap_content"
@@ -42,6 +44,7 @@
                 android:text="Total users: 0"
                 android:textColor="#666666" />
 
+            <!-- User cards rendered dynamically from the database -->
             <LinearLayout
                 android:id="@+id/users_container"
                 android:layout_width="match_parent"
@@ -51,6 +54,7 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- Shared admin bottom navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/admin_bottom_nav"
         android:layout_width="match_parent"

@@ -34,12 +34,20 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
         tipsContainer = findViewById(R.id.tips_container);
 
         Button btnAddTip = findViewById(R.id.btn_add_tip);
+        // Entry point for creating new records in the `safety_tips` collection.
         btnAddTip.setOnClickListener(v -> showAddTipDialog());
 
+        // Initial hydration: load existing tips so admin starts with current database state.
         loadTips();
     }
 
+    /**
+     * Reads all safety tips from Firestore and delegates rendering.
+     * This is called on first open and after every mutating action (add/update/delete)
+     * so the screen remains source-of-truth aligned with backend data.
+     */
     private void loadTips() {
+        // Pull all tips from Firestore before rendering the management cards.
         firestoreService.getAllSafetyTips(new FirebaseFirestoreService.OnSafetyTipsListCallback() {
             @Override
             public void onSuccess(List<SafetyTip> tips) {
@@ -48,12 +56,18 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
 
             @Override
             public void onError(String error) {
-                Toast.makeText(AdminSafetyTipsActivity.this, "Could not load safety tips", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminSafetyTipsActivity.this, getString(R.string.admin_could_not_load_safety_tips), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * Rebuilds the visual list from scratch based on the latest fetched tip list.
+     * Full rebuild is simpler and safer here because list size is small and avoids
+     * partial-state bugs after toggle/delete operations.
+     */
     private void renderTips(List<SafetyTip> tips) {
+        // Rebuild the list so visibility and delete actions stay in sync with the database.
         tipsContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
         for (SafetyTip tip : tips) {
@@ -63,36 +77,44 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
             Button btnToggle = card.findViewById(R.id.btn_tip_toggle);
             Button btnDelete = card.findViewById(R.id.btn_tip_delete);
 
-            tvTitle.setText(tip.getTitle() != null ? tip.getTitle() : "Safety Tip");
-            tvDesc.setText((tip.getDescription() != null ? tip.getDescription() : "")
-                    + "\nCategory: " + (tip.getCategory() != null ? tip.getCategory() : "General")
-                    + "\nVisible: " + tip.isVisible());
+            // Display all operator-relevant fields so admins can decide action quickly.
+            tvTitle.setText(tip.getTitle() != null ? tip.getTitle() : getString(R.string.admin_safety_tip_default));
+            tvDesc.setText(getString(
+                    R.string.admin_tip_details,
+                    tip.getDescription() != null ? tip.getDescription() : "",
+                    tip.getCategory() != null ? tip.getCategory() : getString(R.string.admin_general_category),
+                    String.valueOf(tip.isVisible())));
 
-            btnToggle.setText(tip.isVisible() ? "Hide" : "Show");
+            // Visibility switch controls whether this tip appears in the user app.
+            btnToggle.setText(tip.isVisible() ? getString(R.string.admin_hide) : getString(R.string.admin_show));
             btnToggle.setOnClickListener(v -> {
+                // Update local object first, then persist; final UI truth comes from `loadTips()`.
                 tip.setVisible(!tip.isVisible());
                 firestoreService.updateSafetyTip(tip.getId(), tip, new FirebaseFirestoreService.OnOperationCallback() {
                     @Override
                     public void onSuccess() {
+                        // Requery instead of patching just one card to avoid stale mixed states.
                         loadTips();
                     }
 
                     @Override
                     public void onError(String error) {
-                        Toast.makeText(AdminSafetyTipsActivity.this, "Could not update tip", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminSafetyTipsActivity.this, getString(R.string.admin_could_not_update_tip), Toast.LENGTH_SHORT).show();
                     }
                 });
             });
 
+            // Delete performs a hard remove in Firestore; no local cache is kept.
             btnDelete.setOnClickListener(v -> firestoreService.deleteSafetyTip(tip.getId(), new FirebaseFirestoreService.OnOperationCallback() {
                 @Override
                 public void onSuccess() {
+                    // Refresh list to immediately remove deleted card from the UI.
                     loadTips();
                 }
 
                 @Override
                 public void onError(String error) {
-                    Toast.makeText(AdminSafetyTipsActivity.this, "Could not delete tip", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminSafetyTipsActivity.this, getString(R.string.admin_could_not_delete_tip), Toast.LENGTH_SHORT).show();
                 }
             }));
 
@@ -100,45 +122,52 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
         }
     }
 
+    /**
+     * Shows add-tip dialog and writes a new document if validation passes.
+     * New tips default to visible so user-facing safety content updates immediately.
+     */
     private void showAddTipDialog() {
+        // The dialog keeps add-tip fields focused in one place for quick entry.
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_tip, null);
         EditText etTitle = view.findViewById(R.id.et_tip_title);
         EditText etDesc = view.findViewById(R.id.et_tip_desc);
         EditText etCategory = view.findViewById(R.id.et_tip_category);
 
         new AlertDialog.Builder(this)
-                .setTitle("Add Safety Tip")
+                .setTitle(R.string.admin_add_safety_tip)
                 .setView(view)
-                .setPositiveButton("Save", (dialog, which) -> {
+                .setPositiveButton(R.string.admin_save, (dialog, which) -> {
                     String title = etTitle.getText().toString().trim();
                     String desc = etDesc.getText().toString().trim();
                     String category = etCategory.getText().toString().trim();
 
+                    // Required fields prevent empty or unusable guidance being published.
                     if (title.isEmpty() || desc.isEmpty()) {
-                        Toast.makeText(this, "Please fill title and description", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.admin_fill_title_description), Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     SafetyTip tip = new SafetyTip();
                     tip.setTitle(title);
                     tip.setDescription(desc);
-                    tip.setCategory(category.isEmpty() ? "General" : category);
+                    tip.setCategory(category.isEmpty() ? getString(R.string.admin_general_category) : category);
                     tip.setVisible(true);
 
+                    // Persist new tip, then reload list so server-generated fields are reflected.
                     firestoreService.addSafetyTip(tip, new FirebaseFirestoreService.OnOperationCallback() {
                         @Override
                         public void onSuccess() {
-                            Toast.makeText(AdminSafetyTipsActivity.this, "Tip added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminSafetyTipsActivity.this, getString(R.string.admin_tip_added), Toast.LENGTH_SHORT).show();
                             loadTips();
                         }
 
                         @Override
                         public void onError(String error) {
-                            Toast.makeText(AdminSafetyTipsActivity.this, "Could not add tip", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminSafetyTipsActivity.this, getString(R.string.admin_could_not_load_safety_tips), Toast.LENGTH_SHORT).show();
                         }
                     });
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.admin_cancel, null)
                 .show();
     }
 
@@ -149,7 +178,7 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
 
     @Override
     public void onBackPressed() {
+        // Keep admin navigation behavior consistent across all admin screens.
         navigateToDashboard();
     }
 }
-

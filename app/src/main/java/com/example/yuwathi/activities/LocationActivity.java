@@ -62,6 +62,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         FirebaseUser user = authService.getCurrentUser();
         if (user == null) {
+            // Sharing is user-scoped; force login if identity is unavailable.
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
@@ -79,13 +80,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         if (mapFragment != null) {
+            // Map lifecycle callback: location rendering starts only after map is ready.
             mapFragment.getMapAsync(this);
         }
 
-        // Handle Share Location button click - start sharing live location
+        // Share writes to realtime path (live tracking) and firestore path (history/audit).
         btnShare.setOnClickListener(v -> shareLocation());
 
-        // Handle Stop Sharing button click - stop sharing location
+        // Stop removes only live sharing entry.
         btnStop.setOnClickListener(v -> stopSharing());
 
         // Handle bottom navigation bar item clicks
@@ -118,6 +120,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     private void ensureLocationAndRender() {
+        // Permission is checked each time because users can revoke it while app is running.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -136,6 +139,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     private void updateMapAndAddress(Location location) {
+        // Cache is reused by share action so users can send without another location fetch.
         lastKnownLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         googleMap.clear();
@@ -154,10 +158,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         double lat = lastKnownLocation.getLatitude();
         double lng = lastKnownLocation.getLongitude();
 
+        // Live location goes to Realtime DB for fast consumer updates.
         realtimeDatabaseService.shareLocation(currentUserId, currentUserName, lat, lng,
                 new FirebaseRealtimeDatabaseService.OnOperationCallback() {
                     @Override
                     public void onSuccess() {
+                        // Firestore persists a historical record for reporting/admin review.
                         firestoreService.saveLocation(currentUserId, lat, lng, new FirebaseFirestoreService.OnOperationCallback() {
                             @Override
                             public void onSuccess() {

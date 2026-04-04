@@ -31,25 +31,28 @@ public class AdminUsersActivity extends BaseAdminActivity {
         usersContainer = findViewById(R.id.users_container);
         tvUsersCount = findViewById(R.id.tv_users_count);
 
+        // Load the user list as soon as the screen opens.
         loadUsers();
     }
 
     private void loadUsers() {
+        // Fetch all registered users from Firestore and refresh the list view.
         firestoreService.getAllUsers(new FirebaseFirestoreService.OnUsersListCallback() {
             @Override
             public void onSuccess(List<User> users) {
-                tvUsersCount.setText("Total users: " + users.size());
+                tvUsersCount.setText(getString(R.string.admin_total_users, users.size()));
                 renderUsers(users);
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(AdminUsersActivity.this, "Could not load users", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminUsersActivity.this, getString(R.string.admin_could_not_load_users), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void renderUsers(List<User> users) {
+        // Rebuild the list so the UI always reflects the latest database state.
         usersContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
         for (User user : users) {
@@ -58,9 +61,10 @@ public class AdminUsersActivity extends BaseAdminActivity {
             TextView tvEmail = card.findViewById(R.id.tv_user_email);
             TextView tvRole = card.findViewById(R.id.tv_user_role);
 
+            // Render profile basics exactly as stored in Firestore (with safe fallbacks).
             tvName.setText(user.getName());
-            tvEmail.setText(user.getEmail() != null ? user.getEmail() : "No email");
-            tvRole.setText("Role: " + (user.getRole() != null ? user.getRole() : "user"));
+            tvEmail.setText(user.getEmail() != null ? user.getEmail() : getString(R.string.admin_no_email));
+            tvRole.setText(getString(R.string.admin_user_role, user.getRole() != null ? user.getRole() : getString(R.string.admin_user_default_role)));
             usersContainer.addView(card);
         }
     }
@@ -72,6 +76,7 @@ public class AdminUsersActivity extends BaseAdminActivity {
 
     @Override
     public void onBackPressed() {
+        // Admin users page returns to the dashboard instead of exiting.
         navigateToDashboard();
     }
 }

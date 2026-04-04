@@ -39,6 +39,7 @@ public class SafetyTipsActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav); // Bottom navigation bar
 
         safetyTipList = new ArrayList<>();
+        // Adapter callbacks are no-op here because user screens are read-only for tips.
         safetyTipAdapter = new SafetyTipAdapter(this, safetyTipList, new SafetyTipAdapter.OnSafetyTipActionListener() {
             @Override
             public void onEdit(SafetyTip tip) { }
@@ -52,12 +53,13 @@ public class SafetyTipsActivity extends AppCompatActivity {
         rvTips.setLayoutManager(new LinearLayoutManager(this));
         rvTips.setAdapter(safetyTipAdapter);
 
+        // Initial fetch from Firestore.
         loadTips();
 
         // Set Tips as the selected tab in bottom navigation
         bottomNav.setSelectedItemId(R.id.nav_tips);
 
-        // Handle bottom navigation bar item clicks
+        // Shared user navigation behavior.
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
@@ -80,6 +82,7 @@ public class SafetyTipsActivity extends AppCompatActivity {
     }
 
     private void loadTips() {
+        // Preferred query path: fetch only tips intended for user visibility.
         firestoreService.getSafetyTips(new FirebaseFirestoreService.OnSafetyTipsListCallback() {
             @Override
             public void onSuccess(List<SafetyTip> tips) {
@@ -88,7 +91,7 @@ public class SafetyTipsActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                // Fallback to all tips so admin-added tips still appear if visibility field differs.
+                // Fallback query keeps the page functional even if visibility filtering schema differs.
                 firestoreService.getAllSafetyTips(new FirebaseFirestoreService.OnSafetyTipsListCallback() {
                     @Override
                     public void onSuccess(List<SafetyTip> tips) {

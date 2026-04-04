@@ -99,6 +99,7 @@ public class SosActivity extends AppCompatActivity {
     }
 
     private void startCountdown(TextView tvCountdown, TextView tvStatus) {
+        // Holding gesture acts as an intentional confirmation step to avoid accidental alerts.
         tvStatus.setText(getString(R.string.sos_hold_message)); // Show "Keep holding" message
         countDownTimer = new CountDownTimer(3000, 1000) {
             @Override
@@ -113,6 +114,7 @@ public class SosActivity extends AppCompatActivity {
                 isActivated = true;
                 tvCountdown.setText("");
                 tvStatus.setText(getString(R.string.sos_activated));
+                // Entry point to full SOS pipeline (location -> db alert -> contact notifications).
                 activateSOS(); // Send the SOS alert
             }
         }.start();
@@ -127,7 +129,7 @@ public class SosActivity extends AppCompatActivity {
     }
 
     private void activateSOS() {
-        // Check for location permissions
+        // Permission gate: if denied, later fallback still sends SOS with default coordinates.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -135,40 +137,38 @@ public class SosActivity extends AppCompatActivity {
             return;
         }
 
-        // Get the last known location
         fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location == null) {
-                // If location is not available, send SOS with default coordinates (0,0)
+                // Graceful degradation: do not block emergency trigger because location is unavailable.
                 sendSosWithCoordinates(0.0, 0.0);
             } else {
-                // Send SOS with the actual latitude and longitude
                 sendSosWithCoordinates(location.getLatitude(), location.getLongitude());
             }
         }).addOnFailureListener(e -> sendSosWithCoordinates(0.0, 0.0));
     }
 
     private void sendSosWithCoordinates(double latitude, double longitude) {
-        // Build the SOS message with coordinates
+        // Common payload consumed by SMS and backend logs.
         String message = sosHelper.buildSosMessage(latitude, longitude);
 
-        // Step 1: Send SOS alert to database
+        // Pipeline order:
+        // 1) write SOS record, 2) publish shareable live location, 3) notify emergency contacts.
         realtimeDatabaseService.sendSOSAlert(currentUserId, currentUserName, latitude, longitude,
                 message, new FirebaseRealtimeDatabaseService.OnOperationCallback() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(SosActivity.this, "SOS alert sent!", Toast.LENGTH_LONG).show();
 
-                        // Step 2: Share location with emergency contacts
                         realtimeDatabaseService.shareLocation(currentUserId, currentUserName, latitude, longitude,
                                 new FirebaseRealtimeDatabaseService.OnOperationCallback() {
                                     @Override
                                     public void onSuccess() {
-                                        // Step 3: Send SMS to emergency contacts
                                         sendAlertsToEmergencyContacts(message, latitude, longitude);
                                     }
 
                                     @Override
                                     public void onError(String error) {
+                                        // Even if live share fails, continue notifying contacts immediately.
                                         Toast.makeText(SosActivity.this, "Location sharing failed: " + error, Toast.LENGTH_SHORT).show();
                                         sendAlertsToEmergencyContacts(message, latitude, longitude);
                                     }
@@ -183,7 +183,7 @@ public class SosActivity extends AppCompatActivity {
     }
 
     private void sendAlertsToEmergencyContacts(String message, double latitude, double longitude) {
-        // Retrieve emergency contacts and automatically send SMS
+        // Contact list is user-owned data from Firestore and can be empty.
         firestoreService.getEmergencyContacts(currentUserId, new FirebaseFirestoreService.OnContactsListCallback() {
             @Override
             public void onSuccess(List<Map<String, Object>> contacts) {
@@ -209,7 +209,7 @@ public class SosActivity extends AppCompatActivity {
                 }
 
                 if (!phoneNumbers.isEmpty()) {
-                    // Automatically send SMS to all emergency contacts
+                    // Build map URL so recipients can open exact location in one tap.
                     String locationUrl = String.format(Locale.getDefault(),
                             "https://maps.google.com/?q=%f,%f", latitude, longitude);
                     String smsMessage = String.format(Locale.getDefault(),
@@ -219,6 +219,7 @@ public class SosActivity extends AppCompatActivity {
                             "They need help! Please check on them immediately.",
                             currentUserName, locationUrl);
 
+                    // Opens SMS app with all recipients + message prefilled for fast dispatch.
                     sosHelper.openSmsComposer(phoneNumbers, smsMessage);
                     showEmergencyAlertSummary(contactNames, phoneNumbers.size());
                 }
@@ -281,7 +282,8 @@ public class SosActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 activateSOS(); // Retry SOS activation if permission is granted
             } else {
-                sendSosWithCoordinates(0.0, 0.0); // Send SOS with default coordinates if permission is denied
+                // Still dispatch emergency alert even without granted coordinates.
+                sendSosWithCoordinates(0.0, 0.0);
             }
         }
     }

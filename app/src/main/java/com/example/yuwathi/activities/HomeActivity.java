@@ -30,11 +30,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Initialize services
+        // Initialize service singletons once, then reuse across all callbacks in this screen.
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
 
-        // Initialize Views before any async callbacks update UI
+        // Bind UI references before async operations to avoid null updates from callbacks.
         tvUserName = findViewById(R.id.tv_user_name);
         MaterialButton btnSos = findViewById(R.id.btn_sos);
         LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
@@ -43,18 +43,17 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout cardTip = findViewById(R.id.card_safety_tip);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
-        // Get current user
+        // User identity gates this screen; if session is missing we force a clean login flow.
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
             loadUserProfile();
         } else {
-            // Redirect to login if not authenticated
             redirectToLogin();
             return;
         }
 
-        // 1. Set Listener FIRST
+        // Register listener before setting selected item so initial tab state is consistent.
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
@@ -75,22 +74,21 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         });
 
-        // 2. Set default selection
         bottomNav.setSelectedItemId(R.id.nav_home);
 
-        // Quick Action Click Listeners
+        // Quick actions mirror bottom-nav destinations and expose common tasks as cards/buttons.
         btnSos.setOnClickListener(v -> startActivity(new Intent(this, SosActivity.class)));
         btnShareLoc.setOnClickListener(v -> startActivity(new Intent(this, LocationActivity.class)));
         btnContacts.setOnClickListener(v -> startActivity(new Intent(this, ContactsActivity.class)));
         btnReport.setOnClickListener(v -> startActivity(new Intent(this, ComplaintActivity.class)));
         cardTip.setOnClickListener(v -> startActivity(new Intent(this, SafetyTipsActivity.class)));
 
-        // Handle logout on back press
         setUpLogoutListener();
     }
 
     /**
-     * Load user profile from Firebase
+     * Loads current user's profile document and updates the greeting label.
+     * Failures are non-blocking because the dashboard still works without the name.
      */
     private void loadUserProfile() {
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
@@ -119,6 +117,7 @@ public class HomeActivity extends AppCompatActivity {
      * Redirect to login if user is not authenticated
      */
     private void redirectToLogin() {
+        // Clear task prevents returning to protected screens via back button after logout/session loss.
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -127,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Show logout confirmation dialog
+        // Back from home is treated as explicit logout to reduce accidental lingering sessions.
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
