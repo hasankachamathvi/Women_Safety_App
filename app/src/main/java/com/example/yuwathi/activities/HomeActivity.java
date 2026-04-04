@@ -17,6 +17,7 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 import com.google.firebase.auth.FirebaseUser;
 
 public class HomeActivity extends AppCompatActivity {
+
     private FirebaseAuthService authService;
     private FirebaseFirestoreService firestoreService;
     private TextView tvUserName;
@@ -27,11 +28,10 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Initialize services
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
 
-        // Initialize Views before any async callbacks update UI
+        // Connect XML views
         tvUserName = findViewById(R.id.tv_user_name);
         MaterialButton btnSos = findViewById(R.id.btn_sos);
         LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
@@ -40,20 +40,20 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout cardTip = findViewById(R.id.card_safety_tip);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
-        // Get current user
+        // Check current user
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
             loadUserProfile();
         } else {
-            // Redirect to login if not authenticated
             redirectToLogin();
             return;
         }
 
-        // 1. Set Listener FIRST
+        // Bottom navigation
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
+
             if (id == R.id.nav_home) {
                 return true;
             } else if (id == R.id.nav_contacts) {
@@ -69,26 +69,22 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;
             }
+
             return false;
         });
 
-        // 2. Set default selection
         bottomNav.setSelectedItemId(R.id.nav_home);
 
-        // Quick Action Click Listeners
+        // Buttons
         btnSos.setOnClickListener(v -> startActivity(new Intent(this, SosActivity.class)));
         btnShareLoc.setOnClickListener(v -> startActivity(new Intent(this, LocationActivity.class)));
         btnContacts.setOnClickListener(v -> startActivity(new Intent(this, ContactsActivity.class)));
         btnReport.setOnClickListener(v -> startActivity(new Intent(this, ComplaintActivity.class)));
         cardTip.setOnClickListener(v -> startActivity(new Intent(this, SafetyTipsActivity.class)));
 
-        // Handle logout on back press
         setUpLogoutListener();
     }
 
-    /**
-     * Load user profile from Firebase
-     */
     private void loadUserProfile() {
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
             @Override
@@ -105,16 +101,10 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Set up logout functionality
-     */
     private void setUpLogoutListener() {
-        // You can add a logout button in the menu or use onBackPressed
+        // handled in onBackPressed
     }
 
-    /**
-     * Redirect to login if user is not authenticated
-     */
     private void redirectToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -124,7 +114,6 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Show logout confirmation dialog
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
