@@ -34,11 +34,11 @@ public class LoginActivity extends AppCompatActivity {
         authService = new FirebaseAuthService();
 
         // Connect XML views to Java variables.
-        etUsername = findViewById(R.id.et_username);
-        etPassword = findViewById(R.id.et_password);
-        MaterialButton btnSignIn = findViewById(R.id.btn_sign_in);
-        TextView tvRegister = findViewById(R.id.tv_register_link);
-        TextView tvForgot = findViewById(R.id.tv_forgot_password);
+        etUsername = findViewById(R.id.et_user_email);
+        etPassword = findViewById(R.id.et_user_password);
+        MaterialButton btnSignIn = findViewById(R.id.btn_user_sign_in);
+        TextView tvRegister = findViewById(R.id.tv_user_register_link);
+        TextView tvForgot = findViewById(R.id.tv_user_forgot_password);
 
         // Try login when user taps Sign In.
         btnSignIn.setOnClickListener(v -> performLogin());
