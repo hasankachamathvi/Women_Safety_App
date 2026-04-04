@@ -1,6 +1,6 @@
 package com.example.yuwathi.activities;
 
-// Import required Android classes
+// Android classes used by the login screen.
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -15,9 +15,9 @@ import com.google.android.material.button.MaterialButton;
 import com.example.yuwathi.services.FirebaseAuthService;
 
 public class LoginActivity extends AppCompatActivity {
-    // Handles sign in and password reset with Firebase.
+    // Service for login and password-reset operations.
     private FirebaseAuthService authService;
-    // Small loading popup shown while waiting for Firebase response.
+    // Loading dialog shown during network operations.
     private ProgressDialog progressDialog;
     // Email input field.
     private EditText etUsername;
@@ -26,30 +26,29 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Start activity setup.
+        // Start activity and load the login layout.
         super.onCreate(savedInstanceState);
-        // Set the login screen layout
         setContentView(R.layout.activity_login);
 
-        // Initialize Firebase Auth Service
+        // Create authentication service instance.
         authService = new FirebaseAuthService();
 
-        // Link Java variables to views from XML layout.
-        etUsername = findViewById(R.id.et_username);       // Email input field
-        etPassword = findViewById(R.id.et_password);       // Password input field
-        MaterialButton btnSignIn = findViewById(R.id.btn_sign_in);  // Sign In button
-        TextView tvRegister = findViewById(R.id.tv_register_link);  // "Register" link text
-        TextView tvForgot = findViewById(R.id.tv_forgot_password);  // "Forgot password" link text
+        // Connect XML views to Java variables.
+        etUsername = findViewById(R.id.et_username);
+        etPassword = findViewById(R.id.et_password);
+        MaterialButton btnSignIn = findViewById(R.id.btn_sign_in);
+        TextView tvRegister = findViewById(R.id.tv_register_link);
+        TextView tvForgot = findViewById(R.id.tv_forgot_password);
 
-        // Handle Sign In button click
+        // Try login when user taps Sign In.
         btnSignIn.setOnClickListener(v -> performLogin());
 
-        // Handle "Register" link click - go to Register page
+        // Open register screen.
         tvRegister.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
         );
 
-        // Handle "Forgot password" link click
+        // Open forgot-password dialog.
         tvForgot.setOnClickListener(v -> showForgotPasswordDialog());
     }
 
@@ -61,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Validate inputs
+        // Validate basic input first.
         if (email.isEmpty()) {
             Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
             return;
@@ -77,10 +76,10 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Show loading while Firebase checks credentials.
+        // Show loading while checking credentials.
         showLoadingDialog("Logging in...");
 
-        // Call Firebase authentication
+        // Request login from Firebase.
         authService.loginUser(email, password, new FirebaseAuthService.OnAuthCallback() {
             @Override
             public void onSuccess(String message) {
@@ -88,16 +87,16 @@ public class LoginActivity extends AppCompatActivity {
                 dismissLoadingDialog();
                 Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                // Temporary admin check based on email text.
-                // A role field from database is safer for real apps.
+                // Temporary admin check using email text.
+                // In production, check role/claims from backend.
                 if (email.contains("admin")) {
-                    // Admin login - go to Admin Dashboard
+                    // Admin user goes to admin dashboard.
                     Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
                     // Clear back stack so user cannot return to login with back button.
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
-                    // Regular user login - go to Home page
+                    // Regular user goes to home screen.
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     // Clear back stack so user cannot return to login with back button.
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -117,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Ask for email and send reset-password link.
+     * Show dialog to collect email and send reset link.
      */
     private void showForgotPasswordDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder =
@@ -125,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setTitle("Reset Password");
         builder.setMessage("Enter your email to receive password reset link");
 
-        // Input field inside the dialog.
+        // Add a simple input box to the dialog.
         final EditText input = new EditText(this);
         builder.setView(input);
 
@@ -137,14 +136,14 @@ public class LoginActivity extends AppCompatActivity {
                 authService.resetPassword(email, new FirebaseAuthService.OnAuthCallback() {
                     @Override
                     public void onSuccess(String message) {
-                        // Reset email sent successfully.
+                                // Reset email sent.
                         dismissLoadingDialog();
                         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(String error) {
-                        // Failed to send reset email.
+                                // Reset email failed.
                         dismissLoadingDialog();
                         Toast.makeText(LoginActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show();
                     }
@@ -161,11 +160,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Show non-cancelable loading popup with a message.
+     * Show loading dialog with a custom message.
      */
     private void showLoadingDialog(String message) {
         if (progressDialog == null) {
-            // Create dialog once, then reuse it.
+            // Create once and reuse for later calls.
             progressDialog = new ProgressDialog(this);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
