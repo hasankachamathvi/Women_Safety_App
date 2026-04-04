@@ -14,6 +14,9 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 
 import java.util.List;
 
+/**
+ * Admin screen for reviewing and updating complaints.
+ */
 public class AdminComplaintsActivity extends BaseAdminActivity {
 
     private FirebaseFirestoreService firestoreService;

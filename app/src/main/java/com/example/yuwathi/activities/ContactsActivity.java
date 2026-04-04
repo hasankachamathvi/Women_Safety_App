@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages emergency contacts for the current user.
+ */
 public class ContactsActivity extends AppCompatActivity {
 
     private FirebaseFirestoreService firestoreService;

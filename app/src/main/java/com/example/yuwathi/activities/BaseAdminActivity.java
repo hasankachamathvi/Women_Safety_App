@@ -17,6 +17,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Common admin base activity enforcing access and shared navigation.
+ */
 public abstract class BaseAdminActivity extends AppCompatActivity {
     protected BottomNavigationView bottomNav;
     private FirebaseAuthService authService;
@@ -44,6 +47,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     }
 
     private void enforceAdminAccess() {
+        // Fast path: trusted local admin session already exists.
         if (AdminSessionManager.isAdminLoggedIn(this)) {
             return;
         }
@@ -53,6 +57,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
             redirectToLogin("Please login as admin");
             return;
         }
+        // Verify role from Firestore before allowing entry to admin screens.
         firestoreService.isUserAdmin(currentUser.getUid(), isAdmin -> {
             if (!isAdmin) {
                 redirectToLogin("Admin access required");
@@ -75,6 +80,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
             return;
         }
 
+        // Keep selected tab in sync with the current admin screen.
         bottomNav.setSelectedItemId(getNavigationMenuItemId());
         bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();

@@ -31,6 +31,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Shares and visualizes current location updates.
+ */
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int REQ_LOCATION = 101;

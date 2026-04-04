@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Collects evidence/details and submits final complaint.
+ */
 public class Complaint2Activity extends AppCompatActivity {
 
     private FirebaseFirestoreService firestoreService;
@@ -86,6 +89,7 @@ public class Complaint2Activity extends AppCompatActivity {
                     }
                     selectedEvidenceUris.clear();
                     selectedEvidenceUris.addAll(uris);
+                    tvEvidenceStatus.setText(String.format(Locale.getDefault(), "%d file(s) selected", selectedEvidenceUris.size()));
                     uploadSelectedEvidence();
                 }
         );
@@ -147,8 +151,9 @@ public class Complaint2Activity extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         isUploadingEvidence = false;
-                        Toast.makeText(this, "Evidence upload failed", Toast.LENGTH_SHORT).show();
-                        tvEvidenceStatus.setText("Upload failed. Please try again.");
+                        String reason = e != null && e.getMessage() != null ? e.getMessage() : "Unknown error";
+                        Toast.makeText(this, "Evidence upload failed: " + reason, Toast.LENGTH_LONG).show();
+                        tvEvidenceStatus.setText("Upload failed. Check Firebase Storage setup/rules.");
                     });
         }
     }

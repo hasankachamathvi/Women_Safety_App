@@ -3,6 +3,9 @@ package com.example.yuwathi.models;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data model representing a complaint report and related metadata.
+ */
 public class Complaint {
     private String id;
     private String userId;

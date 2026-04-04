@@ -1,5 +1,8 @@
 package com.example.yuwathi.models;
 
+/**
+ * Data model representing an application user.
+ */
 public class User {
     private String id;
     private String name;

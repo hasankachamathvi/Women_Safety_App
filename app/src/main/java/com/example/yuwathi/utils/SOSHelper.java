@@ -6,6 +6,9 @@ import android.net.Uri;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Helper for composing and launching SOS-related intents/messages.
+ */
 public class SOSHelper {
 
     private final Context context;  // App context needed to access system services
