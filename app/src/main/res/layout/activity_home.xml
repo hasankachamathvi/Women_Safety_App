@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_home.xml - Main Home/Dashboard Page Layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yuwathi_bg"
+    android:background="#FFF5F8"
     android:orientation="vertical">
 
-    <!-- HEADER -->
+    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/yuwathi_pink"
+        android:background="#E91E63"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="20dp"
@@ -36,23 +37,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yuwathi User"
-                android:textColor="@color/white"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/iv_profile_avatar"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/bg_circle_white"
-            android:padding="8dp"
-            android:src="@drawable/ic_profile_nav"
-            app:tint="@color/yuwathi_pink"
-            android:contentDescription="Profile" />
     </LinearLayout>
 
-    <!-- ===== SCROLLABLE CONTENT ===== -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -65,11 +55,12 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <!-- Safety Status Banner -->
+            <!-- Status Card - Fixed background -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_card_white"
                 android:elevation="4dp"
@@ -80,10 +71,8 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/bg_circle_pink_light"
                     android:padding="8dp"
                     android:src="@drawable/ic_shield"
-                    app:tint="@color/yuwathi_pink"
                     android:contentDescription="Shield" />
 
                 <LinearLayout
@@ -97,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You are Safe"
-                        android:textColor="@color/yuwathi_text_dark"
+                        android:textColor="#333333"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -105,17 +94,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Location sharing is off"
-                        android:textColor="@color/yuwathi_text_hint"
+                        android:textColor="#AAAAAA"
                         android:textSize="12sp" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:background="@drawable/bg_circle_pink" />
             </LinearLayout>
 
-            <!-- SOS BUTTON - CENTER DOMINANT -->
+            <!-- SOS Button Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,65 +111,45 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sos_hold_message"
-                    android:textColor="@color/yuwathi_text_medium"
+                    android:text="Hold to SOS"
+                    android:textColor="#666666"
                     android:textSize="13sp"
                     android:layout_marginBottom="16dp" />
 
-                <!-- SOS outer glow ring -->
-                <FrameLayout
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center">
-
-                    <View
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:alpha="0.15"
-                        android:background="@drawable/bg_circle_red" />
-
-                    <View
-                        android:layout_width="170dp"
-                        android:layout_height="170dp"
-                        android:layout_gravity="center"
-                        android:alpha="0.25"
-                        android:background="@drawable/bg_circle_red" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_sos"
-                        android:layout_width="140dp"
-                        android:layout_height="140dp"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@color/yuwathi_red"
-                        android:text="SOS"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="32sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="70dp"
-                        app:elevation="8dp" />
-                </FrameLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_sos"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#D32F2F"
+                    android:text="SOS"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="70dp"
+                    app:elevation="8dp" />
             </LinearLayout>
 
-            <!-- Quick Action Grid -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:text="Quick Actions"
-                android:textColor="@color/yuwathi_text_dark"
+                android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Quick Action Buttons - Fixed background -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <!-- Share Location -->
                 <LinearLayout
                     android:id="@+id/btn_share_location"
                     android:layout_width="0dp"
@@ -198,25 +162,15 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="@drawable/bg_circle_pink"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_location_pin"
-                        android:contentDescription="Location" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:text="Share\nLocation"
-                        android:textColor="@color/yuwathi_text_dark"
+                        android:textColor="#333333"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Contacts -->
                 <LinearLayout
                     android:id="@+id/btn_contacts"
                     android:layout_width="0dp"
@@ -229,25 +183,15 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="@drawable/bg_circle_pink"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_add_contact"
-                        android:contentDescription="Contacts" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:text="Emergency\nContacts"
-                        android:textColor="@color/yuwathi_text_dark"
+                        android:textColor="#333333"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Report -->
                 <LinearLayout
                     android:id="@+id/btn_report"
                     android:layout_width="0dp"
@@ -259,81 +203,69 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="@drawable/bg_circle_pink"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_warning"
-                        android:contentDescription="Report" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:text="Report\nIncident"
-                        android:textColor="@color/yuwathi_text_dark"
+                        android:textColor="#333333"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Safety Tips teaser -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:text="Today's Safety Tip"
-                android:textColor="@color/yuwathi_text_dark"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
+            <!-- Safety Tip Card - Fixed background -->
             <LinearLayout
                 android:id="@+id/card_safety_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/bg_card_white"
-                android:elevation="2dp"
+                android:elevation="4dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/bg_circle_pink_light"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:padding="8dp"
                     android:src="@drawable/ic_tips_nav"
-                    app:tint="@color/yuwathi_pink"
                     android:contentDescription="Tip" />
 
-                <TextView
-                    android:id="@+id/tv_tip_preview"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:text="Always inform a trusted person of your travel route and expected arrival time."
-                    android:textColor="@color/yuwathi_text_medium"
-                    android:textSize="13sp" />
-            </LinearLayout>
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Safety Tip of the Day"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Always share your live location with a trusted contact when traveling alone."
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ===== BOTTOM NAVIGATION ===== -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="#FFFFFF"
         android:elevation="8dp"
-        app:itemIconTint="@color/nav_icon_color"
-        app:itemTextColor="@color/nav_icon_color"
         app:menu="@menu/bottom_menu" />
-
 </LinearLayout>
-<!---->
