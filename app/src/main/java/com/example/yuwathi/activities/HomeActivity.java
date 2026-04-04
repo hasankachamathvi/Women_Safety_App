@@ -47,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
+            // Load the user's name from Firestore and show it on the screen.
             loadUserProfile();
         } else {
             // Redirect to login if not authenticated
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
+                // Already on Home, so no navigation is needed.
                 return true;
             } else if (id == R.id.nav_contacts) {
                 startActivity(new Intent(this, ContactsActivity.class));
@@ -93,16 +95,19 @@ public class HomeActivity extends AppCompatActivity {
      * Load user profile from Firebase
      */
     private void loadUserProfile() {
+        // Read current user's profile from Firestore using the UID from Firebase Auth.
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
             @Override
             public void onSuccess(com.example.yuwathi.models.User user) {
                 if (user != null) {
+                    // Show user's name in the welcome/header text view.
                     tvUserName.setText(user.getName());
                 }
             }
 
             @Override
             public void onError(String error) {
+                // Keep UI usable even if profile fetch fails.
                 Toast.makeText(HomeActivity.this, "Failed to load user profile", Toast.LENGTH_SHORT).show();
             }
         });
@@ -120,6 +125,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void redirectToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
+        // Clear back stack so user cannot return to Home after logout/login redirect.
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -132,6 +138,7 @@ public class HomeActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    // Clear local admin session, sign out Firebase user, then go to Login.
                     com.example.yuwathi.utils.AdminSessionManager.clearSession(this);
                     authService.logout();
                     redirectToLogin();
