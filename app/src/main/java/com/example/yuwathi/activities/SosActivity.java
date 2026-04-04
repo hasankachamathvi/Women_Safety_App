@@ -30,268 +30,451 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
+ * SOSActivity
+ * -----------
  * Handles emergency SOS activation, location capture, and alert dispatch.
+ * Flow:
+ * Hold SOS button → countdown → activate SOS → get location → send alerts
  */
 public class SosActivity extends AppCompatActivity {
 
-    private static final int REQ_LOCATION = 102; // Request code for location permission
+    private static final int REQ_LOCATION = 102; // Permission request code
 
-    private CountDownTimer countDownTimer;  // Timer for the 3-second countdown
-    private boolean isActivated = false;    // Flag to track if SOS is already activated
+    // Countdown timer for SOS hold action
+    private CountDownTimer countDownTimer;
+
+    // Prevent multiple SOS triggers
+    private boolean isActivated = false;
+
+    // Firebase services
     private FirebaseAuthService authService;
     private FirebaseFirestoreService firestoreService;
     private FirebaseRealtimeDatabaseService realtimeDatabaseService;
+
+    // Location provider
     private FusedLocationProviderClient fusedLocationClient;
+
+    // Helper for SMS and emergency actions
     private SOSHelper sosHelper;
+
+    // Current user data
     private String currentUserId;
     private String currentUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Set the SOS screen layout
+
+        // Load SOS UI layout
         setContentView(R.layout.activity_sos);
 
+        // Initialize Firebase services
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
         realtimeDatabaseService = FirebaseRealtimeDatabaseService.getInstance();
+
+        // Initialize location provider
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Helper class for SMS, dialer, message building
         sosHelper = new SOSHelper(this);
 
+        // Get current logged-in user
         FirebaseUser user = authService.getCurrentUser();
+
         if (user != null) {
             currentUserId = user.getUid();
             currentUserName = user.getEmail() != null ? user.getEmail() : "User";
         } else {
+            // If no user logged in, stop activity
             Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // Find buttons and text views from the layout
-        MaterialButton btnSos = findViewById(R.id.btn_sos_main);     // Main SOS button (hold to activate)
-        MaterialButton btnCancel = findViewById(R.id.btn_cancel_sos); // Cancel button
-        TextView tvStatus = findViewById(R.id.tv_sos_status);        // Status text (shows instructions)
-        TextView tvCountdown = findViewById(R.id.tv_countdown);      // Countdown number display
+        // UI elements
+        MaterialButton btnSos = findViewById(R.id.btn_sos_main);
+        MaterialButton btnCancel = findViewById(R.id.btn_cancel_sos);
+        TextView tvStatus = findViewById(R.id.tv_sos_status);
+        TextView tvCountdown = findViewById(R.id.tv_countdown);
 
-        // Handle SOS button touch events (hold to activate)
+        // SOS button touch listener (hold to activate)
         btnSos.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
+
+                // User starts pressing button → start countdown
                 case MotionEvent.ACTION_DOWN:
-                    // User started pressing - begin countdown
                     if (!isActivated) startCountdown(tvCountdown, tvStatus);
                     return true;
+
+                // User releases or cancels → stop countdown
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    // User released the button - cancel countdown
                     if (!isActivated) cancelCountdown(tvCountdown, tvStatus);
                     return true;
+
                 default:
                     return false;
             }
         });
 
-        // Handle Cancel button click - cancel and go back
+        // Cancel button → stop SOS process and close screen
         btnCancel.setOnClickListener(v -> {
             cancelCountdown(tvCountdown, tvStatus);
-            finish(); // Close SOS page
+            finish();
         });
     }
 
+    /**
+     * Starts 3-second countdown before activating SOS
+     */
     private void startCountdown(TextView tvCountdown, TextView tvStatus) {
-        // Holding gesture acts as an intentional confirmation step to avoid accidental alerts.
-        tvStatus.setText(getString(R.string.sos_hold_message)); // Show "Keep holding" message
+
+        // Show instruction message
+        tvStatus.setText(getString(R.string.sos_hold_message));
+
+        // 3 second countdown timer
         countDownTimer = new CountDownTimer(3000, 1000) {
+
             @Override
             public void onTick(long millisUntilFinished) {
-                // Update countdown number each second
+                // Update countdown every second
                 tvCountdown.setText(String.valueOf((millisUntilFinished / 1000) + 1));
             }
 
             @Override
             public void onFinish() {
-                // Countdown finished - SOS is now activated!
+                // Mark SOS as activated
                 isActivated = true;
+
+                // Clear UI
                 tvCountdown.setText("");
+
+                // Update status
                 tvStatus.setText(getString(R.string.sos_activated));
-                // Entry point to full SOS pipeline (location -> db alert -> contact notifications).
-                activateSOS(); // Send the SOS alert
+
+                // Trigger SOS process
+                activateSOS();
             }
         }.start();
     }
 
+    /**
+     * Cancels SOS countdown
+     */
     private void cancelCountdown(TextView tvCountdown, TextView tvStatus) {
         if (countDownTimer != null) {
-            countDownTimer.cancel(); // Stop the timer
+            countDownTimer.cancel();
         }
+
         tvCountdown.setText("");
         tvStatus.setText(getString(R.string.sos_hold_message));
     }
 
+    /**
+     * Main SOS activation flow
+     */
     private void activateSOS() {
-        // Permission gate: if denied, later fallback still sends SOS with default coordinates.
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQ_LOCATION);
+
+        // Check location permission
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED) {
+
+            // Request permission if not granted
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    },
+                    REQ_LOCATION
+            );
             return;
         }
 
+        // Get last known location
         fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+
             if (location == null) {
-                // Graceful degradation: do not block emergency trigger because location is unavailable.
+                // If location not available → send default coordinates
                 sendSosWithCoordinates(0.0, 0.0);
             } else {
-                sendSosWithCoordinates(location.getLatitude(), location.getLongitude());
+                sendSosWithCoordinates(
+                        location.getLatitude(),
+                        location.getLongitude()
+                );
             }
-        }).addOnFailureListener(e -> sendSosWithCoordinates(0.0, 0.0));
+
+        }).addOnFailureListener(e ->
+                sendSosWithCoordinates(0.0, 0.0)
+        );
     }
 
+    /**
+     * Sends SOS alert with coordinates
+     */
     private void sendSosWithCoordinates(double latitude, double longitude) {
-        // Common payload consumed by SMS and backend logs.
+
+        // Build SOS message
         String message = sosHelper.buildSosMessage(latitude, longitude);
 
-        // Pipeline order:
-        // 1) write SOS record, 2) publish shareable live location, 3) notify emergency contacts.
-        realtimeDatabaseService.sendSOSAlert(currentUserId, currentUserName, latitude, longitude,
-                message, new FirebaseRealtimeDatabaseService.OnOperationCallback() {
+        // Step 1: Send SOS to Realtime Database
+        realtimeDatabaseService.sendSOSAlert(
+                currentUserId,
+                currentUserName,
+                latitude,
+                longitude,
+                message,
+                new FirebaseRealtimeDatabaseService.OnOperationCallback() {
+
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(SosActivity.this, "SOS alert sent!", Toast.LENGTH_LONG).show();
 
-                        realtimeDatabaseService.shareLocation(currentUserId, currentUserName, latitude, longitude,
+                        Toast.makeText(SosActivity.this,
+                                "SOS alert sent!",
+                                Toast.LENGTH_LONG).show();
+
+                        // Step 2: Share live location
+                        realtimeDatabaseService.shareLocation(
+                                currentUserId,
+                                currentUserName,
+                                latitude,
+                                longitude,
                                 new FirebaseRealtimeDatabaseService.OnOperationCallback() {
+
                                     @Override
                                     public void onSuccess() {
-                                        sendAlertsToEmergencyContacts(message, latitude, longitude);
+                                        // Step 3: Send alerts to contacts
+                                        sendAlertsToEmergencyContacts(
+                                                message,
+                                                latitude,
+                                                longitude
+                                        );
                                     }
 
                                     @Override
                                     public void onError(String error) {
-                                        // Even if live share fails, continue notifying contacts immediately.
-                                        Toast.makeText(SosActivity.this, "Location sharing failed: " + error, Toast.LENGTH_SHORT).show();
-                                        sendAlertsToEmergencyContacts(message, latitude, longitude);
+                                        // Continue even if location sharing fails
+                                        Toast.makeText(
+                                                SosActivity.this,
+                                                "Location sharing failed: " + error,
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+
+                                        sendAlertsToEmergencyContacts(
+                                                message,
+                                                latitude,
+                                                longitude
+                                        );
                                     }
                                 });
                     }
 
                     @Override
                     public void onError(String error) {
-                        Toast.makeText(SosActivity.this, "Failed to send SOS: " + error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                SosActivity.this,
+                                "Failed to send SOS: " + error,
+                                Toast.LENGTH_SHORT
+                        ).show();
                     }
                 });
     }
 
-    private void sendAlertsToEmergencyContacts(String message, double latitude, double longitude) {
-        // Contact list is user-owned data from Firestore and can be empty.
-        firestoreService.getEmergencyContacts(currentUserId, new FirebaseFirestoreService.OnContactsListCallback() {
-            @Override
-            public void onSuccess(List<Map<String, Object>> contacts) {
-                if (contacts == null || contacts.isEmpty()) {
-                    showEmergencyOptionsDialog(message, latitude, longitude, new ArrayList<>());
-                    return;
-                }
+    /**
+     * Sends alerts to emergency contacts from Firestore
+     */
+    private void sendAlertsToEmergencyContacts(
+            String message,
+            double latitude,
+            double longitude
+    ) {
 
-                // Extract phone numbers and contact names
-                List<String> phoneNumbers = new ArrayList<>();
-                List<String> contactNames = new ArrayList<>();
+        firestoreService.getEmergencyContacts(
+                currentUserId,
+                new FirebaseFirestoreService.OnContactsListCallback() {
 
-                for (Map<String, Object> contact : contacts) {
-                    Object phone = contact.get("phone");
-                    Object name = contact.get("name");
+                    @Override
+                    public void onSuccess(List<Map<String, Object>> contacts) {
 
-                    if (phone != null) {
-                        phoneNumbers.add(String.valueOf(phone));
-                        if (name != null) {
-                            contactNames.add(String.valueOf(name));
+                        if (contacts == null || contacts.isEmpty()) {
+                            showEmergencyOptionsDialog(
+                                    message,
+                                    latitude,
+                                    longitude,
+                                    new ArrayList<>()
+                            );
+                            return;
                         }
+
+                        // Extract phone numbers and names
+                        List<String> phoneNumbers = new ArrayList<>();
+                        List<String> contactNames = new ArrayList<>();
+
+                        for (Map<String, Object> contact : contacts) {
+                            Object phone = contact.get("phone");
+                            Object name = contact.get("name");
+
+                            if (phone != null) {
+                                phoneNumbers.add(String.valueOf(phone));
+
+                                if (name != null) {
+                                    contactNames.add(String.valueOf(name));
+                                }
+                            }
+                        }
+
+                        if (!phoneNumbers.isEmpty()) {
+
+                            // Google Maps link
+                            String locationUrl = String.format(
+                                    Locale.getDefault(),
+                                    "https://maps.google.com/?q=%f,%f",
+                                    latitude,
+                                    longitude
+                            );
+
+                            // SMS message
+                            String smsMessage = String.format(
+                                    Locale.getDefault(),
+                                    "🚨 EMERGENCY SOS ALERT 🚨\n\n" +
+                                            "User: %s\n" +
+                                            "Location: %s\n\n" +
+                                            "They need help! Please check on them immediately.",
+                                    currentUserName,
+                                    locationUrl
+                            );
+
+                            // Open SMS app
+                            sosHelper.openSmsComposer(phoneNumbers, smsMessage);
+
+                            // Show summary dialog
+                            showEmergencyAlertSummary(contactNames, phoneNumbers.size());
+                        }
+
+                        // Show emergency options dialog
+                        showEmergencyOptionsDialog(
+                                message,
+                                latitude,
+                                longitude,
+                                phoneNumbers
+                        );
                     }
-                }
 
-                if (!phoneNumbers.isEmpty()) {
-                    // Build map URL so recipients can open exact location in one tap.
-                    String locationUrl = String.format(Locale.getDefault(),
-                            "https://maps.google.com/?q=%f,%f", latitude, longitude);
-                    String smsMessage = String.format(Locale.getDefault(),
-                            "🚨 EMERGENCY SOS ALERT 🚨\n\n" +
-                            "User: %s\n" +
-                            "Location: %s\n\n" +
-                            "They need help! Please check on them immediately.",
-                            currentUserName, locationUrl);
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(
+                                SosActivity.this,
+                                "Could not load contacts. Check Firebase rules.",
+                                Toast.LENGTH_SHORT
+                        ).show();
 
-                    // Opens SMS app with all recipients + message prefilled for fast dispatch.
-                    sosHelper.openSmsComposer(phoneNumbers, smsMessage);
-                    showEmergencyAlertSummary(contactNames, phoneNumbers.size());
-                }
-
-                showEmergencyOptionsDialog(message, latitude, longitude, phoneNumbers);
-            }
-
-            @Override
-            public void onError(String error) {
-                Toast.makeText(SosActivity.this, "Could not load contacts. Check Firebase rules.", Toast.LENGTH_SHORT).show();
-                showEmergencyOptionsDialog(message, latitude, longitude, new ArrayList<>());
-            }
-        });
+                        showEmergencyOptionsDialog(
+                                message,
+                                latitude,
+                                longitude,
+                                new ArrayList<>()
+                        );
+                    }
+                });
     }
 
-    private void showEmergencyAlertSummary(List<String> contactNames, int contactCount) {
-        if (contactNames.isEmpty()) {
-            return;
-        }
+    /**
+     * Shows summary of emergency alerts sent
+     */
+    private void showEmergencyAlertSummary(
+            List<String> contactNames,
+            int contactCount
+    ) {
+
+        if (contactNames.isEmpty()) return;
 
         String contacts = android.text.TextUtils.join(", ", contactNames);
-        String message = String.format(Locale.getDefault(),
+
+        String message = String.format(
+                Locale.getDefault(),
                 "SOS alert activated!\n\nAlerts sent to %d contact(s):\n%s\n\nLocation has been shared.",
-                contactCount, contacts);
+                contactCount,
+                contacts
+        );
 
         new AlertDialog.Builder(this)
                 .setTitle("🚨 SOS Activated")
                 .setMessage(message)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    finish();
-                })
+                .setPositiveButton("OK", (dialog, which) -> finish())
                 .setCancelable(false)
                 .show();
     }
 
-    private void showEmergencyOptionsDialog(String message, double latitude, double longitude, List<String> phoneNumbers) {
+    /**
+     * Shows emergency options dialog (call emergency services)
+     */
+    private void showEmergencyOptionsDialog(
+            String message,
+            double latitude,
+            double longitude,
+            List<String> phoneNumbers
+    ) {
+
         new AlertDialog.Builder(this)
                 .setTitle("Emergency SOS Activated")
-                .setMessage(phoneNumbers.isEmpty()
-                        ? "No emergency contacts found.\n\nYour location has been shared.\n\nWould you like to call emergency services?"
-                        : "SOS alerts sent to emergency contacts!\n\nYour location has been shared.\n\nWould you like to call emergency services?")
-                .setPositiveButton(phoneNumbers.isEmpty() ? "Call 119" : "Call Emergency", (dialog, which) -> {
-                    sosHelper.openEmergencyDialer();
-                })
+                .setMessage(
+                        phoneNumbers.isEmpty()
+                                ? "No emergency contacts found.\n\nYour location has been shared.\n\nWould you like to call emergency services?"
+                                : "SOS alerts sent to emergency contacts!\n\nYour location has been shared.\n\nWould you like to call emergency services?"
+                )
+                .setPositiveButton(
+                        phoneNumbers.isEmpty() ? "Call 119" : "Call Emergency",
+                        (dialog, which) -> sosHelper.openEmergencyDialer()
+                )
                 .setNegativeButton("Close", (dialog, which) -> finish())
                 .setCancelable(false)
                 .show();
     }
 
+    /**
+     * Old method (deprecated)
+     */
     @Deprecated
-    // This method is replaced by sendAlertsToEmergencyContacts
     private void promptEmergencyContactAlert(String message) {
-        // Old implementation - use sendAlertsToEmergencyContacts instead
+
     }
 
+    /**
+     * Permission result handler
+     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String[] permissions,
+            int[] grantResults
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == REQ_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                activateSOS(); // Retry SOS activation if permission is granted
+
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // Retry SOS if permission granted
+                activateSOS();
+
             } else {
-                // Still dispatch emergency alert even without granted coordinates.
+                // Send SOS even without location
                 sendSosWithCoordinates(0.0, 0.0);
             }
         }
     }
 
+    /**
+     * Cleanup timer
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Clean up timer when activity is destroyed
+
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
