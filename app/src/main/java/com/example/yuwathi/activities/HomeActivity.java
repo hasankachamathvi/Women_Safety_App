@@ -17,31 +17,37 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 import com.google.firebase.auth.FirebaseUser;
 
 public class HomeActivity extends AppCompatActivity {
+    // Authentication helper for current-user and logout actions.
     private FirebaseAuthService authService;
+    // Firestore helper for reading user profile data.
     private FirebaseFirestoreService firestoreService;
+    // TextView that shows the logged-in user's name.
     private TextView tvUserName;
+    // Firebase UID of the currently logged-in user.
     private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Initialize activity and load home screen layout.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Initialize services
+        // Create service instances used by this screen.
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
 
-        // Get current user
+        // Check whether a user is already logged in.
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
+            // Save user id and load profile details from Firestore.
             currentUserId = firebaseUser.getUid();
             loadUserProfile();
         } else {
-            // Redirect to login if not authenticated
+            // If no user is logged in, return to login screen.
             redirectToLogin();
         }
 
-        // Initialize Views
+        // Connect XML views to Java variables.
         tvUserName = findViewById(R.id.tv_user_name);
         MaterialButton btnSos = findViewById(R.id.btn_sos);
         LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
@@ -50,69 +56,77 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout cardTip = findViewById(R.id.card_safety_tip);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
-        // 1. Set Listener FIRST
+        // Handle bottom navigation tab clicks.
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
+                // Already on home screen.
                 return true;
             } else if (id == R.id.nav_contacts) {
+                // Open contacts screen.
                 startActivity(new Intent(this, ContactsActivity.class));
                 return true;
             } else if (id == R.id.nav_sos) {
+                // Open SOS screen.
                 startActivity(new Intent(this, SosActivity.class));
                 return true;
             } else if (id == R.id.nav_tips) {
+                // Open safety tips screen.
                 startActivity(new Intent(this, SafetyTipsActivity.class));
                 return true;
             } else if (id == R.id.nav_profile) {
+                // Open profile screen.
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;
             }
+            // Unknown menu item.
             return false;
         });
 
-        // 2. Set default selection
+        // Mark Home as selected tab.
         bottomNav.setSelectedItemId(R.id.nav_home);
 
-        // Quick Action Click Listeners
+        // Home quick-action buttons.
         btnSos.setOnClickListener(v -> startActivity(new Intent(this, SosActivity.class)));
         btnShareLoc.setOnClickListener(v -> startActivity(new Intent(this, LocationActivity.class)));
         btnContacts.setOnClickListener(v -> startActivity(new Intent(this, ContactsActivity.class)));
         btnReport.setOnClickListener(v -> startActivity(new Intent(this, ComplaintActivity.class)));
         cardTip.setOnClickListener(v -> startActivity(new Intent(this, SafetyTipsActivity.class)));
 
-        // Handle logout on back press
+        // Keep logout behavior organized in one place.
         setUpLogoutListener();
     }
 
     /**
-     * Load user profile from Firebase
+     * Load logged-in user profile from Firestore.
      */
     private void loadUserProfile() {
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
             @Override
             public void onSuccess(com.example.yuwathi.models.User user) {
                 if (user != null) {
+                    // Show user's name on the home screen.
                     tvUserName.setText(user.getName());
                 }
             }
 
             @Override
             public void onError(String error) {
+                // Inform user when profile data cannot be loaded.
                 Toast.makeText(HomeActivity.this, "Failed to load user profile", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     /**
-     * Set up logout functionality
+     * Placeholder for dedicated logout button behavior.
      */
     private void setUpLogoutListener() {
-        // You can add a logout button in the menu or use onBackPressed
+        // Logout is currently handled in onBackPressed().
     }
 
     /**
-     * Redirect to login if user is not authenticated
+     * Navigate to login and clear old screens from back stack.
      */
     private void redirectToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
@@ -123,14 +137,16 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Show logout confirmation dialog
+        // Ask user to confirm logout when back is pressed.
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    // Sign out and return to login.
                     authService.logout();
                     redirectToLogin();
                 })
+                // Stay on current screen if user cancels.
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
