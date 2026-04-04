@@ -16,6 +16,9 @@ import com.example.yuwathi.services.FirebaseAuthService;
 import com.example.yuwathi.services.FirebaseFirestoreService;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Main dashboard for regular users and quick actions.
+ */
 public class HomeActivity extends AppCompatActivity {
     private FirebaseAuthService authService;
     private FirebaseFirestoreService firestoreService;

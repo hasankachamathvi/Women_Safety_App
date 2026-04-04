@@ -1,5 +1,8 @@
 package com.example.yuwathi.models;
 
+/**
+ * Data model representing a safety tip item.
+ */
 public class SafetyTip {
     private String id;
     private String title;

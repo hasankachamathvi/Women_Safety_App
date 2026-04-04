@@ -17,6 +17,9 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 
 import java.util.List;
 
+/**
+ * Admin screen for creating and managing safety tips.
+ */
 public class AdminSafetyTipsActivity extends BaseAdminActivity {
 
     private FirebaseFirestoreService firestoreService;

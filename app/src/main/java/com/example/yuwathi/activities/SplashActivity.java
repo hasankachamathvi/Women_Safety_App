@@ -8,6 +8,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.yuwathi.R;
 
+/**
+ * App entry splash screen that shows branding before navigation.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @Override

@@ -11,6 +11,9 @@ import com.example.yuwathi.services.FirebaseFirestoreService;
 
 import java.util.Map;
 
+/**
+ * Admin landing screen with key system metrics.
+ */
 public class AdminDashboardActivity extends BaseAdminActivity {
 
     private FirebaseFirestoreService firestoreService;

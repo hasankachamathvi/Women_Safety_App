@@ -16,6 +16,9 @@ import com.example.yuwathi.models.SafetyTip;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RecyclerView adapter that binds safety tip items to the list UI.
+ */
 public class SafetyTipAdapter extends RecyclerView.Adapter<SafetyTipAdapter.TipViewHolder> {
 
     public interface OnSafetyTipActionListener {
