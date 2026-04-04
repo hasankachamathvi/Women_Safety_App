@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- activity_complaint2.xml - Report Incident Page 2 of 2 -->
+<!-- Scrollable form with pink background -->
+<!-- Section 3: Detailed Evidence - incident description, witnesses, upload evidence -->
+<!-- Section 4: Safety & Privacy - contact preference dropdown -->
+<!-- "Submit" button at bottom submits the complaint -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,51 +11,63 @@
     android:layout_height="match_parent"
     android:background="#FF208E">
 
-    <!-- Top Right Logo -->
-    <ImageView
-        android:id="@+id/iv_top_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@mipmap/ic_launcher"
-        android:alpha="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Main Title -->
     <TextView
         android:id="@+id/tv_app_name_sinhala"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="යුවති"
         android:textColor="@color/white"
-        android:textSize="64sp"
+        android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Subtitle -->
     <TextView
         android:id="@+id/tv_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:letterSpacing="0.1"
         android:text="REPORT INCIDENT"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:letterSpacing="0.1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_app_name_sinhala" />
 
+    <!-- Submit Button (Bottom) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_submit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/white"
+        android:padding="10dp"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="#FF208E"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Scrollable Form (Middle) -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_form"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/btn_submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_header">
 
         <LinearLayout
@@ -67,7 +84,7 @@
                 android:layout_marginTop="16dp"
                 android:text="3. Detailed Evidence"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -82,12 +99,13 @@
                 android:id="@+id/et_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@color/white"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:minLines="3"
                 android:textColor="@color/white"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,11 +119,12 @@
                 android:id="@+id/et_witnesses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="@color/white"
                 android:hint="Names or descriptions"
                 android:textColor="@color/white"
                 android:textColorHint="#CCFFFFFF"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -121,10 +140,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Upload Evidence"
+                android:text="Add Photos / Audio / Video"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:strokeColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_evidence_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="No evidence selected"
+                android:textColor="#CCFFFFFF"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/et_evidence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:hint="Evidence details or link"
+                android:textColor="@color/white"
+                android:textColorHint="#CCFFFFFF"
+                android:textSize="14sp" />
 
             <!-- 4. Safety & Privacy -->
             <TextView
@@ -133,7 +172,7 @@
                 android:layout_marginTop="32dp"
                 android:text="4. Safety &amp; Privacy"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -153,20 +192,5 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_submit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:text="Submit"
-        android:textAllCaps="false"
-        android:textColor="#FF208E"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:cornerRadius="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="635dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

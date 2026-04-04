@@ -1,11 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- Resource definition for layout/activity_contacts. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/yuwathi_bg"
     android:orientation="vertical">
-    <!-- Pink Header -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +38,7 @@
             android:layout_height="32dp"
             android:contentDescription="placeholder" />
     </LinearLayout>
-    <!-- Add contact button -->
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_add_contact"
         android:layout_width="match_parent"
@@ -51,9 +52,8 @@
         android:textSize="15sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"
-        app:icon="@drawable/ic_add_contact"
         app:iconTint="@color/white" />
-    <!-- Contacts list -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contacts"
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
         android:paddingHorizontal="20dp"
         android:paddingBottom="20dp"
         android:clipToPadding="false" />
-    <!-- Bottom Nav -->
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
@@ -74,3 +74,7 @@
         app:itemTextColor="@color/nav_icon_color"
         app:menu="@menu/bottom_menu" />
 </LinearLayout>
+
+    <!-- activity_contacts.xml - Emergency Contacts Page Layout -->
+    <!-- Shows: pink header, "Add Emergency Contact" button, -->
+    <!-- scrollable list (RecyclerView) of saved contacts, and bottom nav -->
