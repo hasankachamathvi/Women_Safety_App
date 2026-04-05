@@ -8,6 +8,7 @@ public class SafetyTip {
     private String title;
     private String description;
     private String category;
+    private String date;
     private boolean isVisible = true;
 
     public SafetyTip() {
@@ -18,6 +19,15 @@ public class SafetyTip {
         this.title = title;
         this.description = description;
         this.category = category;
+        this.isVisible = isVisible;
+    }
+
+    public SafetyTip(String id, String title, String description, String category, String date, boolean isVisible) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.date = date;
         this.isVisible = isVisible;
     }
 
@@ -53,6 +63,14 @@ public class SafetyTip {
         this.category = category;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public boolean isVisible() {
         return isVisible;
     }
@@ -61,4 +79,3 @@ public class SafetyTip {
         isVisible = visible;
     }
 }
-

@@ -1,6 +1,8 @@
 package com.example.yuwathi.activities;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +17,10 @@ import com.example.yuwathi.R;
 import com.example.yuwathi.models.SafetyTip;
 import com.example.yuwathi.services.FirebaseFirestoreService;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Admin screen for creating, updating, and deleting safety tips.
@@ -98,6 +103,7 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
             // Bind UI elements inside card
             TextView tvTitle = card.findViewById(R.id.tv_tip_title);
             TextView tvDesc = card.findViewById(R.id.tv_tip_desc);
+            TextView tvDate = card.findViewById(R.id.tv_tip_date);
             Button btnToggle = card.findViewById(R.id.btn_tip_toggle);
             Button btnDelete = card.findViewById(R.id.btn_tip_delete);
 
@@ -116,10 +122,15 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
                     String.valueOf(tip.isVisible())
             ));
 
-            /**
-             * Toggle visibility button
-             * Controls whether tip is shown in user app
-             */
+            // Show date only when the tip has a selected date.
+            if (!TextUtils.isEmpty(tip.getDate())) {
+                tvDate.setVisibility(View.VISIBLE);
+                tvDate.setText("Date: " + tip.getDate());
+            } else {
+                tvDate.setVisibility(View.GONE);
+            }
+
+            // Toggle visibility button controls whether tip is shown in user app.
             btnToggle.setText(
                     tip.isVisible()
                             ? getString(R.string.admin_hide)
@@ -153,9 +164,7 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
                 );
             });
 
-            /**
-             * Delete safety tip permanently
-             */
+            // Delete safety tip permanently.
             btnDelete.setOnClickListener(v ->
                     firestoreService.deleteSafetyTip(
                             tip.getId(),
@@ -193,63 +202,96 @@ public class AdminSafetyTipsActivity extends BaseAdminActivity {
         EditText etTitle = view.findViewById(R.id.et_tip_title);
         EditText etDesc = view.findViewById(R.id.et_tip_desc);
         EditText etCategory = view.findViewById(R.id.et_tip_category);
+        EditText etDate = view.findViewById(R.id.et_schedule_time);
+        Button btnPickDate = view.findViewById(R.id.btn_pick_date);
 
-        new AlertDialog.Builder(this)
+        // Calendar pop-up is available from both field and button taps.
+        etDate.setOnClickListener(v -> showDatePicker(etDate));
+        btnPickDate.setOnClickListener(v -> showDatePicker(etDate));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.admin_add_safety_tip)
                 .setView(view)
-
-                // Save button logic
-                .setPositiveButton(R.string.admin_save, (dialog, which) -> {
-
-                    String title = etTitle.getText().toString().trim();
-                    String desc = etDesc.getText().toString().trim();
-                    String category = etCategory.getText().toString().trim();
-
-                    // Validate required fields
-                    if (title.isEmpty() || desc.isEmpty()) {
-                        Toast.makeText(this,
-                                getString(R.string.admin_fill_title_description),
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // Create new SafetyTip object
-                    SafetyTip tip = new SafetyTip();
-                    tip.setTitle(title);
-                    tip.setDescription(desc);
-                    tip.setCategory(category.isEmpty()
-                            ? getString(R.string.admin_general_category)
-                            : category);
-                    tip.setVisible(true);
-
-                    // Save to Firestore
-                    firestoreService.addSafetyTip(
-                            tip,
-                            new FirebaseFirestoreService.OnOperationCallback() {
-
-                                @Override
-                                public void onSuccess() {
-                                    Toast.makeText(AdminSafetyTipsActivity.this,
-                                            getString(R.string.admin_tip_added),
-                                            Toast.LENGTH_SHORT).show();
-
-                                    // Reload list after adding
-                                    loadTips();
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    Toast.makeText(AdminSafetyTipsActivity.this,
-                                            getString(R.string.admin_could_not_load_safety_tips),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                    );
-                })
-
-                // Cancel button
+                .setPositiveButton(R.string.admin_save, null)
                 .setNegativeButton(R.string.admin_cancel, null)
-                .show();
+                .create();
+
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String title = etTitle.getText().toString().trim();
+            String desc = etDesc.getText().toString().trim();
+            String category = etCategory.getText().toString().trim();
+            String date = etDate.getText().toString().trim();
+
+            // Validate required fields
+            if (title.isEmpty() || desc.isEmpty()) {
+                Toast.makeText(this,
+                        getString(R.string.admin_fill_title_description),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (date.isEmpty()) {
+                Toast.makeText(this, "Please pick a date", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Create new SafetyTip object
+            SafetyTip tip = new SafetyTip();
+            tip.setTitle(title);
+            tip.setDescription(desc);
+            tip.setCategory(category.isEmpty()
+                    ? getString(R.string.admin_general_category)
+                    : category);
+            tip.setDate(date);
+            tip.setVisible(true);
+
+            // Save to Firestore
+            firestoreService.addSafetyTip(
+                    tip,
+                    new FirebaseFirestoreService.OnOperationCallback() {
+
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(AdminSafetyTipsActivity.this,
+                                    getString(R.string.admin_tip_added),
+                                    Toast.LENGTH_SHORT).show();
+
+                            dialog.dismiss();
+                            // Reload list after adding
+                            loadTips();
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Toast.makeText(AdminSafetyTipsActivity.this,
+                                    getString(R.string.admin_could_not_load_safety_tips),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+        }));
+
+        dialog.show();
+    }
+
+    private void showDatePicker(EditText targetField) {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    Calendar selected = Calendar.getInstance();
+                    selected.set(Calendar.YEAR, year);
+                    selected.set(Calendar.MONTH, month);
+                    selected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    targetField.setText(formatter.format(selected.getTime()));
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
     }
 
     @Override
