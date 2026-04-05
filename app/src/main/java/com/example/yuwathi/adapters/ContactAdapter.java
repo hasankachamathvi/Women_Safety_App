@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -21,16 +22,22 @@ import java.util.Map;
  */
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
+    public interface OnContactEditListener {
+        void onEdit(Map<String, Object> contact);
+    }
+
     public interface OnContactDeleteListener {
         void onDelete(Map<String, Object> contact);
     }
 
     private final Context context;
+    private final OnContactEditListener editListener;
     private final OnContactDeleteListener deleteListener;
     private final List<Map<String, Object>> contacts = new ArrayList<>();
 
-    public ContactAdapter(Context context, List<Map<String, Object>> initialContacts, OnContactDeleteListener deleteListener) {
+    public ContactAdapter(Context context, List<Map<String, Object>> initialContacts, OnContactEditListener editListener, OnContactDeleteListener deleteListener) {
         this.context = context;
+        this.editListener = editListener;
         this.deleteListener = deleteListener;
         if (initialContacts != null) {
             contacts.addAll(initialContacts);
@@ -38,11 +45,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     public void setContacts(List<Map<String, Object>> newContacts) {
+        int oldSize = contacts.size();
         contacts.clear();
-        if (newContacts != null) {
-            contacts.addAll(newContacts);
+        if (oldSize > 0) {
+            notifyItemRangeRemoved(0, oldSize);
         }
-        notifyDataSetChanged();
+        if (newContacts != null && !newContacts.isEmpty()) {
+            contacts.addAll(newContacts);
+            notifyItemRangeInserted(0, contacts.size());
+        }
     }
 
     @NonNull
@@ -73,14 +84,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         infoCol.addView(tvPhone);
         infoCol.addView(tvRelation);
 
+        LinearLayout actionsCol = new LinearLayout(context);
+        actionsCol.setOrientation(LinearLayout.VERTICAL);
+        actionsCol.setGravity(Gravity.END);
+
+        MaterialButton btnEdit = new MaterialButton(context);
+        btnEdit.setText(R.string.edit_contact);
+        btnEdit.setAllCaps(false);
+
         MaterialButton btnDelete = new MaterialButton(context);
-        btnDelete.setText("Delete");
+        btnDelete.setText(R.string.delete_contact);
         btnDelete.setAllCaps(false);
 
-        row.addView(infoCol);
-        row.addView(btnDelete);
+        actionsCol.addView(btnEdit);
+        actionsCol.addView(btnDelete);
 
-        return new ContactViewHolder(row, tvName, tvPhone, tvRelation, btnDelete);
+        row.addView(infoCol);
+        row.addView(actionsCol);
+
+        return new ContactViewHolder(row, tvName, tvPhone, tvRelation, btnEdit, btnDelete);
     }
 
     @Override
@@ -89,6 +111,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         holder.tvName.setText(String.valueOf(contact.getOrDefault("name", "Unknown")));
         holder.tvPhone.setText(String.valueOf(contact.getOrDefault("phone", "")));
         holder.tvRelation.setText(String.valueOf(contact.getOrDefault("relationship", "")));
+        holder.btnEdit.setOnClickListener(v -> {
+            if (editListener != null) {
+                editListener.onEdit(contact);
+            }
+        });
         holder.btnDelete.setOnClickListener(v -> {
             if (deleteListener != null) {
                 deleteListener.onDelete(contact);
@@ -101,19 +128,20 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         return contacts.size();
     }
 
-    static class ContactViewHolder extends RecyclerView.ViewHolder {
+    public static final class ContactViewHolder extends RecyclerView.ViewHolder {
         final TextView tvName;
         final TextView tvPhone;
         final TextView tvRelation;
+        final MaterialButton btnEdit;
         final MaterialButton btnDelete;
 
-        ContactViewHolder(@NonNull View itemView, TextView tvName, TextView tvPhone, TextView tvRelation, MaterialButton btnDelete) {
+        public ContactViewHolder(@NonNull View itemView, TextView tvName, TextView tvPhone, TextView tvRelation, MaterialButton btnEdit, MaterialButton btnDelete) {
             super(itemView);
             this.tvName = tvName;
             this.tvPhone = tvPhone;
             this.tvRelation = tvRelation;
+            this.btnEdit = btnEdit;
             this.btnDelete = btnDelete;
         }
     }
 }
-

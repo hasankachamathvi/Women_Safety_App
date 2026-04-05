@@ -74,6 +74,27 @@ public class FirebaseFirestoreService {
                 .addOnFailureListener(e -> callback.onError(messageOf(e)));
     }
 
+    public void updateEmergencyContact(String userId, String contactId, Map<String, Object> contact, OnOperationCallback callback) {
+        if (contactId == null || contactId.trim().isEmpty()) {
+            callback.onError("Missing contact ID");
+            return;
+        }
+
+        Map<String, Object> payload = new HashMap<>();
+        if (contact != null) {
+            payload.putAll(contact);
+        }
+        payload.put("id", contactId);
+
+        db.collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CONTACTS_COLLECTION)
+                .document(contactId)
+                .set(payload)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(messageOf(e)));
+    }
+
     public void getEmergencyContacts(String userId, OnContactsListCallback callback) {
         db.collection(USERS_COLLECTION)
                 .document(userId)
