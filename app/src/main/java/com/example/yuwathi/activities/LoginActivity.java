@@ -1,19 +1,19 @@
 package com.example.yuwathi.activities;
 
+// Android classes used by the login screen.
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.ProgressDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.yuwathi.R;
-import com.example.yuwathi.utils.AdminSessionManager;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.yuwathi.services.FirebaseAuthService;
 
 /**
  * Authenticates users and routes them by role.
@@ -29,26 +29,92 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Start activity and load the login layout.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        // Create authentication service instance.
+        authService = new FirebaseAuthService();
 
-        EditText etEmail = findViewById(R.id.et_user_email);
-        EditText etPassword = findViewById(R.id.et_user_password);
-        MaterialButton btnSignIn = findViewById(R.id.btn_user_sign_in);
-        TextView tvRegister = findViewById(R.id.tv_user_register_link);
-        TextView tvForgot = findViewById(R.id.tv_user_forgot_password);
+        // Connect XML views to Java variables.
+        etUsername = findViewById(R.id.et_username);
+        etPassword = findViewById(R.id.et_password);
+        MaterialButton btnSignIn = findViewById(R.id.btn_sign_in);
+        TextView tvRegister = findViewById(R.id.tv_register_link);
+        TextView tvForgot = findViewById(R.id.tv_forgot_password);
 
-        btnSignIn.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+        // Try login when user taps Sign In.
+        btnSignIn.setOnClickListener(v -> performLogin());
+
+        // Open register screen.
+        tvRegister.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
+        );
+
+        // Open forgot-password dialog.
+        tvForgot.setOnClickListener(v -> showForgotPasswordDialog());
+    }
+
+    /**
+     * Read input, validate it, then try login with Firebase.
+     */
+    private void performLogin() {
+        // Get text entered by user and remove extra spaces.
+        String email = etUsername.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+
+        // Validate basic input first.
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Please enter valid email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Show loading while checking credentials.
+        showLoadingDialog("Logging in...");
+
+        // Request login from Firebase.
+        authService.loginUser(email, password, new FirebaseAuthService.OnAuthCallback() {
+            @Override
+            public void onSuccess(String message) {
+                // Hide loading and show success message.
+                dismissLoadingDialog();
+                Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                // Temporary admin check using email text.
+                // In production, check role/claims from backend.
+                if (email.contains("admin")) {
+                    // Admin user goes to admin dashboard.
+                    Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                    // Clear back stack so user cannot return to login with back button.
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    // Regular user goes to home screen.
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    // Clear back stack so user cannot return to login with back button.
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                // Close login screen after navigation.
+                finish();
+            }
 
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 return;
             }
+        });
+    }
 
             // 1) Try Firebase login first (normal path for both user/admin accounts stored in Firebase)
             mAuth.signInWithEmailAndPassword(email, password)
