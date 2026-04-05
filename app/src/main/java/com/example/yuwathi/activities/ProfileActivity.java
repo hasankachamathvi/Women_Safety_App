@@ -42,13 +42,14 @@ public class ProfileActivity extends AppCompatActivity {
         firestoreService = FirebaseFirestoreService.getInstance();
         FirebaseUser user = authService.getCurrentUser();
         if (user == null) {
+            // Profile depends on authenticated identity; route out early if session is missing.
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
         currentUserId = user.getUid();
 
-        // Find all setting buttons from the layout
+        // Screen actions map to profile management + quick navigation shortcuts.
         LinearLayout btnEditProfile = findViewById(R.id.btn_edit_profile);      // Edit Profile option
         LinearLayout btnContacts = findViewById(R.id.btn_emergency_contacts);   // Emergency Contacts option
         LinearLayout btnTips = findViewById(R.id.btn_tips);                     // Safety Tips option
@@ -77,6 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Handle Logout click - go back to Login page and clear all history
         btnLogout.setOnClickListener(v -> {
+            // Logout clears auth + task stack so back cannot reopen user pages.
             com.example.yuwathi.utils.AdminSessionManager.clearSession(ProfileActivity.this);
             authService.logout();
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
@@ -108,6 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfile() {
+        // Pull latest profile values from Firestore so edits are reflected after return/reopen.
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
             @Override
             public void onSuccess(User user) {
@@ -125,6 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showEditProfileDialog() {
+        // Build a simple dynamic form to avoid creating a separate layout for a small edit flow.
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         int padding = (int) (16 * getResources().getDisplayMetrics().density);
@@ -143,6 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .setTitle("Edit Profile")
                 .setView(layout)
                 .setPositiveButton("Save", (dialog, which) -> {
+                    // Only changed fields are sent as a partial map update to Firestore.
                     Map<String, Object> updates = new HashMap<>();
                     updates.put("name", etName.getText().toString().trim());
                     updates.put("phone", etPhone.getText().toString().trim());

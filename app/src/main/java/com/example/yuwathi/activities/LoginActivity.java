@@ -9,6 +9,7 @@ import android.widget.Toast;
 import android.app.ProgressDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.yuwathi.R;
 import com.google.android.material.button.MaterialButton;
@@ -18,14 +19,13 @@ import com.example.yuwathi.services.FirebaseAuthService;
  * Authenticates users and routes them by role.
  */
 public class LoginActivity extends AppCompatActivity {
-    // Service for login and password-reset operations.
-    private FirebaseAuthService authService;
-    // Loading dialog shown during network operations.
-    private ProgressDialog progressDialog;
-    // Email input field.
-    private EditText etUsername;
-    // Password input field.
-    private EditText etPassword;
+
+    // Optional fallback admin credentials (same form as normal login)
+    private static final String ADMIN_EMAIL = "admin@yuwathi.com";
+    private static final String ADMIN_PASSWORD = "Admin@123";
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,79 +109,49 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
 
-            @Override
-            public void onError(String error) {
-                // Hide loading and show reason if login fails.
-                dismissLoadingDialog();
-                Toast.makeText(LoginActivity.this, "Login failed: " + error, Toast.LENGTH_SHORT).show();
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                return;
             }
         });
     }
 
-    /**
-     * Show dialog to collect email and send reset link.
-     */
-    private void showForgotPasswordDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder =
-            new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setTitle("Reset Password");
-        builder.setMessage("Enter your email to receive password reset link");
+            // 1) Try Firebase login first (normal path for both user/admin accounts stored in Firebase)
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful() && mAuth.getCurrentUser() != null) {
+                            AdminSessionManager.clearSession(LoginActivity.this);
+                            String uid = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+                            if (uid == null) {
+                                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            db.collection("users").document(uid).get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        String role = documentSnapshot.exists() ? documentSnapshot.getString("role") : null;
+                                        if ("admin".equalsIgnoreCase(role)) {
+                                            startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
+                                        } else {
+                                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                        }
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Could not read user role", Toast.LENGTH_SHORT).show());
+                            return;
+                        }
 
-        // Add a simple input box to the dialog.
-        final EditText input = new EditText(this);
-        builder.setView(input);
-
-        // Send reset email when user taps Send.
-        builder.setPositiveButton("Send", (dialog, which) -> {
-            String email = input.getText().toString().trim();
-            if (!email.isEmpty()) {
-                showLoadingDialog("Sending reset email...");
-                authService.resetPassword(email, new FirebaseAuthService.OnAuthCallback() {
-                    @Override
-                    public void onSuccess(String message) {
-                                // Reset email sent.
-                        dismissLoadingDialog();
-                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                                // Reset email failed.
-                        dismissLoadingDialog();
-                        Toast.makeText(LoginActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                // Prompt user to enter email before sending.
-                Toast.makeText(LoginActivity.this, "Please enter email", Toast.LENGTH_SHORT).show();
-            }
+                        // 2) Fallback: local hardcoded admin credentials
+                        if (ADMIN_EMAIL.equalsIgnoreCase(email) && ADMIN_PASSWORD.equals(password)) {
+                            AdminSessionManager.startAdminSession(LoginActivity.this);
+                            startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
-        // Close dialog without action.
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
-    }
-
-    /**
-     * Show loading dialog with a custom message.
-     */
-    private void showLoadingDialog(String message) {
-        if (progressDialog == null) {
-            // Create once and reuse for later calls.
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-        }
-        progressDialog.setMessage(message);
-        progressDialog.show();
-    }
-
-    /**
-     * Hide loading popup if currently visible.
-     */
-    private void dismissLoadingDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
+        tvRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+        tvForgot.setOnClickListener(v -> Toast.makeText(this, "Contact support for password reset", Toast.LENGTH_SHORT).show());
     }
 }

@@ -28,6 +28,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Services are initialized once per activity instance and reused in callbacks.
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
     }
@@ -35,12 +36,14 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        // Re-check admin access whenever the screen becomes visible.
         enforceAdminAccess();
     }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
+        // Every admin screen gets the same bottom nav, back button, and logout action.
         setupBottomNavigation();
         setupAdminBackButton();
         setupAdminLogoutButton();
@@ -52,6 +55,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
             return;
         }
 
+        // Fallback path: validate the current Firebase user against Firestore role data.
         FirebaseUser currentUser = authService.getCurrentUser();
         if (currentUser == null) {
             redirectToLogin("Please login as admin");
@@ -66,6 +70,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     }
 
     private void redirectToLogin(String message) {
+        // Always clear admin state before redirecting to avoid stale privileged sessions.
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         AdminSessionManager.clearSession(this);
         Intent intent = new Intent(this, LoginActivity.class);
@@ -77,6 +82,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     protected void setupBottomNavigation() {
         bottomNav = findViewById(R.id.admin_bottom_nav);
         if (bottomNav == null) {
+            // Some admin-like screens may omit bottom nav; skip wiring safely.
             return;
         }
 
@@ -109,6 +115,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     }
 
     protected void setupAdminBackButton() {
+        // Shared back button always returns to the admin dashboard.
         View back = findViewById(R.id.btn_admin_back);
         if (back != null) {
             back.setOnClickListener(v -> navigateToDashboard());
@@ -116,6 +123,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     }
 
     protected void setupAdminLogoutButton() {
+        // Logout clears the admin session and signs the user out of Firebase.
         View logout = findViewById(R.id.card_admin_logout);
         if (logout != null) {
             logout.setOnClickListener(v -> {
@@ -130,6 +138,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     }
 
     protected void navigateToDashboard() {
+        // Central helper so every admin page returns to the same home screen.
         navigateTo(AdminDashboardActivity.class);
     }
 
@@ -139,6 +148,7 @@ public abstract class BaseAdminActivity extends AppCompatActivity {
     }
 
     private void navigateTo(Class<?> target) {
+        // Skip navigation when already on target to prevent duplicate activity instances.
         if (!getClass().equals(target)) {
             startActivity(new Intent(this, target));
             overridePendingTransition(0, 0);

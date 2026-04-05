@@ -18,6 +18,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Dashboard heading and summary counters -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
+                <!-- Total users card -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="100dp"
@@ -64,6 +66,7 @@
                         android:text="Users" />
                 </LinearLayout>
 
+                <!-- Total complaints card -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="100dp"
@@ -90,6 +93,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Pending complaints summary -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
@@ -114,6 +118,7 @@
                     android:text="Pending Complaints" />
             </LinearLayout>
 
+            <!-- Quick action cards for admin navigation -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -196,6 +201,7 @@
 
             </LinearLayout>
 
+            <!-- Recent complaints preview shown directly on the dashboard -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -214,6 +220,7 @@
                 android:orientation="vertical"
                 android:padding="12dp" />
 
+            <!-- Logout entry kept inside the admin dashboard content -->
             <LinearLayout
                 android:id="@+id/card_admin_logout"
                 android:layout_width="match_parent"
@@ -236,6 +243,7 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- Shared admin bottom navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/admin_bottom_nav"
         android:layout_width="match_parent"

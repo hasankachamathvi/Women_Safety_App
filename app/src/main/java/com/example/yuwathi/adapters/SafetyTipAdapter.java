@@ -78,8 +78,10 @@ public class SafetyTipAdapter extends RecyclerView.Adapter<SafetyTipAdapter.TipV
         SafetyTip tip = tips.get(position);
         holder.tvTitle.setText(tip.getTitle() == null ? "Safety Tip" : tip.getTitle());
         holder.tvDescription.setText(tip.getDescription() == null ? "" : tip.getDescription());
+
         String category = tip.getCategory() == null ? "General" : tip.getCategory();
-        holder.tvMeta.setText(category + (tip.isVisible() ? " • Visible" : " • Hidden"));
+        String date = tip.getDate() == null ? "" : tip.getDate().trim();
+        holder.tvMeta.setText(date.isEmpty() ? category : category + " • " + date);
 
         holder.itemView.setOnLongClickListener(v -> {
             if (actionListener != null) {
@@ -107,4 +109,3 @@ public class SafetyTipAdapter extends RecyclerView.Adapter<SafetyTipAdapter.TipV
         }
     }
 }
-

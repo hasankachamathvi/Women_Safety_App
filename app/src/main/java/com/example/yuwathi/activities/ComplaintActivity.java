@@ -35,7 +35,7 @@ public class ComplaintActivity extends AppCompatActivity {
         // Set the complaint form (page 1) layout
         setContentView(R.layout.activity_complaint);
 
-        // Find the category dropdown (spinner) from the layout
+        // Step-1 fields collect incident context before evidence/details are entered on step-2.
         Spinner spinnerCategory = findViewById(R.id.spinner_category);
         EditText etIncidentTime = findViewById(R.id.et_incident_time);
         SwitchCompat switchOngoing = findViewById(R.id.switch_ongoing);
@@ -43,6 +43,7 @@ public class ComplaintActivity extends AppCompatActivity {
         EditText etVehicle = findViewById(R.id.et_vehicle);
         EditText etSuspectDesc = findViewById(R.id.et_suspect_desc);
 
+        // Time picker opens for click and focus, so keyboard-only users can still select date/time.
         etIncidentTime.setOnClickListener(v -> showDateTimePicker(etIncidentTime));
         etIncidentTime.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -56,7 +57,7 @@ public class ComplaintActivity extends AppCompatActivity {
                 "Suspicious Following", "Cyber-bullying", "Other"
         };
 
-        // Custom adapter to style the spinner text colors (white when closed, black when open)
+        // Spinner styling keeps readable contrast in both collapsed and dropdown states.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories) {
             @NonNull
             @Override
@@ -76,7 +77,7 @@ public class ComplaintActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter); // Set the adapter to the spinner
 
-        // Handle Next button click - go to Complaint page 2
+        // Next passes step-1 values to step-2 where final description/evidence is submitted.
         MaterialButton btnNext = findViewById(R.id.btn_next);
         btnNext.setOnClickListener(v -> {
             Intent intent = new Intent(ComplaintActivity.this, Complaint2Activity.class);
@@ -91,6 +92,7 @@ public class ComplaintActivity extends AppCompatActivity {
     }
 
     private void showDateTimePicker(EditText targetField) {
+        // Captures date first, then time, and writes a single normalized timestamp string.
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,

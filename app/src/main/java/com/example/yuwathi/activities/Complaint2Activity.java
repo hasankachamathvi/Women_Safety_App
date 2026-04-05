@@ -48,6 +48,7 @@ public class Complaint2Activity extends AppCompatActivity {
     private TextView tvEvidenceStatus;
     private final List<Uri> selectedEvidenceUris = new ArrayList<>();
     private final List<String> uploadedEvidenceUrls = new ArrayList<>();
+    // Prevents submit while media uploads are still in-flight.
     private boolean isUploadingEvidence = false;
     private ActivityResultLauncher<String[]> evidencePickerLauncher;
 
@@ -60,6 +61,7 @@ public class Complaint2Activity extends AppCompatActivity {
         firestoreService = FirebaseFirestoreService.getInstance();
         authService = new FirebaseAuthService();
 
+        // Step-1 values are passed via intent and merged with step-2 values before submit.
         category = getIntent().getStringExtra("category");
         incidentTime = getIntent().getStringExtra("incident_time");
         ongoing = getIntent().getBooleanExtra("ongoing", false);
@@ -87,6 +89,7 @@ public class Complaint2Activity extends AppCompatActivity {
                     if (uris == null || uris.isEmpty()) {
                         return;
                     }
+                    // Replace previous selection so status and uploads stay deterministic.
                     selectedEvidenceUris.clear();
                     selectedEvidenceUris.addAll(uris);
                     tvEvidenceStatus.setText(String.format(Locale.getDefault(), "%d file(s) selected", selectedEvidenceUris.size()));
@@ -123,6 +126,7 @@ public class Complaint2Activity extends AppCompatActivity {
         uploadedEvidenceUrls.clear();
         tvEvidenceStatus.setText(String.format(Locale.getDefault(), "Uploading %d file(s)...", selectedEvidenceUris.size()));
 
+        // Tracks how many asynchronous uploads have completed.
         AtomicInteger completed = new AtomicInteger(0);
         for (Uri uri : selectedEvidenceUris) {
             String ext = getFileExtension(uri);
@@ -159,6 +163,7 @@ public class Complaint2Activity extends AppCompatActivity {
     }
 
     private String getFileExtension(Uri uri) {
+        // MIME-based extension lookup keeps upload naming stable across file providers.
         ContentResolver resolver = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String type = resolver.getType(uri);
@@ -172,6 +177,7 @@ public class Complaint2Activity extends AppCompatActivity {
             return;
         }
 
+        // Guard against race conditions between media upload completion and form submit.
         if (isUploadingEvidence) {
             Toast.makeText(this, "Please wait for evidence upload to finish", Toast.LENGTH_SHORT).show();
             return;
@@ -182,6 +188,7 @@ public class Complaint2Activity extends AppCompatActivity {
             return;
         }
 
+        // Compose one complaint object from both pages and uploaded evidence URLs.
         Complaint complaint = new Complaint();
         complaint.setUserId(currentUser.getUid());
         complaint.setTitle(category != null ? category : "Complaint");

@@ -22,8 +22,18 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file('../app.keystore')
+            storePassword 'Womensafety123'
+            keyAlias 'womensafetykey'
+            keyPassword 'Womensafety123'
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false  // Don't shrink code in release build (for now)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

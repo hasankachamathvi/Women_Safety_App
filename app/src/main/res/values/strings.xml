@@ -69,6 +69,38 @@
     <string name="admin_reports">Reports</string>
     <string name="admin_safety_tips">Tips</string>
 
+    <!-- Admin dashboard strings -->
+    <string name="admin_total_users">Total users: %1$d</string>
+    <string name="admin_total_complaints">Total complaints: %1$d</string>
+    <string name="admin_user_role">Role: %1$s</string>
+    <string name="admin_no_email">No email</string>
+    <string name="admin_user_default_role">user</string>
+    <string name="admin_complaint_count">Total complaints: %1$d</string>
+    <string name="admin_complaint_title_index">%1$d. %2$s</string>
+    <string name="admin_complaint_meta">Location: %1$s\nDate: %2$s</string>
+    <string name="admin_complaint_status">Status: %1$s</string>
+    <string name="admin_complaint_details">Date: %1$s\nLocation: %2$s\nPriority: %3$s\nDescription: %4$s\nWitnesses: %5$s\nVehicle: %6$s\nSuspect: %7$s\nEvidence: %8$s\nEvidence files: %9$d</string>
+    <string name="admin_report_totals">Users: %1$d\nComplaints: %2$d\nResolved: %3$d\nPending: %4$d</string>
+    <string name="admin_tip_details">%1$s\nCategory: %2$s\nVisible: %3$s</string>
+    <string name="admin_safety_tip_default">Safety Tip</string>
+    <string name="admin_general_category">General</string>
+    <string name="admin_hide">Hide</string>
+    <string name="admin_show">Show</string>
+    <string name="admin_add_safety_tip">Add Safety Tip</string>
+    <string name="admin_save">Save</string>
+    <string name="admin_cancel">Cancel</string>
+    <string name="admin_fill_title_description">Please fill title and description</string>
+    <string name="admin_tip_added">Tip added</string>
+    <string name="admin_could_not_load_users">Could not load users</string>
+    <string name="admin_could_not_load_complaints">Could not load complaints</string>
+    <string name="admin_could_not_load_report_totals">Could not load report totals</string>
+    <string name="admin_could_not_load_incident_reports">Could not load incident reports</string>
+    <string name="admin_could_not_load_safety_tips">Could not load safety tips</string>
+    <string name="admin_could_not_update_complaint">Could not update complaint</string>
+    <string name="admin_could_not_update_tip">Could not update tip</string>
+    <string name="admin_could_not_delete_tip">Could not delete tip</string>
+    <string name="admin_action_under_review">Action taken: moved to Under Review</string>
+
     <!-- Maps config -->
     <string name="google_maps_key">YOUR_API_KEY_HERE</string>
 </resources>

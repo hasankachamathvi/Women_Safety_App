@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
  * Main dashboard for regular users and quick actions.
  */
 public class HomeActivity extends AppCompatActivity {
-
     private FirebaseAuthService authService;
     private FirebaseFirestoreService firestoreService;
     private TextView tvUserName;
@@ -31,11 +30,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Initialize Firebase helper services used by this screen.
+        // Initialize services
         authService = new FirebaseAuthService();
         firestoreService = FirebaseFirestoreService.getInstance();
 
-        // Link Java variables to UI elements from activity_home.xml.
+        // Initialize Views before any async callbacks update UI
         tvUserName = findViewById(R.id.tv_user_name);
         MaterialButton btnSos = findViewById(R.id.btn_sos);
         LinearLayout btnShareLoc = findViewById(R.id.btn_share_location);
@@ -44,21 +43,21 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout cardTip = findViewById(R.id.card_safety_tip);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
-        // Allow only logged-in users to stay on Home; otherwise go to Login.
+        // Get current user
         FirebaseUser firebaseUser = authService.getCurrentUser();
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
             // Load the user's name from Firestore and show it on the screen.
             loadUserProfile();
         } else {
+            // Redirect to login if not authenticated
             redirectToLogin();
             return;
         }
 
-        // Handle bottom menu taps and open the selected screen.
+        // 1. Set Listener FIRST
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-
             if (id == R.id.nav_home) {
                 // Already on Home, so no navigation is needed.
                 return true;
@@ -75,23 +74,26 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;
             }
-
             return false;
         });
 
-        // Highlight Home icon because this activity is the Home screen.
+        // 2. Set default selection
         bottomNav.setSelectedItemId(R.id.nav_home);
 
-        // Quick action buttons on the home dashboard.
+        // Quick Action Click Listeners
         btnSos.setOnClickListener(v -> startActivity(new Intent(this, SosActivity.class)));
         btnShareLoc.setOnClickListener(v -> startActivity(new Intent(this, LocationActivity.class)));
         btnContacts.setOnClickListener(v -> startActivity(new Intent(this, ContactsActivity.class)));
         btnReport.setOnClickListener(v -> startActivity(new Intent(this, ComplaintActivity.class)));
         cardTip.setOnClickListener(v -> startActivity(new Intent(this, SafetyTipsActivity.class)));
 
+        // Handle logout on back press
         setUpLogoutListener();
     }
 
+    /**
+     * Load user profile from Firebase
+     */
     private void loadUserProfile() {
         // Read current user's profile from Firestore using the UID from Firebase Auth.
         firestoreService.getUser(currentUserId, new FirebaseFirestoreService.OnUserFetchCallback() {
@@ -111,10 +113,16 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Set up logout functionality
+     */
     private void setUpLogoutListener() {
-        // Logout is intentionally handled when user presses back.
+        // You can add a logout button in the menu or use onBackPressed
     }
 
+    /**
+     * Redirect to login if user is not authenticated
+     */
     private void redirectToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         // Clear back stack so user cannot return to Home after logout/login redirect.
@@ -125,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Ask confirmation before logging out when user presses the back button.
+        // Show logout confirmation dialog
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to logout?")

@@ -13,7 +13,7 @@ public class DatabaseConnectionTestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Simple harness screen used during manual checks for Firebase connectivity/UI wiring.
         setContentView(R.layout.activity_database_connection_test);
     }
 }
-
